@@ -2,6 +2,29 @@
 
 Todos los cambios relevantes de MIRMC Guerra Espiritual se documentan aquí.
 
+## V11 — 10 de agosto de 2026
+
+### Gestión editorial, versiones y rollback
+- Añadido `content_items` con separación estricta entre `draft_payload` y `published_payload`.
+- RLS y privilegios por columna permiten al navegador público leer únicamente contenido publicado; los borradores no tienen SELECT para `anon` ni `authenticated`.
+- Nueva Edge Function `content-management` con JWT obligatorio y comprobación de rol.
+- `admin` puede guardar borradores; `super_admin` controla publicación, retiro, archivo, restauración y rollback.
+- Nuevo gestor `admin-content.html` para editar las 15 lecciones y recursos sin modificar GitHub en cada cambio.
+- Se pueden crear recursos nuevos de Biblioteca mediante slug estable.
+- Vista previa privada de borradores antes de publicar.
+- Historial editorial con trazabilidad de `save_draft`, `publish`, `unpublish`, `archive`, `restore` y `rollback`.
+- `content-runtime.js` mezcla overrides publicados sobre el contenido estático y conserva fallback a GitHub si Supabase falla.
+- Lecciones, Biblioteca, lector de recursos, Cuaderno y filas de la Ruta MIRMC consumen contenido publicado desde Supabase.
+- Añadido `content_versions` con snapshots inmutables de cada publicación.
+- Nueva pantalla `admin-versions.html`; restaurar una versión anterior crea una versión nueva y preserva el historial.
+- Botón para restaurar overrides archivados.
+- Prueba real de seguridad: se creó un borrador temporal y bajo rol `anon` se verificaron 0 filas visibles; luego se eliminó sin alterar contenido público.
+- `content_versions` verificado sin permiso SELECT para `anon` ni `authenticated`.
+- Índices de claves foráneas añadidos después del Performance Advisor.
+- Service worker actualizado al shell V11 y CI específico `validate-content.yml`.
+- Documentación en `docs/V11-CONTENT-MANAGEMENT.md`.
+- Security Advisor posterior: solo permanece el ajuste independiente de Auth `Leaked Password Protection Disabled`.
+
 ## V10.1 — 10 de agosto de 2026
 
 ### Expediente académico y trazabilidad administrativa
