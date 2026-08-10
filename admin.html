@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#050813" />
+  <meta name="robots" content="noindex,nofollow" />
+  <meta name="description" content="Panel administrativo seguro de MIRMC Guerra Espiritual." />
+  <title>Administración | MIRMC Guerra Espiritual</title>
+  <link rel="icon" href="assets/mirmc-shield.svg" type="image/svg+xml" />
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="admin.css" />
+</head>
+<body class="admin-page">
+  <div class="ambient-grid" aria-hidden="true"></div>
+  <header class="admin-header"><div>
+    <a class="brand" href="index.html"><img src="assets/mirmc-shield.svg" alt="" class="brand-mark" width="44" height="52" /><span class="brand-copy"><strong>MIRMC</strong><small>GUERRA ESPIRITUAL</small></span></a>
+    <a href="account.html">← Mi cuenta</a>
+  </div></header>
+
+  <main class="admin-shell">
+    <section class="admin-hero">
+      <div><p class="admin-eyebrow">ADMINISTRACIÓN</p><h1>Orden, seguimiento y <em>responsabilidad.</em></h1><p>Este panel opera con sesión autenticada y autorización de servidor. Los alumnos no pueden elevar su propio rol desde el navegador.</p></div>
+      <div class="admin-role" id="adminRole"><span>VERIFICANDO</span><strong>Permisos</strong></div>
+    </section>
+
+    <section class="admin-gate" id="adminGate">
+      <div class="admin-loading" id="adminLoading">Comprobando tu sesión y permisos…</div>
+      <div class="admin-denied" id="adminDenied" hidden><span>ACCESO RESTRINGIDO</span><h2>Esta área es solo para personal autorizado.</h2><p>Tu cuenta puede seguir utilizando normalmente la Ruta MIRMC, Biblioteca, Cuaderno y sincronización.</p><a class="button button-ghost" href="index.html#entrenamiento">Volver a la formación</a></div>
+    </section>
+
+    <section class="admin-app" id="adminApp" hidden>
+      <div class="admin-summary" id="adminSummary"></div>
+
+      <div class="admin-toolbar">
+        <label><span>BUSCAR USUARIO</span><input id="adminSearch" type="search" placeholder="Correo o nombre" autocomplete="off" /></label>
+        <button class="button button-ghost" id="refreshUsers" type="button">Actualizar</button>
+      </div>
+
+      <div class="admin-message" id="adminMessage" aria-live="polite"></div>
+      <div class="admin-users" id="adminUsers"></div>
+    </section>
+  </main>
+
+  <footer class="lesson-footer"><div><span>MIRMC GUERRA ESPIRITUAL</span><span>ADMINISTRACIÓN · SEGURIDAD · SEGUIMIENTO</span></div></footer>
+
+  <script src="cloud-config.js"></script>
+  <script src="cloud-client.js"></script>
+  <script src="admin.js"></script>
+</body>
+</html>
