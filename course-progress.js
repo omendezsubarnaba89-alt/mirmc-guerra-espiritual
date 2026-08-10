@@ -99,4 +99,12 @@
   }
 
   window.MIRMCProgress = { KEY, EXAM_KEY, read, write, isComplete, examPassed, isUnlocked, previous, next, complete, saveQuiz, stats, nextAvailable, reset, order };
+
+  if (!window.__MIRMC_AUTO_SYNC_LOADER__) {
+    window.__MIRMC_AUTO_SYNC_LOADER__ = true;
+    const script = document.createElement('script');
+    script.src = 'cloud-autosync.js';
+    script.defer = true;
+    document.head.appendChild(script);
+  }
 })();
