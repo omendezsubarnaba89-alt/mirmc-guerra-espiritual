@@ -1,0 +1,19 @@
+{
+  "name": "MIRMC Guerra Espiritual",
+  "short_name": "MIRMC Guerra",
+  "description": "Centro de formación bíblica para tiempos de batalla, con Cristo como centro.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#040712",
+  "theme_color": "#050813",
+  "lang": "es",
+  "icons": [
+    {
+      "src": "assets/mirmc-shield.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}
