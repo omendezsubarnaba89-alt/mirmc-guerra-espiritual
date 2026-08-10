@@ -3,6 +3,7 @@
     guard:'mirmc-guerra-espiritual-guardia-v1',
     course:'mirmc-guerra-espiritual-course-v1',
     exams:'mirmc-guerra-espiritual-assessments-v1',
+    study:'mirmc-guerra-espiritual-study-v1',
     certificateName:'mirmc-guerra-espiritual-certificate-name-v1'
   };
   const $ = s => document.querySelector(s);
@@ -19,6 +20,7 @@
         guard:readJson(KEYS.guard),
         course:readJson(KEYS.course),
         exams:readJson(KEYS.exams),
+        study:readJson(KEYS.study),
         certificateName:localStorage.getItem(KEYS.certificateName) || ''
       }
     };
@@ -27,10 +29,12 @@
     const course = readJson(KEYS.course);
     const exams = readJson(KEYS.exams);
     const guard = readJson(KEYS.guard);
+    const study = readJson(KEYS.study);
     const lessonCount = Object.values(course).filter(x => x?.completed).length;
     const examCount = Object.values(exams).filter(x => x?.passed).length;
     const guardCount = Object.values(guard).filter(Boolean).length;
-    return { lessonCount, examCount, guardCount, hasName:Boolean(localStorage.getItem(KEYS.certificateName)) };
+    const noteCount = Object.keys(study?.notes || {}).length;
+    return { lessonCount, examCount, guardCount, noteCount, hasName:Boolean(localStorage.getItem(KEYS.certificateName)) };
   }
   function renderStatus(){
     const c = counts();
@@ -38,7 +42,7 @@
       <div><small>LECCIONES</small><strong>${c.lessonCount}/15</strong></div>
       <div><small>EXÁMENES</small><strong>${c.examCount}/3</strong></div>
       <div><small>GUARDIAS</small><strong>${c.guardCount}</strong></div>
-      <div><small>NOMBRE CERT.</small><strong>${c.hasName ? 'SÍ' : 'NO'}</strong></div>`;
+      <div><small>NOTAS</small><strong>${c.noteCount}</strong></div>`;
   }
 
   $('#exportBackup').addEventListener('click', () => {
@@ -62,14 +66,15 @@
     try {
       const parsed = JSON.parse(await file.text());
       if (parsed?.app !== 'MIRMC Guerra Espiritual' || parsed?.version !== 1 || !parsed?.data || typeof parsed.data !== 'object') throw new Error('Formato de respaldo no reconocido.');
-      const { guard, course, exams, certificateName } = parsed.data;
+      const { guard, course, exams, study, certificateName } = parsed.data;
       if (!guard || typeof guard !== 'object' || !course || typeof course !== 'object' || !exams || typeof exams !== 'object') throw new Error('El respaldo está incompleto.');
       localStorage.setItem(KEYS.guard, JSON.stringify(guard));
       localStorage.setItem(KEYS.course, JSON.stringify(course));
       localStorage.setItem(KEYS.exams, JSON.stringify(exams));
+      if (study && typeof study === 'object') localStorage.setItem(KEYS.study, JSON.stringify(study));
       if (typeof certificateName === 'string') localStorage.setItem(KEYS.certificateName, certificateName.slice(0,80));
       result.className = 'settings-result success';
-      result.textContent = 'Respaldo restaurado correctamente. Tu progreso ya está disponible en este navegador.';
+      result.textContent = 'Respaldo restaurado correctamente. Curso, evaluaciones y cuaderno ya están disponibles en este navegador.';
       renderStatus();
     } catch (error) {
       result.className = 'settings-result error';
@@ -80,7 +85,7 @@
   });
 
   $('#resetAll').addEventListener('click', () => {
-    const confirmed = window.confirm('Esto borrará todo el progreso local de MIRMC Guerra Espiritual en este navegador. ¿Continuar?');
+    const confirmed = window.confirm('Esto borrará todo el progreso local, notas y favoritos de MIRMC Guerra Espiritual en este navegador. ¿Continuar?');
     if (!confirmed) return;
     Object.values(KEYS).forEach(key => localStorage.removeItem(key));
     renderStatus();
