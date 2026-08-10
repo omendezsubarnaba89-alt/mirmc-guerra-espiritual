@@ -41,6 +41,9 @@ jobs:
           node --check cloud-client.js
           node --check cloud-sync.js
           node --check account.js
+          node --check study-data.js
+          node --check study-tools.js
+          node --check study.js
           node --check sw.js
 
       - name: Validate static references
@@ -60,3 +63,6 @@ jobs:
 
       - name: Validate cloud account architecture
         run: node scripts/validate-cloud.mjs
+
+      - name: Validate study notebook architecture
+        run: node scripts/validate-study.mjs
