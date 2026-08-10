@@ -17,9 +17,9 @@ Permitir que MIRMC Guerra Espiritual edite y publique contenido desde Administra
 - `published_payload` sí puede leerse, pero RLS permite solamente filas publicadas y no archivadas.
 - El navegador no contiene `service_role` ni secretos administrativos.
 - Escrituras editoriales pasan por Edge Function `content-management` con `verify_jwt=true`.
-- `admin` puede guardar borradores.
-- Solo `super_admin` puede publicar, retirar, archivar o restaurar contenido.
-- `content_audit_log` no es accesible directamente desde el navegador.
+- `admin` puede guardar borradores y consultar historial de versiones.
+- Solo `super_admin` puede publicar, retirar, archivar, restaurar o ejecutar rollback.
+- `content_audit_log` y `content_versions` no son accesibles directamente desde el navegador.
 
 ## Flujo editorial
 
@@ -30,7 +30,10 @@ Permitir que MIRMC Guerra Espiritual edite y publique contenido desde Administra
 5. Abrir `admin-preview.html` para revisar el borrador con sesión administrativa.
 6. Publicar (Super Admin).
 7. El frontend consume la versión publicada desde Supabase sin redeploy.
-8. Retirar publicación devuelve inmediatamente el contenido al fallback de GitHub.
+8. Cada publicación crea una versión inmutable en `content_versions`.
+9. `admin-versions.html` permite consultar versiones y, para Super Admin, restaurar una anterior.
+10. El rollback genera una versión NUEVA a partir de la versión histórica seleccionada; nunca reescribe o elimina el historial existente.
+11. Retirar publicación devuelve inmediatamente el contenido al fallback de GitHub.
 
 ## Nuevos recursos
 
@@ -47,8 +50,13 @@ La creación de nuevas lecciones fuera de 01–15 no está habilitada todavía p
 - `unpublish`
 - `archive`
 - `restore`
+- `rollback`
 
 El historial puede consultarse desde `admin-content-audit.html` por Super Admin.
+
+## Versiones
+
+`content_versions` almacena snapshots inmutables de cada publicación. `content_items.current_version` señala la versión pública actual. La Edge Function calcula números de versión de forma incremental y el rollback publica el snapshot elegido como una nueva versión.
 
 ## Prueba de seguridad ejecutada
 
@@ -59,6 +67,13 @@ El 10 de agosto de 2026 se creó temporalmente un override de prueba solo como b
 - El registro temporal fue eliminado después de la prueba.
 - No se modificó ningún contenido público.
 
+## Migraciones de producción
+
+- `20260810211602_add_content_management_core.sql`
+- `20260810211630_optimize_content_public_read_policy.sql`
+- `20260810212343_index_content_foreign_keys.sql`
+- `20260810213039_add_content_version_history.sql`
+
 ## Archivos principales
 
 - `admin-content.html`
@@ -68,8 +83,10 @@ El 10 de agosto de 2026 se creó temporalmente un override de prueba solo como b
 - `admin-preview.js`
 - `admin-content-audit.html`
 - `admin-content-audit.js`
+- `admin-versions.html`
+- `admin-versions.css`
+- `admin-versions.js`
 - `content-runtime.js`
 - `supabase/functions/content-management/index.ts`
-- `supabase/migrations/20260810211602_add_content_management_core.sql`
 - `scripts/validate-content.mjs`
 - `.github/workflows/validate-content.yml`
