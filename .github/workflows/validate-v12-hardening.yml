@@ -1,0 +1,34 @@
+name: Validate V12 Hardening
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  validate-v12-hardening:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Validate V12 security boundaries
+        run: node scripts/validate-v12-hardening.mjs
+      - name: Check V12 browser syntax
+        run: |
+          node --check academic-official.js
+          node --check academic-official-summary.js
+          node --check assessment-data.js
+          node --check assessment.js
+          node --check certificate-official.js
+          node --check verify-certificate.js
+          node --check admin-certificates.js
+          node --check admin-user.js
+          node --check admin.js
