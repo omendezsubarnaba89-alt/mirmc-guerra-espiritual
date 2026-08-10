@@ -25,7 +25,7 @@
       </div>
       <div class="course-overview-actions">
         <a class="course-continue" id="courseContinue" href="lesson.html?lesson=01">Comenzar ruta <span>→</span></a>
-        <div class="course-utility-links"><a href="academic.html">Registro académico ↗</a><a href="settings.html">Mis datos / respaldo ↗</a></div>
+        <div class="course-utility-links"><a href="account.html">Mi cuenta ↗</a><a href="academic.html">Registro académico ↗</a><a href="settings.html">Mis datos / respaldo ↗</a></div>
       </div>
     `;
     const tabContainer = training.querySelector('.training-tabs');
