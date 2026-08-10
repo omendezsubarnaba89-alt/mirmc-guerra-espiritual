@@ -22,7 +22,15 @@ jobs:
           node-version: '22'
 
       - name: Check JavaScript syntax
-        run: node --check script.js
+        run: |
+          node --check script.js
+          node --check course-data.js
+          node --check course-progress.js
+          node --check course-enhancements.js
+          node --check lesson.js
 
       - name: Validate static references
         run: node scripts/validate.mjs
+
+      - name: Validate course architecture
+        run: node scripts/validate-course.mjs
