@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover" />
+  <meta name="theme-color" content="#050813" />
+  <meta name="robots" content="noindex,nofollow" />
+  <title>Certificados | Administración MIRMC</title>
+  <link rel="icon" href="assets/mirmc-shield.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="admin.css" />
+  <link rel="stylesheet" href="admin-certificates.css" />
+</head>
+<body class="cert-admin-page">
+  <div class="ambient-grid" aria-hidden="true"></div>
+  <header class="admin-header"><div><a class="brand" href="admin.html"><img src="assets/mirmc-shield.svg" alt="" class="brand-mark" width="44" height="52"/><span class="brand-copy"><strong>MIRMC</strong><small>ADMINISTRACIÓN</small></span></a><a href="admin.html">← Panel</a></div></header>
+  <main class="cert-admin-shell">
+    <section class="cert-admin-hero"><div><p class="admin-eyebrow">CERTIFICADOS VERIFICABLES · V12</p><h1>Emisión con <em>control.</em></h1><p>Consulta los registros emitidos y su estado actual. La revocación no elimina el certificado: conserva el código y la trazabilidad, pero el verificador público lo mostrará como revocado.</p></div><div class="cert-admin-role" id="certAdminRole"><span>VERIFICANDO</span><strong>Permisos</strong></div></section>
+    <section class="admin-denied" id="certAdminDenied" hidden><span>ACCESO RESTRINGIDO</span><h2>Solo personal autorizado.</h2><p>Esta área administra registros verificables de finalización.</p><a class="button button-ghost" href="admin.html">Volver al panel</a></section>
+    <section id="certAdminApp" hidden>
+      <div class="cert-admin-summary" id="certAdminSummary"></div>
+      <div class="cert-admin-toolbar"><input id="certAdminSearch" type="search" placeholder="Buscar por nombre o código" autocomplete="off"/><button class="button button-ghost" id="certAdminRefresh" type="button">Actualizar</button></div>
+      <div class="cert-admin-message" id="certAdminMessage" aria-live="polite"></div>
+      <div class="cert-admin-list" id="certAdminList"></div>
+    </section>
+  </main>
+  <footer class="lesson-footer"><div><span>MIRMC GUERRA ESPIRITUAL</span><span>CERTIFICADOS · ESTADO · VERIFICACIÓN</span></div></footer>
+  <script src="cloud-config.js"></script><script src="cloud-client.js"></script><script src="admin-certificates.js"></script>
+</body>
+</html>
