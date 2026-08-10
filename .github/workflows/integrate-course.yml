@@ -1,0 +1,62 @@
+name: Integrate course experience
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'course-data.js'
+      - 'course-progress.js'
+      - 'course-enhancements.js'
+      - 'course-index.css'
+      - '.github/workflows/integrate-course.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  integrate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Inject course assets into index
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import re
+
+          path = Path('index.html')
+          html = path.read_text(encoding='utf-8')
+
+          head_start = '<!-- MIRMC COURSE:HEAD START -->'
+          head_end = '<!-- MIRMC COURSE:HEAD END -->'
+          script_start = '<!-- MIRMC COURSE:SCRIPTS START -->'
+          script_end = '<!-- MIRMC COURSE:SCRIPTS END -->'
+
+          html = re.sub(re.escape(head_start) + r'.*?' + re.escape(head_end), '', html, flags=re.S)
+          html = re.sub(re.escape(script_start) + r'.*?' + re.escape(script_end), '', html, flags=re.S)
+
+          head_block = f'''{head_start}\n  <link rel="stylesheet" href="course-index.css" />\n  {head_end}'''
+          script_block = f'''{script_start}\n  <script src="course-data.js"></script>\n  <script src="course-progress.js"></script>\n  <script src="course-enhancements.js"></script>\n  {script_end}'''
+
+          html = html.replace('</head>', head_block + '\n</head>')
+          html = html.replace('</body>', script_block + '\n</body>')
+          path.write_text(html, encoding='utf-8')
+          PY
+
+      - name: Commit integrated index
+        shell: bash
+        run: |
+          if git diff --quiet -- index.html; then
+            echo "index.html already has course assets."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          git commit -m "feat: wire interactive course into home [skip ci]"
+          git push
