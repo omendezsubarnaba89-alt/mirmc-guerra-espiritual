@@ -7,6 +7,8 @@
   const authArea = $('#authArea');
   const signedOut = $('#signedOutPanel');
   const signedIn = $('#signedInPanel');
+  const googleButton = $('#googleSignIn');
+  const authSeparator = document.querySelector('.auth-separator');
 
   function countLocal() {
     const snap = sync.snapshot();
@@ -67,9 +69,13 @@
     }
 
     mode.className = 'account-mode cloud';
-    mode.innerHTML = '<span>MODO ACTUAL</span><strong>Nube configurada</strong>';
+    mode.innerHTML = '<span>MODO ACTUAL</span><strong>Nube activa</strong>';
     disabled.hidden = true;
     authArea.hidden = false;
+
+    const googleEnabled = Boolean(cloud.config().googleEnabled);
+    if (googleButton) googleButton.hidden = !googleEnabled;
+    if (authSeparator) authSeparator.hidden = !googleEnabled;
 
     let client;
     try {
@@ -109,18 +115,20 @@
       message($('#authMessage'), 'Creando cuenta…');
       const { data: result, error } = await client.auth.signUp({ email, password });
       if (error) message($('#authMessage'), error.message, 'error');
-      else if (!result?.session) message($('#authMessage'), 'Cuenta creada. Revisa tu correo si el proyecto exige confirmación.', 'success');
+      else if (!result?.session) message($('#authMessage'), 'Cuenta creada. Revisa tu correo para confirmar el acceso si Supabase lo solicita.', 'success');
       else message($('#authMessage'), 'Cuenta creada y sesión iniciada.', 'success');
     });
 
-    $('#googleSignIn').addEventListener('click', async () => {
-      message($('#authMessage'), 'Abriendo Google…');
-      const { error } = await client.auth.signInWithOAuth({
-        provider: 'google',
-        options: { redirectTo: cloud.config().redirectUrl }
+    if (googleEnabled && googleButton) {
+      googleButton.addEventListener('click', async () => {
+        message($('#authMessage'), 'Abriendo Google…');
+        const { error } = await client.auth.signInWithOAuth({
+          provider: 'google',
+          options: { redirectTo: cloud.config().redirectUrl }
+        });
+        if (error) message($('#authMessage'), error.message, 'error');
       });
-      if (error) message($('#authMessage'), error.message, 'error');
-    });
+    }
 
     $('#saveProfile').addEventListener('click', async () => {
       const { data: authData } = await client.auth.getUser();
