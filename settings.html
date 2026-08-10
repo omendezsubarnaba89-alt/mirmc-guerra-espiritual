@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#050813" />
+  <meta name="robots" content="noindex,nofollow" />
+  <meta name="description" content="Respaldo local y configuración de MIRMC Guerra Espiritual." />
+  <title>Mis datos | MIRMC Guerra Espiritual</title>
+  <link rel="icon" href="assets/mirmc-shield.svg" type="image/svg+xml" />
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="settings.css" />
+</head>
+<body class="settings-page">
+  <div class="ambient-grid" aria-hidden="true"></div>
+  <header class="settings-header"><div><a class="brand" href="index.html"><img src="assets/mirmc-shield.svg" alt="" class="brand-mark" width="44" height="52" /><span class="brand-copy"><strong>MIRMC</strong><small>GUERRA ESPIRITUAL</small></span></a><a href="academic.html">← Registro académico</a></div></header>
+  <main class="settings-shell">
+    <section class="settings-hero"><p>MIS DATOS</p><h1>Tu progreso debe poder <em>viajar contigo.</em></h1><span>Mientras no exista una cuenta sincronizada, puedes guardar una copia de tu progreso y restaurarla en este u otro navegador.</span></section>
+
+    <section class="settings-status" id="settingsStatus"></section>
+
+    <section class="settings-grid">
+      <article class="settings-card"><span class="settings-index">01</span><h2>Exportar respaldo</h2><p>Descarga un archivo JSON con Guardia, lecciones, evaluaciones finales y nombre del certificado.</p><button class="button button-primary" id="exportBackup" type="button">Descargar respaldo</button></article>
+      <article class="settings-card"><span class="settings-index">02</span><h2>Restaurar respaldo</h2><p>Selecciona un respaldo generado por esta plataforma. Antes de escribir datos se valida su estructura.</p><label class="button button-ghost file-button">Seleccionar archivo<input id="importBackup" type="file" accept="application/json,.json" hidden /></label><div id="importResult" class="settings-result" aria-live="polite"></div></article>
+      <article class="settings-card"><span class="settings-index">03</span><h2>Instalar la aplicación</h2><p>Cuando tu navegador lo permita, instala MIRMC Guerra Espiritual en la pantalla de inicio para abrirla como una app.</p><button class="button button-ghost" id="installApp" type="button" disabled>Instalación no disponible</button><small id="installHint">También puedes usar el menú de Chrome → Añadir a pantalla de inicio.</small></article>
+      <article class="settings-card danger"><span class="settings-index">04</span><h2>Restablecer datos locales</h2><p>Elimina Guardia, curso, exámenes y nombre del certificado en este navegador. Esta acción no se puede deshacer sin un respaldo.</p><button class="danger-button" id="resetAll" type="button">Borrar mis datos locales</button></article>
+    </section>
+
+    <section class="settings-privacy"><strong>Privacidad local</strong><p>En esta etapa MIRMC no recibe este progreso en un servidor. El archivo de respaldo puede contener tu nombre si lo escribiste para el certificado; guárdalo donde consideres seguro.</p></section>
+  </main>
+  <footer class="lesson-footer"><div><span>MIRMC GUERRA ESPIRITUAL</span><span>DATOS LOCALES · RESPALDO · CONTROL DEL USUARIO</span></div></footer>
+  <script src="settings.js"></script>
+</body>
+</html>
