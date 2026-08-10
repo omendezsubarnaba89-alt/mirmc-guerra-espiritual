@@ -23,16 +23,29 @@
         <div><b id="courseHomeCount">0/15</b><small>LECCIONES</small></div>
         <div><b id="courseHomeNext">01</b><small>PRÓXIMA</small></div>
       </div>
-      <a class="course-continue" id="courseContinue" href="lesson.html?lesson=01">Comenzar ruta <span>→</span></a>
+      <div class="course-overview-actions">
+        <a class="course-continue" id="courseContinue" href="lesson.html?lesson=01">Comenzar ruta <span>→</span></a>
+        <a class="course-academic" href="academic.html">Registro académico ↗</a>
+      </div>
     `;
     const tabContainer = training.querySelector('.training-tabs');
     tabContainer?.before(overview);
+  }
+
+  function nextCourseAction(stats) {
+    if (stats.byLevel[1].done === 5 && !progress.examPassed(1)) return { href:'assessment.html?level=1', label:'Presentar examen Nivel 1' };
+    if (stats.byLevel[2].done === 5 && !progress.examPassed(2)) return { href:'assessment.html?level=2', label:'Presentar examen Nivel 2' };
+    if (stats.byLevel[3].done === 5 && !progress.examPassed(3)) return { href:'assessment.html?level=3', label:'Presentar examen Nivel 3' };
+    if (stats.completed === stats.total && [1,2,3].every(level => progress.examPassed(level))) return { href:'academic.html', label:'Ruta completada ✓' };
+    const next = progress.nextAvailable();
+    return { href:`lesson.html?lesson=${next}`, label:`${stats.completed ? 'Continuar' : 'Comenzar'} ruta` };
   }
 
   function updateOverview() {
     createOverview();
     const stats = progress.stats();
     const next = progress.nextAvailable();
+    const action = nextCourseAction(stats);
     const pct = document.getElementById('courseHomePct');
     const bar = document.getElementById('courseHomeBar');
     const count = document.getElementById('courseHomeCount');
@@ -43,13 +56,8 @@
     if (count) count.textContent = `${stats.completed}/${stats.total}`;
     if (nextEl) nextEl.textContent = stats.completed === stats.total ? '✓' : next;
     if (continueLink) {
-      if (stats.completed === stats.total) {
-        continueLink.href = 'lesson.html?lesson=15';
-        continueLink.innerHTML = 'Ruta completada <span>✓</span>';
-      } else {
-        continueLink.href = `lesson.html?lesson=${next}`;
-        continueLink.innerHTML = `${stats.completed ? 'Continuar' : 'Comenzar'} ruta <span>→</span>`;
-      }
+      continueLink.href = action.href;
+      continueLink.innerHTML = `${action.label} <span>→</span>`;
     }
   }
 
@@ -85,7 +93,7 @@
         action.href = `lesson.html?lesson=${number}`;
       } else {
         row.classList.add('is-locked');
-        action.textContent = 'BLOQUEADA';
+        action.textContent = (number === '06' && !progress.examPassed(1)) || (number === '11' && !progress.examPassed(2)) ? 'EXAMEN PENDIENTE' : 'BLOQUEADA';
         action.setAttribute('aria-label', `Lección ${number} bloqueada`);
       }
       row.appendChild(action);
@@ -95,11 +103,21 @@
     const summary = stage.querySelector('.level-summary');
     if (summary) {
       summary.querySelector('.level-progress-inline')?.remove();
+      summary.querySelector('.level-exam-inline')?.remove();
       const s = progress.stats().byLevel[level];
       const block = document.createElement('div');
       block.className = 'level-progress-inline';
       block.innerHTML = `<span>NIVEL ${level}</span><div><i style="width:${s.pct}%"></i></div><b>${s.done}/${s.total}</b>`;
       summary.appendChild(block);
+
+      if (s.done === s.total) {
+        const passed = progress.examPassed(level);
+        const exam = document.createElement('a');
+        exam.className = `level-exam-inline ${passed ? 'passed' : ''}`;
+        exam.href = `assessment.html?level=${level}`;
+        exam.innerHTML = `<span>CIERRE DEL NIVEL ${level}</span><strong>${passed ? 'Examen aprobado ✓' : 'Presentar evaluación final →'}</strong>`;
+        summary.appendChild(exam);
+      }
     }
     decorating = false;
   }
@@ -149,8 +167,6 @@
   observer.observe(stage, { childList: true, subtree: false });
 
   tabs.forEach(tab => tab.addEventListener('click', () => setTimeout(decorateRows, 20)));
-  window.addEventListener('mirmc-course-progress', () => {
-    updateOverview();
-    decorateRows();
-  });
+  window.addEventListener('mirmc-course-progress', () => { updateOverview(); decorateRows(); });
+  window.addEventListener('storage', () => { updateOverview(); decorateRows(); });
 })();
