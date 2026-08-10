@@ -9,7 +9,7 @@
   const refresh=document.querySelector('#refreshContentAudit');
   let session=null;
 
-  const labels={save_draft:'Borrador guardado',publish:'Contenido publicado',unpublish:'Publicación retirada',archive:'Override archivado',restore:'Override restaurado'};
+  const labels={save_draft:'Borrador guardado',publish:'Contenido publicado',unpublish:'Publicación retirada',archive:'Override archivado',restore:'Override restaurado',rollback:'Versión anterior restaurada'};
   const fmt=v=>{try{return new Intl.DateTimeFormat('es',{dateStyle:'medium',timeStyle:'short'}).format(new Date(v));}catch{return '—';}};
   const esc=v=>String(v??'').replace(/[&<>\"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 
