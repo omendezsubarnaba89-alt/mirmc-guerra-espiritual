@@ -1,65 +1,80 @@
-# Activación de nube · MIRMC Guerra Espiritual
+# Supabase · MIRMC Guerra Espiritual
 
-La V7 funciona en modo local aunque Supabase no esté configurado. Esta carpeta contiene lo necesario para activar autenticación y sincronización real cuando exista el proyecto.
+La nube está **activa** desde V9.
 
-## 1. Crear proyecto Supabase
+## Proyecto
 
-Crea un proyecto nuevo dedicado a MIRMC Guerra Espiritual. No reutilices un backend de otra aplicación sin una decisión explícita de arquitectura.
+- Nombre: `MIRMC Guerra Espiritual`
+- Project Ref: `eqffbegdezlzzffvmsqk`
+- Región: `us-east-1`
+- Project URL: `https://eqffbegdezlzzffvmsqk.supabase.co`
+- Frontend: GitHub Pages
 
-## 2. Aplicar la migración
+El frontend usa exclusivamente una **publishable key**. Ninguna `service_role`, `sb_secret_...`, contraseña de base de datos o token de gestión debe vivir en GitHub Pages.
 
-Ejecuta `migrations/20260810143000_init_mirmc_cloud.sql` desde Supabase CLI o el SQL Editor.
+## Migraciones aplicadas
 
-La migración crea:
+Backend real:
 
-- `public.profiles`
-- `public.user_learning_state`
-- RLS en ambas tablas
-- políticas para que cada usuario autenticado solo lea/escriba su propia fila
-- trigger de perfil al crear un usuario
-- timestamps de actualización
+1. `init_mirmc_cloud`
+2. `harden_profile_trigger_function`
 
-## 3. Configurar Auth
+Archivos del repositorio:
 
-En Authentication / URL Configuration:
+- `migrations/20260810143000_init_mirmc_cloud.sql`
+- `migrations/20260810200500_harden_trigger_functions.sql`
 
-- Site URL: `https://omendezsubarnaba89-alt.github.io/mirmc-guerra-espiritual/`
-- Redirect URL permitida: `https://omendezsubarnaba89-alt.github.io/mirmc-guerra-espiritual/account.html`
+## Esquema
 
-Para Google, habilita el proveedor Google y completa sus credenciales OAuth en Supabase. El botón de Google de la app ya está preparado.
+### `public.profiles`
+- `user_id` → `auth.users.id`
+- `display_name`
+- timestamps
 
-## 4. Activar el frontend
+### `public.user_learning_state`
+- `user_id` → `auth.users.id`
+- `schema_version`
+- `payload jsonb`
+- `client_updated_at`
+- timestamps
 
-Edita `cloud-config.js`:
+## Seguridad
 
-```js
-window.MIRMC_CLOUD_CONFIG = {
-  enabled: true,
-  provider: 'supabase',
-  supabaseUrl: 'https://TU-PROYECTO.supabase.co',
-  supabasePublishableKey: 'TU_CLAVE_PUBLICABLE',
-  redirectUrl: new URL('account.html', window.location.href).href,
-  schemaVersion: 1
-};
-```
+- RLS habilitado en ambas tablas.
+- `anon` no tiene privilegios directos sobre estas tablas.
+- `authenticated` recibe únicamente `SELECT/INSERT/UPDATE` sujetos a RLS.
+- Todas las políticas comparan `auth.uid()` con `user_id`.
+- Las funciones de trigger no son ejecutables mediante RPC por `anon` ni `authenticated`.
+- Security Advisor fue ejecutado después del hardening y devolvió cero avisos.
 
-La URL del proyecto y la publishable key están diseñadas para uso en cliente. **Nunca** coloques una `service_role`, secret key administrativa, contraseña de base de datos ni token de gestión en este repositorio o en JavaScript servido por GitHub Pages.
+## Auth · ajuste obligatorio de Dashboard
 
-## 5. Probar
+Supabase hosted exige confirmación de email por defecto. Antes de probar altas públicas, configura en **Authentication → URL Configuration**:
 
-1. Abre `account.html`.
-2. Crea una cuenta de prueba.
-3. Completa una lección o importa un respaldo.
-4. Pulsa `Sincronizar ahora`.
-5. En otro navegador/dispositivo, inicia sesión con la misma cuenta.
-6. La sincronización inteligente debe combinar el progreso sin perder lecciones completadas ni mejores notas.
+- Site URL:
+  `https://omendezsubarnaba89-alt.github.io/mirmc-guerra-espiritual/`
+- Additional Redirect URL:
+  `https://omendezsubarnaba89-alt.github.io/mirmc-guerra-espiritual/**`
 
-## Estrategia de conflictos
+El conector actual permite administrar proyecto, SQL, migraciones, advisors y claves publicables, pero no expone la modificación de URL Configuration.
 
-- Lecciones completadas: unión; una lección completada en cualquiera de los dispositivos permanece completada.
-- Quiz de lección: se conserva la mejor puntuación registrada.
-- Exámenes finales: se conserva el mejor porcentaje y el estado aprobado.
-- Guardias: las marcas booleanas se combinan.
-- Nombre de certificado: se conserva el valor local cuando existe; en caso contrario se usa el remoto.
+## Google OAuth
 
-Los botones `Usar este dispositivo como fuente` y `Restaurar desde la nube` son operaciones manuales deliberadas para casos donde el usuario quiera reemplazar un lado en lugar de fusionar.
+`cloud-config.js` mantiene `googleEnabled:false`. Para activarlo hacen falta las credenciales OAuth del proyecto de Google y configurar el proveedor en Supabase. Hasta entonces el botón permanece oculto.
+
+## Sincronización
+
+`cloud-sync.js` fusiona:
+
+- lecciones completadas;
+- quizzes de lección;
+- exámenes finales;
+- Guardia de hoy;
+- favoritos;
+- notas personales;
+- historial reciente;
+- nombre del certificado.
+
+`cloud-autosync.js` ejecuta reconciliación al iniciar sesión, detectar cambios, recuperar conexión, volver a enfocar la aplicación y durante comprobaciones periódicas.
+
+Los controles manuales de `account.html` siguen disponibles para subir/restaurar de manera deliberada.
