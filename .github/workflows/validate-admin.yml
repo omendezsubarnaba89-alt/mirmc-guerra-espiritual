@@ -24,4 +24,7 @@ jobs:
       - name: Check browser JavaScript syntax
         run: |
           node --check admin.js
+          node --check admin-enhancements.js
+          node --check admin-user.js
+          node --check admin-audit.js
           node --check account.js
