@@ -44,8 +44,14 @@
 
   <footer class="lesson-footer"><div><span>MIRMC GUERRA ESPIRITUAL</span><span>CRISTO AL CENTRO · BIBLIA ABIERTA · DISCERNIMIENTO</span></div></footer>
   <script src="resource-data.js"></script>
-  <script src="resource.js"></script>
-  <script src="study-data.js"></script>
-  <script src="study-tools.js"></script>
+  <script src="cloud-config.js"></script>
+  <script src="content-runtime.js"></script>
+  <script>
+    window.MIRMCContent.ready.finally(() => {
+      const r=document.createElement('script'); r.src='resource.js';
+      r.onload=()=>{ const d=document.createElement('script'); d.src='study-data.js'; d.onload=()=>{ const t=document.createElement('script'); t.src='study-tools.js'; document.body.appendChild(t); }; document.body.appendChild(d); };
+      document.body.appendChild(r);
+    });
+  </script>
 </body>
 </html>
