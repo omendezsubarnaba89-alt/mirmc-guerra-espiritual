@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://omendezsubarnaba89-alt.github.io/mirmc-guerra-espiritual/sitemap.xml
