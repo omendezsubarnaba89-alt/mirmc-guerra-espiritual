@@ -25,7 +25,7 @@
       </div>
       <div class="course-overview-actions">
         <a class="course-continue" id="courseContinue" href="lesson.html?lesson=01">Comenzar ruta <span>→</span></a>
-        <a class="course-academic" href="academic.html">Registro académico ↗</a>
+        <div class="course-utility-links"><a href="academic.html">Registro académico ↗</a><a href="settings.html">Mis datos / respaldo ↗</a></div>
       </div>
     `;
     const tabContainer = training.querySelector('.training-tabs');
@@ -54,7 +54,12 @@
     if (pct) pct.textContent = `${stats.pct}%`;
     if (bar) bar.style.width = `${stats.pct}%`;
     if (count) count.textContent = `${stats.completed}/${stats.total}`;
-    if (nextEl) nextEl.textContent = stats.completed === stats.total ? '✓' : next;
+    if (nextEl) {
+      if (stats.byLevel[1].done === 5 && !progress.examPassed(1)) nextEl.textContent = 'EX1';
+      else if (stats.byLevel[2].done === 5 && !progress.examPassed(2)) nextEl.textContent = 'EX2';
+      else if (stats.byLevel[3].done === 5 && !progress.examPassed(3)) nextEl.textContent = 'EX3';
+      else nextEl.textContent = stats.completed === stats.total ? '✓' : next;
+    }
     if (continueLink) {
       continueLink.href = action.href;
       continueLink.innerHTML = `${action.label} <span>→</span>`;
@@ -169,4 +174,6 @@
   tabs.forEach(tab => tab.addEventListener('click', () => setTimeout(decorateRows, 20)));
   window.addEventListener('mirmc-course-progress', () => { updateOverview(); decorateRows(); });
   window.addEventListener('storage', () => { updateOverview(); decorateRows(); });
+
+  if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(() => {});
 })();
