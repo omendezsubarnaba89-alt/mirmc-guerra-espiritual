@@ -56,11 +56,12 @@
     const confirmed = users.filter(u => u.email_confirmed_at).length;
     const active = users.filter(u => u.active !== false).length;
     const staff = users.filter(u => ['admin','super_admin'].includes(u.role) && u.active !== false).length;
+    const certificates = users.filter(u => u.certificate_status === 'active').length;
     summary.innerHTML = `
       <div><small>USUARIOS</small><strong>${users.length}</strong></div>
       <div><small>CONFIRMADOS</small><strong>${confirmed}</strong></div>
-      <div><small>ACTIVOS</small><strong>${active}</strong></div>
-      <div><small>PERSONAL</small><strong>${staff}</strong></div>`;
+      <div><small>PERSONAL</small><strong>${staff}</strong></div>
+      <div><small>CERT. ACTIVOS</small><strong>${certificates}</strong></div>`;
   }
 
   function card(user) {
@@ -69,14 +70,17 @@
     const display = user.display_name || 'Sin nombre visible';
     const stateLabel = user.active === false ? 'INACTIVO' : String(user.role || 'student').replace('_',' ');
     const roleOptions = ['student','admin','super_admin'].map(role => `<option value="${role}" ${user.role === role ? 'selected' : ''}>${role.replace('_',' ')}</option>`).join('');
+    const certLabel = user.certificate_status ? String(user.certificate_status).toUpperCase() : 'NO';
     return `<article class="admin-user" data-user-id="${user.user_id}">
       <div class="admin-user-head">
         <div class="admin-user-title"><small>${user.email_confirmed_at ? 'CORREO CONFIRMADO' : 'CORREO PENDIENTE'}</small><strong>${escapeHtml(user.email || '')}</strong><span>${escapeHtml(display)}</span></div>
         <span class="admin-badge">${escapeHtml(stateLabel)}</span>
       </div>
       <div class="admin-user-metrics">
-        <div><small>LECCIONES</small><strong>${Number(user.lesson_count || 0)}/15</strong></div>
-        <div><small>EXÁMENES</small><strong>${Number(user.exam_count || 0)}/3</strong></div>
+        <div><small>LECCIONES LOCAL</small><strong>${Number(user.lesson_count || 0)}/15</strong></div>
+        <div><small>LECCIONES OFICIAL</small><strong>${Number(user.official_lesson_count || 0)}/15</strong></div>
+        <div><small>EXÁMENES OFICIAL</small><strong>${Number(user.official_exam_count || 0)}/3</strong></div>
+        <div><small>CERTIFICADO</small><strong>${escapeHtml(certLabel)}</strong></div>
         <div><small>ALTA</small><strong>${fmtDate(user.created_at)}</strong></div>
         <div><small>ÚLTIMO ACCESO</small><strong>${fmtDate(user.last_sign_in_at)}</strong></div>
       </div>
@@ -94,7 +98,7 @@
 
   function renderUsers() {
     const q = (search?.value || '').trim().toLowerCase();
-    const filtered = !q ? users : users.filter(u => `${u.email || ''} ${u.display_name || ''}`.toLowerCase().includes(q));
+    const filtered = !q ? users : users.filter(u => `${u.email || ''} ${u.display_name || ''} ${u.certificate_code || ''}`.toLowerCase().includes(q));
     usersWrap.innerHTML = filtered.length ? filtered.map(card).join('') : '<div class="admin-loading">No hay usuarios que coincidan con la búsqueda.</div>';
   }
 
