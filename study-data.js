@@ -55,4 +55,12 @@
   function clearHistory(){ const state = read(); state.history=[]; write(state); }
 
   window.MIRMCStudy = { KEY, read, write, makeKey, bookmark, isBookmarked, saveNote, note, touch, clearHistory };
+
+  if (!window.__MIRMC_AUTO_SYNC_LOADER__) {
+    window.__MIRMC_AUTO_SYNC_LOADER__ = true;
+    const script = document.createElement('script');
+    script.src = 'cloud-autosync.js';
+    script.defer = true;
+    document.head.appendChild(script);
+  }
 })();
