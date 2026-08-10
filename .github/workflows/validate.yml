@@ -31,6 +31,11 @@ jobs:
           node --check resource-data.js
           node --check library.js
           node --check resource.js
+          node --check assessment-data.js
+          node --check assessment-progress.js
+          node --check assessment.js
+          node --check academic.js
+          node --check certificate.js
 
       - name: Validate static references
         run: node scripts/validate.mjs
@@ -40,3 +45,6 @@ jobs:
 
       - name: Validate library architecture
         run: node scripts/validate-library.mjs
+
+      - name: Validate academic architecture
+        run: node scripts/validate-academic.mjs
