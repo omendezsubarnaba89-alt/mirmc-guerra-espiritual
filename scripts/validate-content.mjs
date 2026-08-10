@@ -1,7 +1,7 @@
 import fs from 'node:fs';
 
 const required = [
-  'admin-content.html','admin-content.css','admin-content.js','content-runtime.js',
+  'admin-content.html','admin-content.css','admin-content.js','admin-content-restore.js','content-runtime.js',
   'admin-content-audit.html','admin-content-audit.js',
   'admin-preview.html','admin-preview.css','admin-preview.js',
   'admin-versions.html','admin-versions.css','admin-versions.js',
@@ -13,7 +13,7 @@ const required = [
 ];
 for (const file of required) if (!fs.existsSync(file)) throw new Error(`Missing V11 content file: ${file}`);
 
-const browserFiles = ['admin-content.js','content-runtime.js','admin-preview.js','admin-content-audit.js','admin-versions.js','lesson.html','library.html','resource.html','study.html'];
+const browserFiles = ['admin-content.js','admin-content-restore.js','content-runtime.js','admin-preview.js','admin-content-audit.js','admin-versions.js','course-enhancements.js','lesson.html','library.html','resource.html','study.html'];
 const browser = browserFiles.map(f=>fs.readFileSync(f,'utf8')).join('\n');
 if (/SUPABASE_SERVICE_ROLE_KEY|sb_secret_/i.test(browser)) throw new Error('V11 browser files must never expose administrative secrets.');
 
@@ -24,7 +24,7 @@ for (const marker of ['published_payload','static-fallback','MIRMC_COURSE_DATA',
 if (/Authorization:\s*`Bearer \$\{config\.supabasePublishableKey\}/.test(runtime)) throw new Error('Publishable key must not be treated as a JWT.');
 
 const edge = fs.readFileSync('supabase/functions/content-management/index.ts','utf8');
-for (const marker of ['SUPABASE_SERVICE_ROLE_KEY','auth.getUser(token)','save_draft','super_admin_required','published_payload','content_audit_log','get_item','audit','list_versions','rollback','content_versions','current_version']) {
+for (const marker of ['SUPABASE_SERVICE_ROLE_KEY','auth.getUser(token)','save_draft','super_admin_required','published_payload','content_audit_log','get_item','audit','list_versions','rollback','content_versions','current_version','restore']) {
   if (!edge.includes(marker)) throw new Error(`Content Edge Function missing: ${marker}`);
 }
 
@@ -43,13 +43,19 @@ for (const html of ['lesson.html','library.html','resource.html','study.html']) 
   for (const marker of ['cloud-config.js','content-runtime.js']) if (!text.includes(marker)) throw new Error(`${html} missing ${marker}`);
 }
 
+const homeEnhancements=fs.readFileSync('course-enhancements.js','utf8');
+for (const marker of ['hydratePublishedCourse','content-runtime.js','syncRowCopy','mirmc-content-ready']) if(!homeEnhancements.includes(marker)) throw new Error(`Home route hydration missing: ${marker}`);
+
 const preview = fs.readFileSync('admin-preview.js','utf8');
 for (const marker of ['get_item','draft_payload','user_roles','admin','super_admin']) if (!preview.includes(marker)) throw new Error(`Preview missing security/content marker: ${marker}`);
 
 const versions = fs.readFileSync('admin-versions.js','utf8');
 for (const marker of ['list_versions','rollback','super_admin','user_roles']) if (!versions.includes(marker)) throw new Error(`Versions UI missing marker: ${marker}`);
 
+const restore=fs.readFileSync('admin-content-restore.js','utf8');
+for(const marker of ['restore','super_admin','content-management']) if(!restore.includes(marker)) throw new Error(`Restore control missing marker: ${marker}`);
+
 const sw=fs.readFileSync('sw.js','utf8');
-for (const marker of ['./admin-content.html','./admin-content.css','./admin-content.js','./content-runtime.js','./admin-content-audit.html','./admin-content-audit.js','./admin-preview.html','./admin-preview.css','./admin-preview.js','./admin-versions.html','./admin-versions.css','./admin-versions.js']) if(!sw.includes(marker)) throw new Error(`Service worker missing ${marker}`);
+for (const marker of ['./admin-content.html','./admin-content.css','./admin-content.js','./admin-content-restore.js','./content-runtime.js','./admin-content-audit.html','./admin-content-audit.js','./admin-preview.html','./admin-preview.css','./admin-preview.js','./admin-versions.html','./admin-versions.css','./admin-versions.js']) if(!sw.includes(marker)) throw new Error(`Service worker missing ${marker}`);
 
 console.log('V11 content management validation passed.');
