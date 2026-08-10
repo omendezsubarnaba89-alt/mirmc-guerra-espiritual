@@ -6,9 +6,9 @@ Centro web de formación bíblica, enseñanza y entrenamiento para comprender la
 
 https://omendezsubarnaba89-alt.github.io/mirmc-guerra-espiritual/
 
-## Estado actual — V9
+## Estado actual — V11
 
-La plataforma combina formación, curso, biblioteca, evaluaciones, expediente, certificado, respaldo/PWA, Cuaderno MIRMC y **sincronización real en Supabase**.
+La plataforma ya combina formación, curso secuencial, biblioteca, evaluaciones, expediente, certificado, PWA, Cuaderno MIRMC, cuentas reales, sincronización entre dispositivos, roles administrativos y **gestión editorial desde Supabase con borradores, publicación, preview, auditoría, versiones y rollback**.
 
 ### Formación
 - 3 niveles y 15 lecciones navegables.
@@ -17,93 +17,108 @@ La plataforma combina formación, curso, biblioteca, evaluaciones, expediente, c
 - Gates académicos entre niveles.
 - Registro académico y certificado interno imprimible.
 - Sala de discernimiento, Armadura de Dios y Guardia de hoy.
+- La Ruta MIRMC del home se hidrata con títulos/subtítulos publicados desde el CMS.
 
 ### Biblioteca
-- 12 recursos escritos iniciales.
+- 12 recursos escritos estáticos iniciales.
 - Búsqueda y filtros por categoría/nivel.
 - Lector dinámico para cada recurso.
+- El CMS puede editar recursos existentes y crear recursos nuevos sin redeploy.
 
 ### Cuaderno MIRMC
-- `study.html` con búsqueda global en las 15 lecciones y 12 recursos.
+- `study.html` con búsqueda global en lecciones y recursos.
 - Filtros por tipo y nivel.
 - Favoritos personales.
 - Notas de hasta 12.000 caracteres por lección o recurso.
 - Historial de hasta 30 contenidos recientes.
-- Lecciones y recursos incorporan `Cuaderno personal`.
 - Notas/favoritos forman parte del respaldo JSON y de la sincronización en nube.
+- El índice usa también las versiones publicadas desde Supabase.
 
-### Cuenta y nube · V9
+### Cuenta y nube
 - Proyecto Supabase dedicado: `eqffbegdezlzzffvmsqk` (`us-east-1`).
-- `cloud-config.js` está activado con Project URL + **publishable key**; no contiene claves administrativas.
-- `account.html` ofrece acceso por correo/contraseña, perfil y controles de sincronización.
-- Google OAuth permanece oculto hasta configurar el proveedor de Google.
-- `cloud-sync.js` fusiona progreso local/remoto conservando lecciones completadas, mejores notas, Cuaderno y nombre del certificado.
-- `cloud-autosync.js` sincroniza al iniciar sesión, al detectar cambios, recuperar conectividad, volver a la pestaña y en revisiones periódicas.
-- `course-progress.js`, `assessment-progress.js` y `study-data.js` cargan autosync cuando corresponde.
+- `cloud-config.js` usa Project URL + **publishable key**; no contiene claves administrativas.
+- Registro y acceso por correo/contraseña verificados de punta a punta.
+- Confirmación de correo, sesión, perfil automático y primera sincronización real comprobados.
+- Google OAuth permanece oculto hasta configurar el proveedor.
+- `cloud-sync.js` fusiona progreso local/remoto.
+- `cloud-autosync.js` sincroniza al iniciar sesión, detectar cambios, recuperar conectividad y volver a la pestaña.
 
-### Backend Supabase
-- `profiles` — perfil básico del alumno.
-- `user_learning_state` — snapshot versionado de progreso/cuaderno.
-- RLS activado en ambas tablas.
-- Acceso anónimo revocado.
-- Políticas `SELECT/INSERT/UPDATE` limitadas a `auth.uid() = user_id`.
-- Funciones de trigger endurecidas: no son ejecutables como RPC por `anon` ni `authenticated`.
-- Security Advisor verificado sin avisos después del hardening.
+### Roles y Administración · V10+
+- Roles: `student`, `admin`, `super_admin`.
+- Nuevos usuarios reciben `student` por defecto.
+- Panel `admin.html` protegido por sesión y autorización de servidor.
+- `admin-management` es una Edge Function con JWT obligatorio.
+- `service_role` se utiliza únicamente dentro de Edge Functions.
+- Expediente académico por alumno sin exponer notas privadas del Cuaderno.
+- Bitácora de cambios de roles/estado.
 
-### Datos y PWA
-- `settings.html` exporta/importa respaldo local.
-- `sw.js` mantiene caché del shell esencial y utiliza network-first para HTML/CSS/JS.
-- `manifest.webmanifest` mantiene la app preparada para modo standalone.
+### Gestión de contenido · V11
+- `content_items` separa `draft_payload` de `published_payload`.
+- El navegador público puede leer únicamente columnas publicables; `draft_payload` no tiene SELECT para `anon` ni `authenticated`.
+- RLS limita la lectura pública a elementos publicados y no archivados.
+- `content-management` maneja escrituras editoriales con JWT + roles.
+- `admin` puede crear/editar borradores.
+- Solo `super_admin` puede publicar, retirar, archivar, restaurar y ejecutar rollback.
+- Vista previa privada de borradores antes de publicar.
+- Historial editorial de borradores/publicaciones/retiros/archivos/rollback.
+- Cada publicación crea snapshot inmutable en `content_versions`.
+- Rollback publica el snapshot seleccionado como una **versión nueva**; no reescribe el historial.
+- GitHub sigue siendo fallback: si Supabase falla o no hay override publicado, se usa el contenido estático.
+- Lecciones, Biblioteca, lector, Cuaderno y filas de la Ruta MIRMC consumen overrides publicados.
+
+### Seguridad comprobada
+- RLS activo en tablas sensibles.
+- Acceso directo del navegador revocado para borradores, auditorías y versiones.
+- Prueba real: un borrador temporal fue invisible bajo rol `anon` y luego eliminado.
+- `content_versions` devuelve privilegio SELECT = false para `anon` y `authenticated`.
+- Security Advisor posterior a V11 solo mantiene el aviso de **Leaked Password Protection Disabled**, que debe activarse en Dashboard de Auth.
+
+### PWA y resiliencia
+- `sw.js` usa caché versionada y network-first para HTML/CSS/JS.
+- El shell incluye cuenta, administración, CMS, preview, historial editorial y versiones.
+- `manifest.webmanifest` mantiene la aplicación preparada para modo standalone.
 
 ## Archivos principales
 
 ### Curso
 `course-data.js`, `course-progress.js`, `course-enhancements.js`, `course-index.css`, `lesson.html`, `lesson.css`, `lesson.js`
 
-### Evaluación
-`assessment-data.js`, `assessment-progress.js`, `assessment.html`, `assessment.css`, `assessment.js`, `academic.html`, `certificate.html`
-
-### Biblioteca
-`resource-data.js`, `library.html`, `library.css`, `library.js`, `resource.html`, `resource.js`
-
-### Cuaderno
-`study.html`, `study.css`, `study.js`, `study-data.js`, `study-tools.js`, `study-tools.css`
+### Biblioteca y Cuaderno
+`resource-data.js`, `library.html`, `library.js`, `resource.html`, `resource.js`, `study.html`, `study.js`, `study-data.js`, `study-tools.js`
 
 ### Cuenta y nube
-`account.html`, `account.css`, `account.js`, `cloud-config.js`, `cloud-client.js`, `cloud-sync.js`, `cloud-autosync.js`
+`account.html`, `account.js`, `cloud-config.js`, `cloud-client.js`, `cloud-sync.js`, `cloud-autosync.js`
 
-### Backend
-`supabase/migrations/20260810143000_init_mirmc_cloud.sql`
-`supabase/migrations/20260810200500_harden_trigger_functions.sql`
+### Administración
+`admin.html`, `admin.js`, `admin-user.html`, `admin-audit.html`, `admin-enhancements.js`
+
+### CMS V11
+`admin-content.html`, `admin-content.js`, `admin-content-restore.js`, `admin-preview.html`, `admin-content-audit.html`, `admin-versions.html`, `content-runtime.js`
+
+### Backend Supabase
+`supabase/functions/admin-management/index.ts`
+`supabase/functions/content-management/index.ts`
+`supabase/migrations/`
 `supabase/README.md`
 
 ### Calidad
-GitHub Actions valida sitio, curso, biblioteca, evaluaciones, respaldo/offline, nube/RLS/autosync y Cuaderno en cada push.
+GitHub Actions valida sitio, curso, biblioteca, evaluaciones, respaldo/offline, nube/RLS/autosync, Cuaderno, administración y arquitectura V11 en cada push. `validate-content.mjs` también impide que secretos administrativos entren en archivos del navegador.
 
-## Seguridad
+## Auth configurado
 
-La clave que vive en el frontend es una **Supabase publishable key**, diseñada para aplicaciones públicas. La autorización de datos depende de RLS. No se almacena `service_role`, `sb_secret_...`, contraseña de base de datos ni secreto administrativo en GitHub.
-
-## Configuración Auth pendiente en Dashboard
-
-Para confirmaciones por correo y futuros OAuth, el Dashboard de Supabase debe usar como Site URL:
+Site URL:
 
 `https://omendezsubarnaba89-alt.github.io/mirmc-guerra-espiritual/`
 
-Y debe permitir como Redirect URL:
+Redirect permitido:
 
 `https://omendezsubarnaba89-alt.github.io/mirmc-guerra-espiritual/**`
 
-El conector actual de Supabase no expone la acción de modificar URL Configuration; es el único ajuste de Auth que requiere Dashboard.
-
-## Próximas etapas
-1. Configurar Site URL/Redirect URL y probar alta real por correo en el teléfono.
-2. Configurar Google OAuth cuando existan Client ID/Client Secret.
-3. Crear roles de alumno/administrador y panel administrativo.
-4. Añadir multimedia real: PDFs, audios y videos.
-5. Verificación remota de certificados.
-6. Custom SMTP antes de un lanzamiento público de usuarios.
+Pendientes opcionales/de producción:
+- Activar Leaked Password Protection en Supabase Auth.
+- Google OAuth cuando existan Client ID/Client Secret.
+- Custom SMTP antes de un lanzamiento de mayor volumen.
 
 ## Publicación
 
-GitHub Pages publica desde `main` y `/ (root)`.
+GitHub Pages publica desde `main` y `/ (root)`. El CMS no necesita redeploy para cambios editoriales publicados porque `content-runtime.js` consulta Supabase y conserva GitHub como fallback.
