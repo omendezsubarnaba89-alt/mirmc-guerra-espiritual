@@ -43,4 +43,12 @@
   function reset(){ try { localStorage.removeItem(KEY); } catch {} write({}); }
 
   window.MIRMCAssessmentProgress = { KEY, read, write, record, result, passed, average, stats, reset };
+
+  if (!window.__MIRMC_AUTO_SYNC_LOADER__) {
+    window.__MIRMC_AUTO_SYNC_LOADER__ = true;
+    const script = document.createElement('script');
+    script.src = 'cloud-autosync.js';
+    script.defer = true;
+    document.head.appendChild(script);
+  }
 })();
