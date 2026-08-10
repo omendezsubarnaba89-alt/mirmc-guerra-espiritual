@@ -25,14 +25,7 @@
   }
 
   function isMeaningful(data) {
-    return Boolean(
-      data && (
-        !isEmptyObject(data.guard) ||
-        !isEmptyObject(data.course) ||
-        !isEmptyObject(data.exams) ||
-        data.certificateName
-      )
-    );
+    return Boolean(data && (!isEmptyObject(data.guard) || !isEmptyObject(data.course) || !isEmptyObject(data.exams) || data.certificateName));
   }
 
   function mergeGuard(local = {}, remote = {}) {
@@ -88,14 +81,19 @@
       const aTime = new Date(a.lastAt || 0).getTime();
       const bTime = new Date(b.lastAt || 0).getTime();
       const latest = bTime >= aTime ? b : a;
+      const aBest = Number(a.bestPct || 0);
+      const bBest = Number(b.bestPct || 0);
+      const bestSource = bBest >= aBest ? b : a;
       out[level] = {
         ...a,
         ...b,
         passed: Boolean(a.passed || b.passed),
-        bestPercent: Math.max(Number(a.bestPercent || 0), Number(b.bestPercent || 0)),
         attempts: Math.max(Number(a.attempts || 0), Number(b.attempts || 0)),
-        lastScore: latest.lastScore ?? a.lastScore ?? b.lastScore ?? null,
-        lastPercent: latest.lastPercent ?? a.lastPercent ?? b.lastPercent ?? null,
+        total: Math.max(Number(a.total || 0), Number(b.total || 0)) || latest.total,
+        bestPct: Math.max(aBest, bBest),
+        bestScore: bestSource.bestScore ?? latest.bestScore ?? 0,
+        lastScore: latest.lastScore ?? null,
+        lastPct: latest.lastPct ?? null,
         lastAt: latestIso(a.lastAt, b.lastAt),
         passedAt: earliestIso(a.passedAt, b.passedAt)
       };
@@ -168,7 +166,6 @@
     const local = snapshot();
     const { row } = await readRemote();
     const remote = row?.payload || null;
-
     if (!remote && !isMeaningful(local)) return { payload: local, direction: 'none', message: 'No hay progreso para sincronizar todavía.' };
     if (!remote) {
       const result = await push(local);
@@ -178,7 +175,6 @@
       apply(remote);
       return { payload: remote, direction: 'pull', message: 'Progreso recuperado desde la nube.' };
     }
-
     const merged = merge(local, remote);
     apply(merged);
     const result = await push(merged);
