@@ -34,9 +34,13 @@ Deno.serve(async (req:Request)=>{
   const audit=async(actionName:string,type:string,key:string,details:any={})=>{
     await admin.from('content_audit_log').insert({actor_user_id:caller.id,action:actionName,content_type:type,content_key:key,details});
   };
+  const nextVersion=async(type:string,key:string)=>{
+    const {data}=await admin.from('content_versions').select('version').eq('content_type',type).eq('content_key',key).order('version',{ascending:false}).limit(1).maybeSingle();
+    return Number(data?.version||0)+1;
+  };
 
   if(action==='list_items'){
-    const {data,error}=await admin.from('content_items').select('content_type,content_key,draft_payload,published_payload,position,archived,created_at,updated_at,published_at').order('content_type').order('position').order('content_key');
+    const {data,error}=await admin.from('content_items').select('content_type,content_key,draft_payload,published_payload,position,archived,current_version,created_at,updated_at,published_at').order('content_type').order('position').order('content_key');
     if(error) return reply({error:'list_failed'},500,origin);
     return reply({items:data||[]},200,origin);
   }
@@ -54,10 +58,35 @@ Deno.serve(async (req:Request)=>{
     const payload=body?.payload; const position=Math.max(0,Math.min(9999,Number(body?.position||0)));
     if(!['lesson','resource'].includes(type)||!validKey(type,key)||!payload||typeof payload!=='object'||Array.isArray(payload)) return reply({error:'invalid_content'},400,origin);
     const encoded=JSON.stringify(payload); if(encoded.length>120000) return reply({error:'content_too_large'},413,origin);
-    const {error}=await admin.from('content_items').upsert({content_type:type,content_key:key,draft_payload:payload,position,archived:false,updated_by:caller.id,created_by:caller.id},{onConflict:'content_type,content_key'});
+    const {data:existing}=await admin.from('content_items').select('created_by').eq('content_type',type).eq('content_key',key).maybeSingle();
+    const {error}=await admin.from('content_items').upsert({content_type:type,content_key:key,draft_payload:payload,position,archived:false,updated_by:caller.id,created_by:existing?.created_by||caller.id},{onConflict:'content_type,content_key'});
     if(error) return reply({error:'save_failed'},500,origin);
     await audit('save_draft',type,key,{position});
     return reply({ok:true},200,origin);
+  }
+
+  if(action==='list_versions'){
+    const type=String(body?.content_type||''); const key=String(body?.content_key||'');
+    if(!['lesson','resource'].includes(type)||!validKey(type,key)) return reply({error:'invalid_key'},400,origin);
+    const {data,error}=await admin.from('content_versions').select('id,content_type,content_key,version,payload,published_by,published_at').eq('content_type',type).eq('content_key',key).order('version',{ascending:false}).limit(100);
+    if(error) return reply({error:'versions_failed'},500,origin);
+    return reply({versions:data||[]},200,origin);
+  }
+
+  if(action==='rollback'){
+    if(role.role!=='super_admin') return reply({error:'super_admin_required'},403,origin);
+    const type=String(body?.content_type||''); const key=String(body?.content_key||''); const version=Number(body?.version||0);
+    if(!['lesson','resource'].includes(type)||!validKey(type,key)||!Number.isInteger(version)||version<1) return reply({error:'invalid_version'},400,origin);
+    const {data:snapshot,error:snapshotError}=await admin.from('content_versions').select('payload,version').eq('content_type',type).eq('content_key',key).eq('version',version).maybeSingle();
+    if(snapshotError||!snapshot) return reply({error:'version_not_found'},404,origin);
+    const newVersion=await nextVersion(type,key);
+    const now=new Date().toISOString();
+    const {error:versionError}=await admin.from('content_versions').insert({content_type:type,content_key:key,version:newVersion,payload:snapshot.payload,published_by:caller.id,published_at:now});
+    if(versionError) return reply({error:'version_create_failed'},500,origin);
+    const {error:updateError}=await admin.from('content_items').update({draft_payload:snapshot.payload,published_payload:snapshot.payload,current_version:newVersion,published_at:now,archived:false,updated_by:caller.id}).eq('content_type',type).eq('content_key',key);
+    if(updateError) return reply({error:'rollback_failed'},500,origin);
+    await audit('rollback',type,key,{from_version:version,new_version:newVersion});
+    return reply({ok:true,version:newVersion},200,origin);
   }
 
   if(['publish','unpublish','archive','restore'].includes(action)){
@@ -66,17 +95,20 @@ Deno.serve(async (req:Request)=>{
     if(!['lesson','resource'].includes(type)||!validKey(type,key)) return reply({error:'invalid_key'},400,origin);
     const {data:item,error:getError}=await admin.from('content_items').select('*').eq('content_type',type).eq('content_key',key).maybeSingle();
     if(getError||!item) return reply({error:'item_not_found'},404,origin);
-    let patch:any={updated_by:caller.id};
+    let patch:any={updated_by:caller.id}; let version:number|null=null;
     if(action==='publish'){
       if(!item.draft_payload) return reply({error:'draft_required'},400,origin);
-      patch={...patch,published_payload:item.draft_payload,published_at:new Date().toISOString(),archived:false};
+      version=await nextVersion(type,key); const now=new Date().toISOString();
+      const {error:versionError}=await admin.from('content_versions').insert({content_type:type,content_key:key,version,payload:item.draft_payload,published_by:caller.id,published_at:now});
+      if(versionError) return reply({error:'version_create_failed'},500,origin);
+      patch={...patch,published_payload:item.draft_payload,published_at:now,current_version:version,archived:false};
     } else if(action==='unpublish') patch={...patch,published_payload:null,published_at:null};
     else if(action==='archive') patch={...patch,archived:true,published_payload:null,published_at:null};
     else if(action==='restore') patch={...patch,archived:false};
     const {error}=await admin.from('content_items').update(patch).eq('content_type',type).eq('content_key',key);
     if(error) return reply({error:'state_change_failed'},500,origin);
-    await audit(action,type,key,{});
-    return reply({ok:true},200,origin);
+    await audit(action,type,key,version?{version}:{});
+    return reply({ok:true,version},200,origin);
   }
 
   if(action==='audit'){
