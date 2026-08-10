@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover" />
+  <meta name="theme-color" content="#050813" />
+  <meta name="robots" content="noindex,nofollow" />
+  <title>Analítica académica | Administración MIRMC</title>
+  <link rel="icon" href="assets/mirmc-shield.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="admin.css" />
+  <link rel="stylesheet" href="admin-analytics.css" />
+</head>
+<body class="analytics-page">
+  <div class="ambient-grid" aria-hidden="true"></div>
+  <header class="admin-header"><div><a class="brand" href="admin.html"><img src="assets/mirmc-shield.svg" alt="" class="brand-mark" width="44" height="52"/><span class="brand-copy"><strong>MIRMC</strong><small>ADMINISTRACIÓN</small></span></a><a href="admin.html">← Panel</a></div></header>
+  <main class="analytics-shell">
+    <section class="analytics-hero"><div><p class="admin-eyebrow">V13 · ANALÍTICA ACADÉMICA</p><h1>Mide el proceso, <em>no la intimidad.</em></h1><p>Indicadores agregados de formación oficial: avance por lección, cierres de nivel, actividad, sincronización y certificados. Esta página no consulta notas personales del Cuaderno ni contenido privado escrito por alumnos.</p></div><div class="analytics-role" id="analyticsRole"><span>VERIFICANDO</span><strong>Permisos</strong></div></section>
+    <section class="admin-denied" id="analyticsDenied" hidden><span>ACCESO RESTRINGIDO</span><h2>Solo personal autorizado.</h2><p>La analítica académica requiere rol administrativo activo.</p><a class="button button-ghost" href="admin.html">Volver al panel</a></section>
+    <section id="analyticsApp" hidden>
+      <div class="analytics-toolbar"><button class="button button-ghost" id="analyticsRefresh" type="button">Actualizar datos</button></div>
+      <div class="analytics-message" id="analyticsMessage" aria-live="polite"></div>
+      <div class="analytics-summary" id="analyticsSummary"></div>
+      <div class="analytics-grid">
+        <article class="analytics-card"><h2>Embudo de la Ruta MIRMC</h2><p>Cuántos usuarios tienen cada lección validada oficialmente.</p><div class="funnel" id="analyticsFunnel"></div></article>
+        <article class="analytics-card"><h2>Cierres de nivel</h2><p>Resultados oficiales y actividad de los últimos 14 días.</p><div class="exam-analytics" id="analyticsExams"></div></article>
+        <article class="analytics-card"><h2>Actividad oficial · 14 días</h2><p>Lecciones validadas, intentos de examen y certificados emitidos por día.</p><div class="activity-bars" id="analyticsActivity"></div><div class="analytics-legend"><span>Lecciones</span><span>Exámenes</span><span>Certificados</span></div></article>
+        <article class="analytics-card"><h2>Sincronización y certificados</h2><p>Señales operativas, no contenido personal.</p><div class="exam-analytics" id="analyticsOperations"></div></article>
+      </div>
+      <aside class="analytics-privacy">Privacidad: la Edge Function devuelve únicamente conteos y promedios agregados. No devuelve correos, nombres, notas del Cuaderno, favoritos ni textos personales.</aside>
+    </section>
+  </main>
+  <footer class="lesson-footer"><div><span>MIRMC GUERRA ESPIRITUAL</span><span>ANALÍTICA · PROCESO · PRIVACIDAD</span></div></footer>
+  <script src="cloud-config.js"></script><script src="cloud-client.js"></script><script src="admin-analytics.js"></script>
+</body>
+</html>
