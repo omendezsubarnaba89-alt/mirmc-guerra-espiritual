@@ -37,6 +37,10 @@ jobs:
           node --check academic.js
           node --check certificate.js
           node --check settings.js
+          node --check cloud-config.js
+          node --check cloud-client.js
+          node --check cloud-sync.js
+          node --check account.js
           node --check sw.js
 
       - name: Validate static references
@@ -53,3 +57,6 @@ jobs:
 
       - name: Validate local data and offline architecture
         run: node scripts/validate-local-data.mjs
+
+      - name: Validate cloud account architecture
+        run: node scripts/validate-cloud.mjs
