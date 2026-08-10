@@ -6,9 +6,9 @@ Centro web de formación bíblica, enseñanza y entrenamiento para comprender la
 
 https://omendezsubarnaba89-alt.github.io/mirmc-guerra-espiritual/
 
-## Estado actual — V3
+## Estado actual — V4
 
-La V3 convierte la Ruta MIRMC en un curso navegable real sin abandonar la arquitectura estática y económica de GitHub Pages.
+La V4 ya combina tres experiencias funcionales: centro de entrenamiento, curso navegable y biblioteca real.
 
 ### Experiencia principal
 
@@ -20,24 +20,22 @@ La V3 convierte la Ruta MIRMC en un curso navegable real sin abandonar la arquit
 - Progreso total y por nivel guardado en el navegador.
 - Desbloqueo secuencial de lecciones.
 - Evaluación de tres preguntas por lección; se requieren al menos dos respuestas correctas para completarla.
-- Navegación anterior/siguiente y navegador lateral por nivel.
+- Navegación anterior/siguiente y navegador por nivel.
 - Estado visual `ABRIR`, `BLOQUEADA` o `COMPLETADA` desde la portada.
 - Botón inteligente `Comenzar/Continuar ruta` que abre la próxima lección disponible.
-- Código de campo, biblioteca conceptual y preguntas frecuentes.
 
-### Curso
+### Biblioteca MIRMC
 
-Cada una de las 15 lecciones contiene:
-
-- objetivo;
-- base bíblica;
-- idea central;
-- tres bloques de desarrollo;
-- tres puntos clave;
-- ejercicio práctico;
-- pregunta de reflexión;
-- mini evaluación;
-- finalización y desbloqueo de la siguiente lección.
+- Página independiente `library.html`.
+- 12 recursos escritos iniciales.
+- Búsqueda instantánea.
+- Filtros por categoría y nivel.
+- Recursos destacados.
+- Categorías: Formación, Guías prácticas, Casos y escenarios, Liderazgo, Preguntas y respuestas y Devocional.
+- Lector dinámico `resource.html?id=...`.
+- Cada recurso incluye nivel, formato, duración, base bíblica, desarrollo e idea para retener.
+- Las seis tarjetas de Biblioteca del home llevan al filtro correspondiente.
+- La plataforma no muestra descargas, PDFs ni audios que todavía no existan.
 
 ## Estructura
 
@@ -53,16 +51,23 @@ Cada una de las 15 lecciones contiene:
 
 - `course-data.js` — contenido estructurado de los 3 niveles y 15 lecciones.
 - `course-progress.js` — progreso, desbloqueos, navegación y estadísticas.
-- `course-enhancements.js` — integración de progreso en la Ruta MIRMC del home.
+- `course-enhancements.js` — integra curso y accesos a Biblioteca en el home.
 - `course-index.css` — componentes de progreso del home.
 - `lesson.html` — plantilla dinámica de lección.
 - `lesson.css` — experiencia visual de estudio.
 - `lesson.js` — render, quiz, finalización y navegación.
 
+### Biblioteca
+
+- `resource-data.js` — categorías y recursos estructurados.
+- `library.html` / `library.css` / `library.js` — búsqueda, filtros y catálogo.
+- `resource.html` / `resource.js` — lector dinámico de recursos.
+
 ### Calidad y publicación
 
 - `scripts/validate.mjs` — referencias estáticas y estructura principal.
 - `scripts/validate-course.mjs` — coherencia de niveles, 15 lecciones, evaluaciones y archivos del curso.
+- `scripts/validate-library.mjs` — coherencia de recursos, categorías, niveles y páginas de Biblioteca.
 - `.github/workflows/validate.yml` — validación automática.
 - `.github/workflows/integrate-course.yml` — integra assets del curso en `index.html`.
 - `.github/workflows/apply-mobile-fixes.yml` — aplica hardening móvil a la hoja principal.
@@ -72,17 +77,16 @@ Cada una de las 15 lecciones contiene:
 
 La aplicación sigue siendo **100% estática** y no depende de Supabase, bases de datos, servidores propios ni créditos de IA. El progreso de Guardia y Curso usa `localStorage`, por lo que permanece en el navegador del dispositivo actual.
 
-Esto permite validar primero la experiencia completa antes de añadir autenticación y backend. Cuando incorporemos cuentas, el motor de progreso ya está separado del contenido, por lo que podremos sustituir el almacenamiento local por persistencia remota sin reconstruir las lecciones.
+Esto permite validar primero la experiencia completa antes de añadir autenticación y backend. El contenido, el progreso y la presentación están separados para que podamos incorporar persistencia remota después sin reconstruir la plataforma.
 
 ## Próximas etapas previstas
 
-1. Biblioteca real de PDFs, audios, videos y enseñanzas.
-2. Evaluaciones finales por nivel y calificación acumulada.
-3. Perfil de alumno y sincronización de progreso con backend.
-4. Panel administrativo para publicar y editar contenido.
-5. Buscador y filtros por tema/nivel.
-6. Certificados y seguimiento del curso.
-7. Modo instalable/PWA mejorado y funcionamiento offline selectivo.
+1. Evaluaciones finales por nivel y calificación acumulada.
+2. Perfil de alumno y sincronización de progreso con backend.
+3. Panel administrativo para publicar y editar lecciones/recursos.
+4. Recursos multimedia reales: PDFs, audios y videos cuando sean cargados.
+5. Certificados y seguimiento del curso.
+6. Modo instalable/PWA mejorado y funcionamiento offline selectivo.
 
 ## Publicación
 
