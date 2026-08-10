@@ -2,6 +2,19 @@
 
 Todos los cambios relevantes de MIRMC Guerra Espiritual se documentan aquí.
 
+## V2.2 — 10 de agosto de 2026
+
+### Corrección estructural de desbordamiento móvil
+- Confirmado mediante segunda prueba real en Chrome/Android que el overflow afectaba al documento completo y no solo a la portada.
+- Reescrito el blindaje móvil para trabajar con ancho real de viewport y padding interno, evitando dependencias de `calc(100% - ...)` en teléfonos.
+- `html` y `body` quedan limitados explícitamente a `100vw`/`100%` y sin desplazamiento horizontal.
+- Todos los hijos de grids y flex principales reciben `min-width: 0` y límites de ancho.
+- En móvil, Hero, Fundamento, Discernimiento, Armadura, Guardia, Ruta, Biblioteca y Footer usan columnas `minmax(0, 1fr)` para impedir anchos intrínsecos fuera del viewport.
+- Pseudoelementos, radares, órbitas, resplandores y otros elementos absolutos quedan limitados al ancho de su contenedor.
+- `section-shell` y `header-inner` pasan a ancho completo con padding interno en móvil.
+- Consola de portada, selector de armadura, progreso semanal, tarjetas y listas reciben límites de ancho explícitos.
+- El workflow `Apply mobile hardening` fusionó automáticamente la corrección en `styles.css` mediante el commit `fix: apply Android mobile hardening [skip ci]`.
+
 ## V2.1 — 10 de agosto de 2026
 
 ### Prueba real en Android
