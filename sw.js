@@ -1,4 +1,4 @@
-const CACHE = 'mirmc-guerra-espiritual-v7';
+const CACHE = 'mirmc-guerra-espiritual-v8';
 const CORE = [
   './',
   './index.html',
@@ -37,6 +37,12 @@ const CORE = [
   './cloud-config.js',
   './cloud-client.js',
   './cloud-sync.js',
+  './study.html',
+  './study.css',
+  './study.js',
+  './study-data.js',
+  './study-tools.js',
+  './study-tools.css',
   './assets/mirmc-shield.svg',
   './manifest.webmanifest'
 ];
