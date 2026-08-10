@@ -9,6 +9,13 @@
   const signedIn = $('#signedInPanel');
   const googleButton = $('#googleSignIn');
   const authSeparator = document.querySelector('.auth-separator');
+  const signInButton = $('#signIn');
+  const signUpButton = $('#signUp');
+  const resendButton = $('#resendConfirmation');
+  const COOLDOWN_KEY = 'mirmc-auth-email-cooldown-v1';
+  let authBusy = false;
+  let cooldownTimer = null;
+  let pendingConfirmation = false;
 
   function countLocal() {
     const snap = sync.snapshot();
@@ -32,6 +39,81 @@
     el.textContent = text || '';
   }
 
+  function authErrorMessage(error) {
+    const code = String(error?.code || '').toLowerCase();
+    const raw = String(error?.message || '');
+    const lower = raw.toLowerCase();
+    const wait = raw.match(/after\s+(\d+)\s+seconds?/i)?.[1];
+
+    if (code === 'email_not_confirmed' || lower.includes('email not confirmed')) {
+      pendingConfirmation = true;
+      if (resendButton) resendButton.hidden = false;
+      return 'Tu cuenta ya existe, pero todavía falta confirmar el correo. Revisa tu bandeja de entrada y la carpeta de spam.';
+    }
+    if (code === 'over_email_send_rate_limit' || error?.status === 429 || lower.includes('only request this after')) {
+      const seconds = Number(wait || 60);
+      startCooldown(Number.isFinite(seconds) ? seconds : 60);
+      return `Por seguridad, espera ${seconds} segundos antes de pedir otro correo de confirmación.`;
+    }
+    if (code === 'invalid_credentials' || lower.includes('invalid login credentials')) {
+      return 'El correo o la contraseña no coinciden. Si acabas de crear la cuenta, confirma primero el correo.';
+    }
+    if (code === 'user_already_exists' || lower.includes('already registered')) {
+      return 'Ese correo ya tiene una cuenta. Prueba con “Entrar” o reenvía el correo de confirmación.';
+    }
+    if (code === 'weak_password' || lower.includes('password')) {
+      return 'La contraseña no cumple los requisitos de seguridad. Usa al menos 8 caracteres y evita contraseñas fáciles de adivinar.';
+    }
+    if (code === 'email_address_invalid' || lower.includes('invalid email')) {
+      return 'El correo escrito no parece válido. Revísalo e inténtalo otra vez.';
+    }
+    if (!navigator.onLine) return 'No hay conexión a Internet. Tu progreso local sigue guardado; vuelve a intentarlo cuando recuperes conexión.';
+    return raw || 'No se pudo completar la operación. Inténtalo nuevamente.';
+  }
+
+  function cooldownRemaining() {
+    const until = Number(localStorage.getItem(COOLDOWN_KEY) || 0);
+    return Math.max(0, Math.ceil((until - Date.now()) / 1000));
+  }
+
+  function setButtonsBusy(value) {
+    authBusy = Boolean(value);
+    signInButton && (signInButton.disabled = authBusy);
+    refreshCooldownUI();
+  }
+
+  function refreshCooldownUI() {
+    const remaining = cooldownRemaining();
+    if (signUpButton) {
+      signUpButton.disabled = authBusy || remaining > 0;
+      signUpButton.textContent = remaining > 0 ? `Crear cuenta (${remaining}s)` : 'Crear cuenta';
+    }
+    if (resendButton) {
+      resendButton.disabled = authBusy || remaining > 0;
+      resendButton.textContent = remaining > 0 ? `Reenviar correo (${remaining}s)` : 'Reenviar correo de confirmación';
+      resendButton.hidden = !pendingConfirmation;
+    }
+    if (remaining <= 0 && cooldownTimer) {
+      clearInterval(cooldownTimer);
+      cooldownTimer = null;
+      localStorage.removeItem(COOLDOWN_KEY);
+    }
+  }
+
+  function startCooldown(seconds = 60) {
+    const safe = Math.max(1, Number(seconds) || 60);
+    const currentUntil = Number(localStorage.getItem(COOLDOWN_KEY) || 0);
+    const nextUntil = Math.max(currentUntil, Date.now() + safe * 1000);
+    localStorage.setItem(COOLDOWN_KEY, String(nextUntil));
+    if (!cooldownTimer) cooldownTimer = setInterval(refreshCooldownUI, 1000);
+    refreshCooldownUI();
+  }
+
+  function resumeCooldown() {
+    if (cooldownRemaining() > 0 && !cooldownTimer) cooldownTimer = setInterval(refreshCooldownUI, 1000);
+    refreshCooldownUI();
+  }
+
   async function loadProfile(client, user) {
     const { data, error } = await client.from('profiles').select('display_name').eq('user_id', user.id).maybeSingle();
     if (error) throw error;
@@ -44,6 +126,8 @@
     signedIn.hidden = !user;
     if (!user) return;
 
+    pendingConfirmation = false;
+    if (resendButton) resendButton.hidden = true;
     $('#accountEmail').textContent = user.email || 'Cuenta activa';
     $('#sessionInfo').textContent = `Sesión autenticada · ${user.email || user.id}`;
     try { await loadProfile(client, user); } catch (error) { message($('#profileMessage'), error.message, 'error'); }
@@ -60,6 +144,8 @@
 
   async function bootCloud() {
     renderLocalSummary();
+    resumeCooldown();
+
     if (!cloud?.configured()) {
       mode.className = 'account-mode local';
       mode.innerHTML = '<span>MODO ACTUAL</span><strong>Local · sin nube</strong>';
@@ -97,26 +183,72 @@
 
     $('#authForm').addEventListener('submit', async event => {
       event.preventDefault();
+      if (authBusy) return;
       const email = $('#authEmail').value.trim();
       const password = $('#authPassword').value;
-      message($('#authMessage'), 'Entrando…');
-      const { error } = await client.auth.signInWithPassword({ email, password });
-      if (error) message($('#authMessage'), error.message, 'error');
-      else message($('#authMessage'), 'Sesión iniciada.', 'success');
+      setButtonsBusy(true);
+      message($('#authMessage'), 'Comprobando tu cuenta…');
+      try {
+        const { error } = await client.auth.signInWithPassword({ email, password });
+        if (error) message($('#authMessage'), authErrorMessage(error), 'error');
+        else message($('#authMessage'), 'Sesión iniciada correctamente.', 'success');
+      } finally {
+        setButtonsBusy(false);
+      }
     });
 
-    $('#signUp').addEventListener('click', async () => {
+    signUpButton?.addEventListener('click', async () => {
+      if (authBusy || cooldownRemaining() > 0) return;
       const email = $('#authEmail').value.trim();
       const password = $('#authPassword').value;
       if (!email || password.length < 8) {
         message($('#authMessage'), 'Escribe un correo válido y una contraseña de al menos 8 caracteres.', 'error');
         return;
       }
-      message($('#authMessage'), 'Creando cuenta…');
-      const { data: result, error } = await client.auth.signUp({ email, password });
-      if (error) message($('#authMessage'), error.message, 'error');
-      else if (!result?.session) message($('#authMessage'), 'Cuenta creada. Revisa tu correo para confirmar el acceso si Supabase lo solicita.', 'success');
-      else message($('#authMessage'), 'Cuenta creada y sesión iniciada.', 'success');
+
+      setButtonsBusy(true);
+      message($('#authMessage'), 'Creando tu cuenta…');
+      try {
+        const { data: result, error } = await client.auth.signUp({ email, password });
+        if (error) {
+          message($('#authMessage'), authErrorMessage(error), 'error');
+          return;
+        }
+
+        if (!result?.session) {
+          pendingConfirmation = true;
+          startCooldown(60);
+          message($('#authMessage'), 'Cuenta creada. Te enviamos un correo de confirmación. Ábrelo antes de intentar entrar.', 'success');
+        } else {
+          message($('#authMessage'), 'Cuenta creada y sesión iniciada correctamente.', 'success');
+        }
+      } finally {
+        setButtonsBusy(false);
+      }
+    });
+
+    resendButton?.addEventListener('click', async () => {
+      if (authBusy || cooldownRemaining() > 0) return;
+      const email = $('#authEmail').value.trim();
+      if (!email) {
+        message($('#authMessage'), 'Escribe primero el correo de la cuenta que quieres confirmar.', 'error');
+        return;
+      }
+
+      setButtonsBusy(true);
+      message($('#authMessage'), 'Enviando un nuevo correo de confirmación…');
+      try {
+        const { error } = await client.auth.resend({ type: 'signup', email });
+        if (error) {
+          message($('#authMessage'), authErrorMessage(error), 'error');
+          return;
+        }
+        pendingConfirmation = true;
+        startCooldown(60);
+        message($('#authMessage'), 'Correo reenviado. Revisa tu bandeja de entrada y spam antes de volver a solicitar otro.', 'success');
+      } finally {
+        setButtonsBusy(false);
+      }
     });
 
     if (googleEnabled && googleButton) {
@@ -126,7 +258,7 @@
           provider: 'google',
           options: { redirectTo: cloud.config().redirectUrl }
         });
-        if (error) message($('#authMessage'), error.message, 'error');
+        if (error) message($('#authMessage'), authErrorMessage(error), 'error');
       });
     }
 
