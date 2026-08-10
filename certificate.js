@@ -35,7 +35,7 @@
   const seed = `${examStats.average}-${finalDate.toISOString().slice(0,10)}-${progress.stats().completed}`;
   let hash = 0;
   for (let i=0;i<seed.length;i++) hash = ((hash << 5) - hash + seed.charCodeAt(i)) | 0;
-  document.getElementById('certificateCode').textContent = `REGISTRO LOCAL · MIRMC-${Math.abs(hash).toString(36).toUpperCase().padStart(6,'0').slice(0,6)}`;
+  document.getElementById('certificateCode').textContent = `REGISTRO LOCAL · MIRMC-LOCAL-${Math.abs(hash).toString(36).toUpperCase().padStart(6,'0').slice(0,6)}`;
 
   document.getElementById('printCertificate').addEventListener('click', () => {
     if (!input.value.trim()) {
