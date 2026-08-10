@@ -1,0 +1,32 @@
+name: Validate V12 Official Academic
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  validate-official-academic:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Validate V12 architecture
+        run: node scripts/validate-official-academic.mjs
+      - name: Check browser JavaScript syntax
+        run: |
+          node --check academic-official.js
+          node --check lesson-official-hook.js
+          node --check assessment-data.js
+          node --check assessment.js
+          node --check certificate-official.js
+          node --check verify-certificate.js
+          node --check admin-certificates.js
