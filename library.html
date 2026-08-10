@@ -36,10 +36,7 @@
     </section>
 
     <section class="library-controls" aria-label="Filtros de biblioteca">
-      <label class="library-search">
-        <span>BUSCAR</span>
-        <input id="librarySearch" type="search" placeholder="Ej.: armadura, discernimiento, puertas..." autocomplete="off" />
-      </label>
+      <label class="library-search"><span>BUSCAR</span><input id="librarySearch" type="search" placeholder="Ej.: armadura, discernimiento, puertas..." autocomplete="off" /></label>
       <div class="library-filter-row">
         <select id="categoryFilter" aria-label="Filtrar por categoría"><option value="all">Todas las categorías</option></select>
         <select id="levelFilter" aria-label="Filtrar por nivel"><option value="all">Todos los niveles</option><option value="1">Nivel 1</option><option value="2">Nivel 2</option><option value="3">Nivel 3</option></select>
@@ -62,6 +59,8 @@
   <footer class="lesson-footer"><div><span>MIRMC GUERRA ESPIRITUAL</span><span>CRISTO AL CENTRO · BIBLIA ABIERTA · DISCERNIMIENTO</span></div></footer>
 
   <script src="resource-data.js"></script>
-  <script src="library.js"></script>
+  <script src="cloud-config.js"></script>
+  <script src="content-runtime.js"></script>
+  <script>window.MIRMCContent.ready.finally(() => { const s=document.createElement('script'); s.src='library.js'; document.body.appendChild(s); });</script>
 </body>
 </html>
