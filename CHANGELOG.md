@@ -2,6 +2,28 @@
 
 Todos los cambios relevantes de MIRMC Guerra Espiritual se documentan aquí.
 
+## V9 — 10 de agosto de 2026
+
+### Nube real y sincronización
+- Creado proyecto Supabase dedicado `MIRMC Guerra Espiritual` en `us-east-1` (`eqffbegdezlzzffvmsqk`).
+- Aplicada migración con `profiles` y `user_learning_state`.
+- RLS habilitado en ambas tablas y acceso anónimo revocado.
+- Políticas por usuario limitadas a `auth.uid() = user_id`.
+- Security Advisor detectó exposición de funciones `SECURITY DEFINER`; se añadió migración de hardening y el Advisor quedó en cero avisos.
+- `cloud-config.js` activado con Project URL + publishable key.
+- Ninguna `service_role`, `sb_secret_...` ni secreto administrativo se publica en GitHub.
+- `account.html` pasa de modo preparado a cuenta real por correo/contraseña.
+- Google OAuth queda oculto hasta configurar el proveedor.
+- Nuevo `cloud-autosync.js` para reconciliación automática de progreso local/remoto.
+- Autosync se activa desde curso, evaluaciones y Cuaderno; escucha cambios, reconexión y retorno a la pestaña.
+- Service worker actualizado para cachear el runtime de nube y refrescar scripts con estrategia network-first.
+- CI cloud ampliado para validar autosync y la migración de hardening.
+
+### Ajustes móviles de V8.1
+- Corregido footer pegado en Cuaderno/Cuenta y pantallas reutilizadas.
+- Cuaderno ordena lecciones 01→15, prioriza coincidencias y pagina los resultados en lotes de 8.
+- Cuenta compactada para móviles.
+
 ## V8 — 10 de agosto de 2026
 
 ### Cuaderno MIRMC
