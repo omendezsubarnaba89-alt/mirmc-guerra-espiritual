@@ -11,7 +11,7 @@
       return { type:'lesson', id, title:lesson.title, subtitle:lesson.subtitle || '', url:`lesson.html?lesson=${id}` };
     }
     const resourceId = params.get('id');
-    const resource = window.MIRMC_RESOURCES?.find?.(item => item.id === resourceId);
+    const resource = window.MIRMC_LIBRARY?.resources?.find?.(item => item.id === resourceId);
     if (resource) return { type:'resource', id:resource.id, title:resource.title, subtitle:resource.subtitle || '', url:`resource.html?id=${encodeURIComponent(resource.id)}` };
     return null;
   }
@@ -39,8 +39,7 @@
       <label class="study-note-label"><span>MI NOTA SOBRE ${item.type === 'lesson' ? 'ESTA LECCIÓN' : 'ESTE RECURSO'}</span><textarea id="studyNote" maxlength="12000" placeholder="Escribe una idea, pregunta, aplicación o algo que quieras revisar después…">${escapeHtml(currentNote)}</textarea></label>
       <div class="study-save-row"><small id="studySaveStatus">Las notas se guardan en este navegador y entran en tu respaldo.</small><button id="studySave" type="button">Guardar nota</button></div>`;
 
-    if (item.type === 'lesson') target.insertAdjacentElement('afterend', card);
-    else target.insertAdjacentElement('afterend', card);
+    target.insertAdjacentElement('afterend', card);
 
     const bookmark = card.querySelector('#studyBookmark');
     const refreshBookmark = () => {
