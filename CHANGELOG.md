@@ -2,6 +2,21 @@
 
 Todos los cambios relevantes de MIRMC Guerra Espiritual se documentan aquí.
 
+## V10.1 — 10 de agosto de 2026
+
+### Expediente académico y trazabilidad administrativa
+- Añadido `admin-user.html` para consultar el progreso académico de cada alumno sin exponer notas privadas del Cuaderno.
+- El expediente muestra las 15 lecciones, 3 evaluaciones, guardias, estado de certificado y fechas relevantes.
+- Añadido `admin-audit.html`, visible solo para `super_admin`.
+- Nueva tabla `admin_audit_log` con RLS, privilegios de cliente revocados y política deny explícita para `anon`/`authenticated`.
+- `admin-management` actualizado a versión 2 con acciones `get_user_detail`, `list_audit` y registro automático de cambios de rol.
+- El panel enlaza cada usuario con su expediente académico y añade acceso a la bitácora.
+- `Mi cuenta` mueve el acceso a Administración justo debajo del correo para que sea visible en móvil.
+- Service worker actualizado para cachear las nuevas pantallas administrativas.
+- CI administrativo ampliado para validar detalle, bitácora, migraciones, deny policy, Edge Function y ausencia de secretos en navegador.
+- Política `user_roles_select_own` optimizada a `(select auth.uid()) = user_id` siguiendo la recomendación del Performance Advisor.
+- Security Advisor posterior: queda únicamente la recomendación independiente de activar Leaked Password Protection en Auth.
+
 ## V10 — 10 de agosto de 2026
 
 ### Roles y administración segura
