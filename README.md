@@ -6,9 +6,9 @@ Centro web de formación bíblica, enseñanza y entrenamiento para comprender la
 
 https://omendezsubarnaba89-alt.github.io/mirmc-guerra-espiritual/
 
-## Estado actual — V8
+## Estado actual — V9
 
-La plataforma combina formación, curso, biblioteca, evaluaciones, expediente, certificado, respaldo/PWA, arquitectura de cuentas en nube y ahora un **Cuaderno MIRMC** para búsqueda, favoritos, notas y actividad reciente.
+La plataforma combina formación, curso, biblioteca, evaluaciones, expediente, certificado, respaldo/PWA, Cuaderno MIRMC y **sincronización real en Supabase**.
 
 ### Formación
 - 3 niveles y 15 lecciones navegables.
@@ -23,30 +23,36 @@ La plataforma combina formación, curso, biblioteca, evaluaciones, expediente, c
 - Búsqueda y filtros por categoría/nivel.
 - Lector dinámico para cada recurso.
 
-### V8 · Cuaderno MIRMC
-- Nueva página `study.html`.
-- Búsqueda global sobre las 15 lecciones y los 12 recursos.
+### Cuaderno MIRMC
+- `study.html` con búsqueda global en las 15 lecciones y 12 recursos.
 - Filtros por tipo y nivel.
 - Favoritos personales.
 - Notas de hasta 12.000 caracteres por lección o recurso.
 - Historial de hasta 30 contenidos recientes.
-- Lecciones y recursos incorporan una tarjeta `Cuaderno personal`.
-- Acceso `Cuaderno` desde la Ruta MIRMC del home.
-- Notas/favoritos forman parte del respaldo JSON.
-- `cloud-sync.js` ya incluye Cuaderno en la futura sincronización.
-- El service worker cachea también la experiencia del Cuaderno.
+- Lecciones y recursos incorporan `Cuaderno personal`.
+- Notas/favoritos forman parte del respaldo JSON y de la sincronización en nube.
 
-### Cuenta y nube · V7
-- `account.html` preparado para correo/contraseña y Google OAuth.
-- `cloud-config.js` permanece deshabilitado hasta disponer de un proyecto Supabase real.
-- `cloud-client.js` carga Supabase solo cuando se activa la nube.
-- `cloud-sync.js` fusiona progreso local/remoto conservando avances y mejores notas.
-- Migración Supabase con `profiles`, `user_learning_state` y RLS por usuario en `supabase/migrations/20260810143000_init_mirmc_cloud.sql`.
-- Ninguna `service_role` pertenece al frontend.
+### Cuenta y nube · V9
+- Proyecto Supabase dedicado: `eqffbegdezlzzffvmsqk` (`us-east-1`).
+- `cloud-config.js` está activado con Project URL + **publishable key**; no contiene claves administrativas.
+- `account.html` ofrece acceso por correo/contraseña, perfil y controles de sincronización.
+- Google OAuth permanece oculto hasta configurar el proveedor de Google.
+- `cloud-sync.js` fusiona progreso local/remoto conservando lecciones completadas, mejores notas, Cuaderno y nombre del certificado.
+- `cloud-autosync.js` sincroniza al iniciar sesión, al detectar cambios, recuperar conectividad, volver a la pestaña y en revisiones periódicas.
+- `course-progress.js`, `assessment-progress.js` y `study-data.js` cargan autosync cuando corresponde.
+
+### Backend Supabase
+- `profiles` — perfil básico del alumno.
+- `user_learning_state` — snapshot versionado de progreso/cuaderno.
+- RLS activado en ambas tablas.
+- Acceso anónimo revocado.
+- Políticas `SELECT/INSERT/UPDATE` limitadas a `auth.uid() = user_id`.
+- Funciones de trigger endurecidas: no son ejecutables como RPC por `anon` ni `authenticated`.
+- Security Advisor verificado sin avisos después del hardening.
 
 ### Datos y PWA
 - `settings.html` exporta/importa respaldo local.
-- `sw.js` ofrece caché del shell esencial.
+- `sw.js` mantiene caché del shell esencial y utiliza network-first para HTML/CSS/JS.
 - `manifest.webmanifest` mantiene la app preparada para modo standalone.
 
 ## Archivos principales
@@ -63,27 +69,40 @@ La plataforma combina formación, curso, biblioteca, evaluaciones, expediente, c
 ### Cuaderno
 `study.html`, `study.css`, `study.js`, `study-data.js`, `study-tools.js`, `study-tools.css`
 
-### Cuenta y datos
-`account.html`, `account.css`, `account.js`, `cloud-config.js`, `cloud-client.js`, `cloud-sync.js`, `settings.html`, `settings.js`, `sw.js`
+### Cuenta y nube
+`account.html`, `account.css`, `account.js`, `cloud-config.js`, `cloud-client.js`, `cloud-sync.js`, `cloud-autosync.js`
 
-### Backend preparado
-`supabase/migrations/20260810143000_init_mirmc_cloud.sql`, `supabase/README.md`
+### Backend
+`supabase/migrations/20260810143000_init_mirmc_cloud.sql`
+`supabase/migrations/20260810200500_harden_trigger_functions.sql`
+`supabase/README.md`
 
 ### Calidad
-GitHub Actions valida sitio, curso, biblioteca, evaluaciones, respaldo/offline, nube/RLS y Cuaderno en cada push.
+GitHub Actions valida sitio, curso, biblioteca, evaluaciones, respaldo/offline, nube/RLS/autosync y Cuaderno en cada push.
 
-## Arquitectura actual
+## Seguridad
 
-Mientras `cloud-config.js` tenga `enabled:false`, toda la aplicación sigue funcionando con almacenamiento local y respaldo JSON. La ausencia de Supabase no bloquea ninguna función local.
+La clave que vive en el frontend es una **Supabase publishable key**, diseñada para aplicaciones públicas. La autorización de datos depende de RLS. No se almacena `service_role`, `sb_secret_...`, contraseña de base de datos ni secreto administrativo en GitHub.
 
-Cuando se cree el proyecto Supabase, se aplicará la migración y se configurarán únicamente Project URL + publishable key. El contenido y el progreso ya están desacoplados para evitar reconstrucciones.
+## Configuración Auth pendiente en Dashboard
+
+Para confirmaciones por correo y futuros OAuth, el Dashboard de Supabase debe usar como Site URL:
+
+`https://omendezsubarnaba89-alt.github.io/mirmc-guerra-espiritual/`
+
+Y debe permitir como Redirect URL:
+
+`https://omendezsubarnaba89-alt.github.io/mirmc-guerra-espiritual/**`
+
+El conector actual de Supabase no expone la acción de modificar URL Configuration; es el único ajuste de Auth que requiere Dashboard.
 
 ## Próximas etapas
-1. Activar Supabase y probar sincronización real en dos dispositivos.
-2. Panel administrativo seguro una vez existan roles/backend.
-3. Multimedia real: PDFs, audios y videos.
-4. Verificación remota de certificados.
-5. Refinamiento PWA con iconos PNG dedicados y pruebas offline reales.
+1. Configurar Site URL/Redirect URL y probar alta real por correo en el teléfono.
+2. Configurar Google OAuth cuando existan Client ID/Client Secret.
+3. Crear roles de alumno/administrador y panel administrativo.
+4. Añadir multimedia real: PDFs, audios y videos.
+5. Verificación remota de certificados.
+6. Custom SMTP antes de un lanzamiento público de usuarios.
 
 ## Publicación
 
