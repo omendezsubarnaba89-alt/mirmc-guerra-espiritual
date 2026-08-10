@@ -12,6 +12,7 @@
   const signInButton = $('#signIn');
   const signUpButton = $('#signUp');
   const resendButton = $('#resendConfirmation');
+  const adminAccess = $('#adminAccess');
   const COOLDOWN_KEY = 'mirmc-auth-email-cooldown-v1';
   let authBusy = false;
   let cooldownTimer = null;
@@ -120,17 +121,31 @@
     $('#profileName').value = data?.display_name || user.user_metadata?.display_name || user.user_metadata?.full_name || '';
   }
 
+  async function loadRoleAccess(client, user) {
+    if (adminAccess) adminAccess.hidden = true;
+    const { data, error } = await client.from('user_roles').select('role,active').eq('user_id', user.id).maybeSingle();
+    if (error || !data?.active) return;
+    if (['admin','super_admin'].includes(data.role) && adminAccess) {
+      adminAccess.hidden = false;
+      adminAccess.textContent = data.role === 'super_admin' ? 'Administración MIRMC · Super Admin' : 'Administración MIRMC';
+    }
+  }
+
   async function renderSession(client, session) {
     const user = session?.user || null;
     signedOut.hidden = Boolean(user);
     signedIn.hidden = !user;
-    if (!user) return;
+    if (!user) {
+      if (adminAccess) adminAccess.hidden = true;
+      return;
+    }
 
     pendingConfirmation = false;
     if (resendButton) resendButton.hidden = true;
     $('#accountEmail').textContent = user.email || 'Cuenta activa';
     $('#sessionInfo').textContent = `Sesión autenticada · ${user.email || user.id}`;
-    try { await loadProfile(client, user); } catch (error) { message($('#profileMessage'), error.message, 'error'); }
+    try { await Promise.all([loadProfile(client, user), loadRoleAccess(client, user)]); }
+    catch (error) { message($('#profileMessage'), error.message, 'error'); }
 
     message($('#syncMessage'), 'Comprobando si hay progreso para combinar…');
     try {
