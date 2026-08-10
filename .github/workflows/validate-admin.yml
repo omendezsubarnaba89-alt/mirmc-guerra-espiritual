@@ -1,0 +1,27 @@
+name: Validate V10 Admin
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  validate-admin:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Validate admin architecture
+        run: node scripts/validate-admin.mjs
+      - name: Check browser JavaScript syntax
+        run: |
+          node --check admin.js
+          node --check account.js
