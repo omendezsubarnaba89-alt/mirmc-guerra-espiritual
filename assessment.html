@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#050813" />
+  <meta name="description" content="Evaluación final por nivel de MIRMC Guerra Espiritual." />
+  <title>Evaluación final | MIRMC Guerra Espiritual</title>
+  <link rel="icon" href="assets/mirmc-shield.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="assessment.css" />
+</head>
+<body class="assessment-page">
+  <a class="skip-link" href="#assessmentContent">Saltar a la evaluación</a>
+  <div class="ambient-grid" aria-hidden="true"></div>
+  <header class="assessment-header"><div class="assessment-header-inner">
+    <a class="brand" href="index.html#entrenamiento"><img src="assets/mirmc-shield.svg" alt="" class="brand-mark" width="44" height="52" /><span class="brand-copy"><strong>MIRMC</strong><small>GUERRA ESPIRITUAL</small></span></a>
+    <a class="assessment-back" href="academic.html">Registro académico →</a>
+  </div></header>
+
+  <main id="assessmentContent" class="assessment-shell">
+    <section id="assessmentLocked" class="assessment-state" hidden>
+      <img src="assets/mirmc-shield.svg" alt="" width="70" height="82" />
+      <p class="assessment-eyebrow">CIERRE DE NIVEL</p>
+      <h1>La evaluación todavía está bloqueada.</h1>
+      <p id="lockedMessage"></p>
+      <a class="button button-primary" id="lockedAction" href="index.html#entrenamiento">Continuar formación</a>
+    </section>
+
+    <section id="assessmentExperience" hidden>
+      <div class="assessment-hero">
+        <div><p class="assessment-eyebrow" id="assessmentEyebrow"></p><h1 id="assessmentTitle"></h1><p id="assessmentSubtitle"></p></div>
+        <aside class="assessment-summary"><span>REQUISITO</span><strong>80%</strong><p>10 preguntas · puedes repetirla. Se conserva tu mejor resultado.</p></aside>
+      </div>
+      <div class="assessment-history" id="assessmentHistory"></div>
+      <form id="assessmentForm" class="assessment-form"></form>
+      <section class="assessment-submit">
+        <button class="button button-primary" id="assessmentSubmit" type="button">Calificar evaluación</button>
+        <div id="assessmentResult" class="assessment-result" aria-live="polite"></div>
+      </section>
+    </section>
+  </main>
+
+  <footer class="lesson-footer"><div><span>MIRMC GUERRA ESPIRITUAL</span><span>CRISTO AL CENTRO · FORMACIÓN CON PROCESO</span></div></footer>
+  <script src="course-data.js"></script>
+  <script src="course-progress.js"></script>
+  <script src="assessment-data.js"></script>
+  <script src="assessment-progress.js"></script>
+  <script src="assessment.js"></script>
+</body>
+</html>
