@@ -2,133 +2,193 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="theme-color" content="#060914" />
-  <meta name="description" content="MIRMC Guerra Espiritual — formación bíblica, entrenamiento y recursos con Cristo como centro." />
-  <title>MIRMC Guerra Espiritual</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#050813" />
+  <meta name="color-scheme" content="dark" />
+  <meta name="description" content="MIRMC Guerra Espiritual: centro de formación bíblica para aprender discernimiento, armadura de Dios, estrategia y firmeza con Cristo como centro." />
+  <meta name="robots" content="index,follow" />
+  <meta property="og:title" content="MIRMC Guerra Espiritual" />
+  <meta property="og:description" content="Formación bíblica para tiempos de batalla. Cristo al centro, Biblia abierta y discernimiento sobrio." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://omendezsubarnaba89-alt.github.io/mirmc-guerra-espiritual/" />
+  <title>MIRMC Guerra Espiritual | Centro de Entrenamiento Bíblico</title>
+  <link rel="icon" href="assets/mirmc-shield.svg" type="image/svg+xml" />
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css" />
+  <script type="application/ld+json">
+  {
+    "@context":"https://schema.org",
+    "@type":"EducationalOrganization",
+    "name":"MIRMC Guerra Espiritual",
+    "description":"Centro de formación bíblica sobre guerra espiritual con Cristo como centro.",
+    "url":"https://omendezsubarnaba89-alt.github.io/mirmc-guerra-espiritual/"
+  }
+  </script>
 </head>
 <body>
+  <a class="skip-link" href="#contenido">Saltar al contenido</a>
   <canvas id="particles" aria-hidden="true"></canvas>
+  <div class="ambient-grid" aria-hidden="true"></div>
 
   <header class="site-header" id="inicio">
-    <a class="brand" href="#inicio" aria-label="MIRMC Guerra Espiritual, inicio">
-      <span class="brand-mark" aria-hidden="true">
-        <svg viewBox="0 0 64 64" role="img">
-          <path d="M32 4 52 12v15c0 14-8 25-20 33C20 52 12 41 12 27V12L32 4Z" fill="none" stroke="currentColor" stroke-width="2.5"/>
-          <path d="M32 15v30M22 25h20" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
-        </svg>
-      </span>
-      <span class="brand-copy"><strong>MIRMC</strong><small>GUERRA ESPIRITUAL</small></span>
-    </a>
+    <div class="header-inner">
+      <a class="brand" href="#inicio" aria-label="MIRMC Guerra Espiritual, inicio">
+        <img src="assets/mirmc-shield.svg" alt="" class="brand-mark" width="48" height="56" />
+        <span class="brand-copy"><strong>MIRMC</strong><small>GUERRA ESPIRITUAL</small></span>
+      </a>
 
-    <button class="menu-toggle" id="menuToggle" aria-label="Abrir menú" aria-expanded="false">
-      <span></span><span></span><span></span>
-    </button>
+      <button class="menu-toggle" id="menuToggle" type="button" aria-label="Abrir menú" aria-expanded="false" aria-controls="mainNav">
+        <span></span><span></span><span></span>
+      </button>
 
-    <nav class="main-nav" id="mainNav" aria-label="Navegación principal">
-      <a href="#batalla">La batalla</a>
-      <a href="#armadura">La armadura</a>
-      <a href="#entrenamiento">Entrenamiento</a>
-      <a href="#recursos">Recursos</a>
-      <a class="nav-cta" href="#comenzar">Comenzar</a>
-    </nav>
+      <nav class="main-nav" id="mainNav" aria-label="Navegación principal">
+        <a href="#fundamento">Fundamento</a>
+        <a href="#discernimiento">Discernimiento</a>
+        <a href="#armadura">Armadura</a>
+        <a href="#entrenamiento">Entrenamiento</a>
+        <a href="#recursos">Biblioteca</a>
+        <a class="nav-cta" href="#guardia">Guardia de hoy</a>
+      </nav>
+    </div>
   </header>
 
-  <main>
-    <section class="hero section-shell">
-      <div class="hero-light hero-light-one"></div>
-      <div class="hero-light hero-light-two"></div>
-
+  <main id="contenido">
+    <section class="hero section-shell" aria-labelledby="hero-title">
       <div class="hero-copy reveal">
-        <p class="eyebrow"><span></span> Formación bíblica para tiempos de batalla</p>
-        <h1>LA BATALLA ES REAL.<br><em>CRISTO YA VENCIÓ.</em></h1>
-        <p class="hero-lead">Aprende a discernir, permanecer firme y pelear desde la identidad que tienes en Jesús. Sin superstición. Sin miedo. Con Biblia, madurez y Cristo en el centro.</p>
+        <div class="hero-kicker"><span class="status-dot"></span> Centro de entrenamiento bíblico</div>
+        <p class="eyebrow"><span></span> Formación para tiempos de batalla</p>
+        <h1 id="hero-title"><span>La batalla es real.</span><em>Cristo ya venció.</em></h1>
+        <p class="hero-lead">Aprende a discernir, permanecer firme y responder desde tu identidad en Jesús. Sin superstición. Sin miedo. Con Biblia abierta, madurez espiritual y Cristo en el centro.</p>
         <div class="hero-actions">
-          <a class="button button-primary" href="#entrenamiento">Entrar al entrenamiento <span>→</span></a>
+          <a class="button button-primary" href="#guardia">Comenzar entrenamiento <span aria-hidden="true">→</span></a>
           <a class="button button-ghost" href="#armadura">Explorar la armadura</a>
         </div>
-        <div class="hero-reference">
+
+        <div class="hero-pillars" aria-label="Principios de MIRMC Guerra Espiritual">
+          <span>CRISTO AL CENTRO</span><i></i><span>BIBLIA ABIERTA</span><i></i><span>DISCERNIMIENTO</span><i></i><span>MADUREZ</span>
+        </div>
+
+        <blockquote class="hero-reference">
           <span class="reference-line"></span>
           <p>“Fortaleceos en el Señor, y en el poder de su fuerza.” <strong>Efesios 6:10</strong></p>
-        </div>
+        </blockquote>
       </div>
 
-      <div class="hero-visual reveal" aria-label="Escudo simbólico con cruz, representación de Cristo como centro">
-        <div class="orbit orbit-one"></div>
-        <div class="orbit orbit-two"></div>
+      <div class="hero-visual reveal" aria-label="Escudo con cruz, representación visual de Cristo como centro">
+        <div class="radar radar-one"></div>
+        <div class="radar radar-two"></div>
         <div class="crest-glow"></div>
-        <div class="crest">
-          <div class="crest-inner">
-            <span class="cross-vertical"></span>
-            <span class="cross-horizontal"></span>
+        <div class="crest-shell">
+          <div class="crest">
+            <div class="crest-inner">
+              <span class="cross-vertical"></span>
+              <span class="cross-horizontal"></span>
+            </div>
           </div>
         </div>
-        <div class="visual-tag tag-top"><small>IDENTIDAD</small><strong>EN CRISTO</strong></div>
-        <div class="visual-tag tag-bottom"><small>FIRMES</small><strong>EN LA VERDAD</strong></div>
+        <div class="visual-chip chip-a"><small>POSICIÓN</small><strong>EN CRISTO</strong></div>
+        <div class="visual-chip chip-b"><small>POSTURA</small><strong>PERMANECER</strong></div>
+        <div class="visual-chip chip-c"><small>RESPUESTA</small><strong>VERDAD</strong></div>
+        <div class="hero-console">
+          <span><b>01</b> IDENTIDAD</span>
+          <span><b>02</b> DISCERNIMIENTO</span>
+          <span><b>03</b> FIRMEZA</span>
+        </div>
       </div>
 
-      <div class="scroll-cue"><span></span> DESCUBRIR</div>
+      <a class="scroll-cue" href="#fundamento" aria-label="Bajar al fundamento"><span></span> DESCUBRIR</a>
     </section>
 
-    <section class="battle section-shell" id="batalla">
-      <div class="section-heading reveal">
-        <p class="eyebrow"><span></span> Entiende antes de pelear</p>
-        <h2>No toda oposición es un demonio.<br><em>Toda batalla exige discernimiento.</em></h2>
-        <p>La guerra espiritual bíblica no comienza buscando oscuridad; comienza mirando a Cristo, sometiendo la mente a la verdad y aprendiendo a reconocer qué necesita oración, qué necesita obediencia y qué necesita una decisión madura.</p>
+    <section class="manifesto section-shell" id="fundamento">
+      <div class="manifesto-intro reveal">
+        <p class="eyebrow"><span></span> Principio cero</p>
+        <div class="manifesto-grid">
+          <h2>La guerra espiritual no comienza mirando al enemigo.</h2>
+          <p>Comienza mirando a Cristo. Antes de hablar de estrategias, puertas, fortalezas o ataques, necesitamos saber quién es Jesús, qué hizo en la cruz y desde qué posición vive el creyente.</p>
+        </div>
       </div>
 
-      <div class="battle-grid">
-        <article class="battle-card reveal">
-          <span class="card-number">01</span>
+      <div class="foundation-grid">
+        <article class="foundation-card reveal">
+          <span class="card-index">01</span>
           <div class="line-icon">
             <svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="18"/><path d="M24 12v24M16 20h16"/></svg>
           </div>
           <h3>Identidad antes que combate</h3>
-          <p>No peleamos para conseguir que Cristo nos acepte. Permanecemos firmes porque ya le pertenecemos.</p>
-          <span class="scripture">Colosenses 2:15</span>
+          <p>No peleas para ganarte un lugar en Cristo. Permaneces firme porque, por gracia, ya le perteneces.</p>
+          <span class="scripture">COLOSENSES 2:15</span>
         </article>
 
-        <article class="battle-card reveal">
-          <span class="card-number">02</span>
+        <article class="foundation-card reveal">
+          <span class="card-index">02</span>
           <div class="line-icon">
             <svg viewBox="0 0 48 48" aria-hidden="true"><path d="M5 24s7-12 19-12 19 12 19 12-7 12-19 12S5 24 5 24Z"/><circle cx="24" cy="24" r="5"/></svg>
           </div>
           <h3>Discernimiento, no paranoia</h3>
-          <p>Aprenderás a separar tentación, patrones humanos, heridas, malas decisiones y verdadera oposición espiritual.</p>
-          <span class="scripture">1 Juan 4:1</span>
+          <p>No todo problema es demoníaco. La madurez distingue tentación, heridas, decisiones, conflictos humanos y oposición espiritual.</p>
+          <span class="scripture">1 JUAN 4:1</span>
         </article>
 
-        <article class="battle-card reveal">
-          <span class="card-number">03</span>
+        <article class="foundation-card reveal">
+          <span class="card-index">03</span>
           <div class="line-icon">
             <svg viewBox="0 0 48 48" aria-hidden="true"><path d="M24 5 40 11v12c0 10-6 17-16 22C14 40 8 33 8 23V11l16-6Z"/><path d="m16 25 5 5 11-13"/></svg>
           </div>
           <h3>Autoridad bajo autoridad</h3>
-          <p>La autoridad espiritual no es espectáculo ni gritos; nace de una vida rendida, obediente y dependiente de Jesús.</p>
-          <span class="scripture">Santiago 4:7</span>
+          <p>La autoridad espiritual no es volumen ni espectáculo. Nace de una vida rendida a Dios, obediente a la Palabra y dependiente de Jesús.</p>
+          <span class="scripture">SANTIAGO 4:7</span>
         </article>
       </div>
+    </section>
+
+    <section class="discernment section-shell" id="discernimiento">
+      <div class="section-heading reveal">
+        <p class="eyebrow"><span></span> Sala de discernimiento</p>
+        <h2>Antes de reaccionar, <em>identifica qué tienes delante.</em></h2>
+        <p>Este ejercicio no “diagnostica espíritus”. Su propósito es obligarnos a pensar bíblicamente antes de atribuir cada situación al enemigo.</p>
+      </div>
+
+      <div class="discernment-shell reveal">
+        <div class="discernment-options" role="tablist" aria-label="Escenarios de discernimiento">
+          <button class="discernment-tab active" type="button" data-discern="tentacion" role="tab" aria-selected="true"><span>01</span><strong>Tentación recurrente</strong><small>Deseos, hábitos, impulsos</small></button>
+          <button class="discernment-tab" type="button" data-discern="herida" role="tab" aria-selected="false"><span>02</span><strong>Herida o agotamiento</strong><small>Dolor, duelo, cansancio</small></button>
+          <button class="discernment-tab" type="button" data-discern="conflicto" role="tab" aria-selected="false"><span>03</span><strong>Conflicto humano</strong><small>Comunicación, límites, decisiones</small></button>
+          <button class="discernment-tab" type="button" data-discern="oposicion" role="tab" aria-selected="false"><span>04</span><strong>Oposición espiritual</strong><small>Resistencia que exige sobriedad</small></button>
+        </div>
+
+        <div class="discernment-stage" id="discernmentStage" aria-live="polite">
+          <div class="stage-topline"><span>ESCENARIO 01</span><b>PRIMERA RESPUESTA</b></div>
+          <h3>Tentación recurrente</h3>
+          <p class="stage-lead">La Biblia no enseña a culpar a un demonio por cada deseo desordenado. También habla de nuestra responsabilidad, de huir, renovar la mente y cortar provisión al pecado.</p>
+          <div class="response-grid">
+            <div><small>PREGUNTA CLAVE</small><p>¿Qué estoy alimentando, justificando o dejando sin límites?</p></div>
+            <div><small>RESPUESTA BÍBLICA</small><p>Confesar, huir de la ocasión, renovar hábitos y buscar acompañamiento maduro.</p></div>
+          </div>
+          <span class="stage-scripture">Santiago 1:14–15 · 2 Timoteo 2:22</span>
+        </div>
+      </div>
+
+      <p class="care-note reveal"><strong>Nota de responsabilidad:</strong> la formación espiritual acompaña, pero no sustituye atención médica, psicológica, psiquiátrica ni ayuda profesional cuando una situación lo requiere.</p>
     </section>
 
     <section class="armor section-shell" id="armadura">
       <div class="section-heading centered reveal">
         <p class="eyebrow"><span></span> Efesios 6:10–18</p>
         <h2>Vístete para <em>permanecer firme.</em></h2>
-        <p>Toca cada pieza de la armadura. No es un amuleto: cada elemento representa una realidad espiritual que debe formar parte de tu manera de vivir.</p>
+        <p>La armadura no funciona como amuleto. Cada pieza representa una realidad del evangelio que debe formar parte de tu manera de pensar, caminar y responder.</p>
       </div>
 
       <div class="armor-layout">
         <div class="armor-selector reveal" role="tablist" aria-label="Piezas de la armadura de Dios">
-          <button class="armor-item active" data-armor="verdad" role="tab" aria-selected="true"><span>01</span><strong>Cinturón</strong><small>La verdad</small></button>
-          <button class="armor-item" data-armor="justicia" role="tab" aria-selected="false"><span>02</span><strong>Coraza</strong><small>La justicia</small></button>
-          <button class="armor-item" data-armor="evangelio" role="tab" aria-selected="false"><span>03</span><strong>Calzado</strong><small>El evangelio</small></button>
-          <button class="armor-item" data-armor="fe" role="tab" aria-selected="false"><span>04</span><strong>Escudo</strong><small>La fe</small></button>
-          <button class="armor-item" data-armor="salvacion" role="tab" aria-selected="false"><span>05</span><strong>Yelmo</strong><small>La salvación</small></button>
-          <button class="armor-item" data-armor="palabra" role="tab" aria-selected="false"><span>06</span><strong>Espada</strong><small>La Palabra</small></button>
+          <button class="armor-item active" type="button" data-armor="verdad" role="tab" aria-selected="true"><span>01</span><strong>Cinturón</strong><small>La verdad</small></button>
+          <button class="armor-item" type="button" data-armor="justicia" role="tab" aria-selected="false"><span>02</span><strong>Coraza</strong><small>La justicia</small></button>
+          <button class="armor-item" type="button" data-armor="evangelio" role="tab" aria-selected="false"><span>03</span><strong>Calzado</strong><small>El evangelio</small></button>
+          <button class="armor-item" type="button" data-armor="fe" role="tab" aria-selected="false"><span>04</span><strong>Escudo</strong><small>La fe</small></button>
+          <button class="armor-item" type="button" data-armor="salvacion" role="tab" aria-selected="false"><span>05</span><strong>Yelmo</strong><small>La salvación</small></button>
+          <button class="armor-item" type="button" data-armor="palabra" role="tab" aria-selected="false"><span>06</span><strong>Espada</strong><small>La Palabra</small></button>
         </div>
 
         <div class="armor-stage reveal">
@@ -137,86 +197,152 @@
             <svg viewBox="0 0 120 120" aria-hidden="true"><path d="M60 10 98 25v28c0 25-14 43-38 57C36 96 22 78 22 53V25L60 10Z"/><path d="M60 32v52M43 49h34"/></svg>
           </div>
           <div class="armor-detail" id="armorDetail" aria-live="polite">
-            <p class="detail-label">PIEZA 01</p>
+            <p class="detail-label">PIEZA 01 · VERDAD</p>
             <h3>Cinturón de la Verdad</h3>
             <p>La mentira desordena; la verdad afirma. La batalla comienza cuando dejas de negociar con engaños y permites que la verdad de Dios gobierne lo que piensas, dices y decides.</p>
+            <div class="armor-application"><small>APLICACIÓN</small><p>Identifica una mentira que has aceptado y compárala con lo que realmente enseña la Escritura.</p></div>
             <blockquote>“Estad, pues, firmes, ceñidos vuestros lomos con la verdad...” <span>Efesios 6:14</span></blockquote>
           </div>
         </div>
       </div>
     </section>
 
-    <section class="training section-shell" id="entrenamiento">
+    <section class="daily section-shell" id="guardia">
       <div class="section-heading reveal">
-        <p class="eyebrow"><span></span> Ruta de formación</p>
-        <h2>Entrenamiento que va <em>de fundamento a profundidad.</em></h2>
-        <p>Una ruta progresiva para estudiar, practicar, discernir y crecer. Cada nivel construye sobre el anterior.</p>
+        <p class="eyebrow"><span></span> Guardia de hoy</p>
+        <h2>Entrena algo concreto. <em>Hoy.</em></h2>
+        <p>Una práctica breve que cambia cada día. Tu progreso se guarda solamente en este navegador; no necesitas cuenta.</p>
       </div>
 
-      <div class="training-grid">
-        <article class="level-card reveal">
-          <div class="level-top"><span>NIVEL 1</span><small>FUNDAMENTOS</small></div>
-          <h3>Conoce tu posición</h3>
-          <p>Identidad en Cristo, naturaleza de la batalla, oración, Palabra, obediencia y fundamentos de autoridad espiritual.</p>
-          <ul><li>Fundamento bíblico</li><li>Identidad y autoridad</li><li>Oración estratégica</li></ul>
-          <a href="#comenzar">Explorar nivel <span>→</span></a>
-        </article>
+      <div class="daily-card reveal">
+        <div class="daily-main">
+          <div class="daily-meta"><span id="dailyDate">HOY</span><b id="dailyNumber">DÍA 1 DE 7</b></div>
+          <p class="daily-label" id="dailyLabel">IDENTIDAD</p>
+          <h3 id="dailyTitle">Recuerda desde dónde peleas</h3>
+          <p class="daily-text" id="dailyText">Antes de analizar el problema, nombra tres verdades bíblicas acerca de tu identidad en Cristo.</p>
+          <blockquote id="dailyVerse">“Con Cristo estoy juntamente crucificado...” <span>Gálatas 2:20</span></blockquote>
+          <div class="daily-practice">
+            <small>PRÁCTICA DE HOY</small>
+            <p id="dailyPractice">Escribe una mentira que te esté presionando y responde con una verdad bíblica concreta.</p>
+          </div>
+          <button class="button button-primary daily-complete" id="dailyComplete" type="button">Marcar entrenamiento completado <span>✓</span></button>
+        </div>
 
-        <article class="level-card featured reveal">
-          <div class="level-badge">FORMACIÓN ACTIVA</div>
-          <div class="level-top"><span>NIVEL 2</span><small>ESTRATEGIA</small></div>
-          <h3>Discierne la estrategia</h3>
-          <p>Inteligencia del enemigo, estrategias invisibles, emboscadas, fortalezas y principios bíblicos de contraataque.</p>
-          <ul><li>Inteligencia espiritual</li><li>Fortalezas y patrones</li><li>Respuesta bíblica</li></ul>
-          <a href="#comenzar">Explorar nivel <span>→</span></a>
-        </article>
+        <aside class="daily-progress" aria-label="Progreso de siete días">
+          <div class="progress-head"><span>PROGRESO LOCAL</span><strong id="progressCount">0/7</strong></div>
+          <div class="progress-ring" id="progressRing"><span id="progressPercent">0%</span><small>COMPLETADO</small></div>
+          <div class="week-dots" id="weekDots" aria-label="Días completados"></div>
+          <p>Completa las siete guardias a tu ritmo. No es una competencia: es constancia.</p>
+          <button class="text-button" id="resetProgress" type="button">Reiniciar progreso</button>
+        </aside>
+      </div>
+    </section>
 
-        <article class="level-card reveal">
-          <div class="level-top"><span>NIVEL 3</span><small>PUERTAS Y DERECHOS</small></div>
-          <h3>Cierra lo que alimenta la batalla</h3>
-          <p>Puertas, derechos, alimentación espiritual, cierres reales y cómo reconocer sustituciones después de una victoria.</p>
-          <ul><li>Puertas y accesos</li><li>Cierres reales</li><li>Sustituciones</li></ul>
-          <a href="#comenzar">Explorar nivel <span>→</span></a>
-        </article>
+    <section class="training section-shell" id="entrenamiento">
+      <div class="section-heading reveal">
+        <p class="eyebrow"><span></span> Ruta MIRMC</p>
+        <h2>De fundamento a profundidad, <em>sin saltarte procesos.</em></h2>
+        <p>Tres niveles, quince lecciones y una misma línea: comprender, discernir y aplicar todo bajo el señorío de Cristo.</p>
+      </div>
+
+      <div class="training-tabs reveal" role="tablist" aria-label="Niveles del curso">
+        <button class="training-tab active" type="button" data-level="1" role="tab" aria-selected="true"><span>01</span><b>Fundamentos</b></button>
+        <button class="training-tab" type="button" data-level="2" role="tab" aria-selected="false"><span>02</span><b>Estrategia</b></button>
+        <button class="training-tab" type="button" data-level="3" role="tab" aria-selected="false"><span>03</span><b>Puertas y derechos</b></button>
+      </div>
+
+      <div class="level-stage reveal" id="levelStage" aria-live="polite">
+        <div class="level-summary">
+          <span class="level-kicker">NIVEL 1 · FUNDAMENTOS</span>
+          <h3>Conoce tu posición antes de estudiar la guerra.</h3>
+          <p>Este nivel construye la base: identidad, naturaleza de la batalla, autoridad en Cristo, oración y el uso responsable de la Escritura.</p>
+          <div class="level-metrics"><span><b>5</b> LECCIONES</span><span><b>BASE</b> BÍBLICA</span><span><b>01</b> RUTA</span></div>
+        </div>
+        <ol class="lesson-list">
+          <li><span>01</span><div><strong>La naturaleza de la batalla</strong><small>Qué es y qué no es guerra espiritual.</small></div></li>
+          <li><span>02</span><div><strong>Identidad y posición en Cristo</strong><small>Pelear desde la obra terminada de Jesús.</small></div></li>
+          <li><span>03</span><div><strong>Autoridad espiritual</strong><small>Autoridad bíblica sin espectáculo.</small></div></li>
+          <li><span>04</span><div><strong>Oración y vigilancia</strong><small>Orar con sobriedad, fe y perseverancia.</small></div></li>
+          <li><span>05</span><div><strong>La Palabra en la batalla</strong><small>Interpretar antes de declarar.</small></div></li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="field-code section-shell">
+      <div class="section-heading centered reveal">
+        <p class="eyebrow"><span></span> Código de campo</p>
+        <h2>Cinco reglas para <em>no perder el centro.</em></h2>
+      </div>
+      <div class="code-grid">
+        <article class="code-card reveal"><span>01</span><h3>Prueba lo que escuchas</h3><p>No todo lenguaje espiritual es bíblico. Examina doctrina, fruto, contexto y dirección.</p></article>
+        <article class="code-card reveal"><span>02</span><h3>No conviertas sospechas en revelación</h3><p>Una impresión no te autoriza a acusar personas ni a construir historias sin evidencia.</p></article>
+        <article class="code-card reveal"><span>03</span><h3>La obediencia también es guerra</h3><p>A veces la respuesta más espiritual es pedir perdón, poner un límite, descansar o corregir un hábito.</p></article>
+        <article class="code-card reveal"><span>04</span><h3>La verdad no necesita teatro</h3><p>La autoridad de Cristo no depende de gritos, objetos, fórmulas ni actuaciones.</p></article>
+        <article class="code-card reveal"><span>05</span><h3>El fruto importa</h3><p>Si una práctica produce miedo crónico, obsesión o dependencia de un líder, hay que revisarla.</p></article>
       </div>
     </section>
 
     <section class="resources section-shell" id="recursos">
-      <div class="resource-panel reveal">
-        <div>
-          <p class="eyebrow"><span></span> Biblioteca de campo</p>
-          <h2>Herramientas para estudiar.<br><em>No fórmulas mágicas.</em></h2>
-          <p>Guías bíblicas, enseñanzas, ejercicios de discernimiento, material para grupos y recursos de formación para volver una y otra vez a la Escritura.</p>
-        </div>
-        <div class="resource-list">
-          <a href="#comenzar"><span>01</span><strong>Enseñanzas</strong><small>Fundamento y profundidad</small><b>↗</b></a>
-          <a href="#comenzar"><span>02</span><strong>Guías de estudio</strong><small>Aplicación práctica</small><b>↗</b></a>
-          <a href="#comenzar"><span>03</span><strong>Preguntas y respuestas</strong><small>Discernir sin extremos</small><b>↗</b></a>
-          <a href="#comenzar"><span>04</span><strong>Recursos para líderes</strong><small>Formación responsable</small><b>↗</b></a>
-        </div>
+      <div class="section-heading reveal">
+        <p class="eyebrow"><span></span> Biblioteca de campo</p>
+        <h2>Herramientas para estudiar. <em>No fórmulas mágicas.</em></h2>
+        <p>La biblioteca crecerá con enseñanzas, guías y recursos para alumnos, grupos y líderes.</p>
+      </div>
+
+      <div class="resource-grid">
+        <article class="resource-card reveal"><span class="resource-icon">01</span><div><small>FORMACIÓN</small><h3>Enseñanzas</h3><p>Fundamento bíblico y desarrollo profundo de cada tema.</p></div><b aria-hidden="true">↗</b></article>
+        <article class="resource-card reveal"><span class="resource-icon">02</span><div><small>ESTUDIO</small><h3>Guías prácticas</h3><p>Preguntas, ejercicios y pasos de aplicación responsables.</p></div><b aria-hidden="true">↗</b></article>
+        <article class="resource-card reveal"><span class="resource-icon">03</span><div><small>DISCERNIMIENTO</small><h3>Casos y escenarios</h3><p>Aprende a razonar antes de etiquetar una situación.</p></div><b aria-hidden="true">↗</b></article>
+        <article class="resource-card reveal"><span class="resource-icon">04</span><div><small>LIDERAZGO</small><h3>Recursos para líderes</h3><p>Material para enseñar con responsabilidad y cuidado pastoral.</p></div><b aria-hidden="true">↗</b></article>
+        <article class="resource-card reveal"><span class="resource-icon">05</span><div><small>REPASO</small><h3>Preguntas y respuestas</h3><p>Respuestas claras para dudas frecuentes y extremos comunes.</p></div><b aria-hidden="true">↗</b></article>
+        <article class="resource-card reveal"><span class="resource-icon">06</span><div><small>DEVOCIONAL</small><h3>Guardias de entrenamiento</h3><p>Prácticas cortas para formar hábitos de verdad y sobriedad.</p></div><b aria-hidden="true">↗</b></article>
+      </div>
+    </section>
+
+    <section class="faq section-shell" id="preguntas">
+      <div class="section-heading reveal">
+        <p class="eyebrow"><span></span> Preguntas necesarias</p>
+        <h2>La madurez también <em>hace buenas preguntas.</em></h2>
+      </div>
+      <div class="faq-list reveal">
+        <details><summary>¿Todo problema fuerte significa que estoy bajo ataque espiritual?<span>+</span></summary><p>No. La Biblia reconoce tentación, consecuencias, conflictos humanos, enfermedad, cansancio, decisiones imprudentes y oposición espiritual. Discernir evita llamar “ataque” a todo lo que nos incomoda.</p></details>
+        <details><summary>¿La guerra espiritual consiste principalmente en reprender demonios?<span>+</span></summary><p>No. Efesios 6 enfatiza verdad, justicia, evangelio, fe, salvación, Palabra y oración perseverante. Mucha guerra espiritual se libra permaneciendo fiel a esas realidades.</p></details>
+        <details><summary>¿Puedo usar objetos como protección espiritual?<span>+</span></summary><p>La seguridad del creyente no descansa en objetos, símbolos o fórmulas. Nuestra confianza está en Cristo. Un símbolo puede recordar una verdad, pero no posee poder espiritual autónomo.</p></details>
+        <details><summary>¿Buscar ayuda profesional significa falta de fe?<span>+</span></summary><p>No. Buscar atención médica o psicológica cuando corresponde no compite con la oración. La sabiduría bíblica no obliga a escoger entre cuidado espiritual y ayuda profesional responsable.</p></details>
+        <details><summary>¿Cuál es la meta final de este entrenamiento?<span>+</span></summary><p>No terminar pensando más en el enemigo, sino viviendo más firme en Cristo: con mejor discernimiento, una mente renovada, obediencia concreta y una fe menos vulnerable al miedo.</p></details>
       </div>
     </section>
 
     <section class="final-cta section-shell" id="comenzar">
-      <div class="cta-cross" aria-hidden="true"><span></span><i></i></div>
+      <div class="cta-orbit" aria-hidden="true"></div>
       <div class="cta-content reveal">
+        <img src="assets/mirmc-shield.svg" alt="" width="70" height="82" />
         <p class="eyebrow centered-eye"><span></span> MIRMC GUERRA ESPIRITUAL <span></span></p>
-        <h2>No te entrenamos para vivir mirando al enemigo.<br><em>Te entrenamos para permanecer mirando a Cristo.</em></h2>
-        <p>El objetivo no es que termines obsesionado con la batalla. Es que termines más firme en Jesús, más sobrio, más bíblico y más preparado para obedecer.</p>
-        <a class="button button-primary" href="#inicio">Comenzar desde el fundamento <span>↑</span></a>
+        <h2>No te entrenamos para vivir mirando al enemigo. <em>Te entrenamos para permanecer mirando a Cristo.</em></h2>
+        <p>El objetivo es una fe más bíblica, más sobria, más obediente y menos controlada por el miedo.</p>
+        <a class="button button-primary" href="#guardia">Entrar a la guardia de hoy <span aria-hidden="true">→</span></a>
       </div>
     </section>
   </main>
 
-  <footer class="site-footer section-shell">
-    <a class="brand footer-brand" href="#inicio">
-      <span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 64 64"><path d="M32 4 52 12v15c0 14-8 25-20 33C20 52 12 41 12 27V12L32 4Z" fill="none" stroke="currentColor" stroke-width="2.5"/><path d="M32 15v30M22 25h20" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg></span>
-      <span class="brand-copy"><strong>MIRMC</strong><small>GUERRA ESPIRITUAL</small></span>
-    </a>
-    <p>Formación bíblica con Cristo como centro.</p>
-    <p class="copyright">© <span id="year"></span> MIRMC. Todos los derechos reservados.</p>
+  <footer class="site-footer">
+    <div class="footer-inner section-shell">
+      <div class="footer-brand-block">
+        <a class="brand footer-brand" href="#inicio">
+          <img src="assets/mirmc-shield.svg" alt="" class="brand-mark" width="48" height="56" />
+          <span class="brand-copy"><strong>MIRMC</strong><small>GUERRA ESPIRITUAL</small></span>
+        </a>
+        <p>Formación bíblica para permanecer firmes en Cristo.</p>
+      </div>
+      <div class="footer-links">
+        <div><strong>FORMACIÓN</strong><a href="#fundamento">Fundamento</a><a href="#armadura">Armadura</a><a href="#entrenamiento">Niveles</a></div>
+        <div><strong>RECURSOS</strong><a href="#guardia">Guardia diaria</a><a href="#recursos">Biblioteca</a><a href="#preguntas">Preguntas</a></div>
+      </div>
+      <div class="footer-bottom"><span>© <span id="year"></span> MIRMC</span><span>CRISTO AL CENTRO · BIBLIA ABIERTA · DISCERNIMIENTO SOBRIO</span></div>
+    </div>
   </footer>
 
-  <script src="script.js"></script>
+  <noscript><div class="noscript">Activa JavaScript para usar la armadura interactiva, la sala de discernimiento y el progreso de entrenamiento.</div></noscript>
+  <script src="script.js" defer></script>
 </body>
 </html>
