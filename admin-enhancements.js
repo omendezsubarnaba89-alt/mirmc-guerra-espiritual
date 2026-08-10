@@ -11,6 +11,15 @@
     toolbar.appendChild(link);
   }
 
+  if (toolbar && !toolbar.querySelector('[data-content-audit-link]')) {
+    const link = document.createElement('a');
+    link.href = 'admin-content-audit.html';
+    link.className = 'button button-ghost';
+    link.dataset.contentAuditLink = 'true';
+    link.textContent = 'Historial editorial';
+    toolbar.appendChild(link);
+  }
+
   if (toolbar && !toolbar.querySelector('[data-audit-link]')) {
     const link = document.createElement('a');
     link.href = 'admin-audit.html';
