@@ -1,11 +1,11 @@
-const CACHE = 'mirmc-guerra-espiritual-v11-content-4';
+const CACHE = 'mirmc-guerra-espiritual-v11-content-5';
 const CORE = [
   './','./index.html','./styles.css','./script.js','./course-data.js','./course-progress.js','./course-enhancements.js','./course-index.css',
   './lesson.html','./lesson.css','./lesson.js','./resource-data.js','./library.html','./library.css','./library.js','./resource.html','./resource.js','./content-runtime.js',
   './assessment-data.js','./assessment-progress.js','./assessment.html','./assessment.css','./assessment.js','./academic.html','./academic.css','./academic.js',
   './certificate.html','./certificate.css','./certificate.js','./settings.html','./settings.css','./settings.js','./account.html','./account.css','./account.js',
   './admin.html','./admin.css','./admin.js','./admin-enhancements.js','./admin-user.html','./admin-user.js','./admin-detail.css','./admin-audit.html','./admin-audit.js','./admin-audit.css',
-  './admin-content.html','./admin-content.css','./admin-content.js','./admin-content-audit.html','./admin-content-audit.js','./admin-preview.html','./admin-preview.css','./admin-preview.js',
+  './admin-content.html','./admin-content.css','./admin-content.js','./admin-content-restore.js','./admin-content-audit.html','./admin-content-audit.js','./admin-preview.html','./admin-preview.css','./admin-preview.js',
   './admin-versions.html','./admin-versions.css','./admin-versions.js',
   './cloud-config.js','./cloud-client.js','./cloud-sync.js','./cloud-autosync.js','./study.html','./study.css','./study.js','./study-data.js','./study-tools.js','./study-tools.css',
   './assets/mirmc-shield.svg','./manifest.webmanifest'
