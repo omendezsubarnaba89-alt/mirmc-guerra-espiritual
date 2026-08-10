@@ -2,6 +2,15 @@
   const usersWrap = document.querySelector('#adminUsers');
   const toolbar = document.querySelector('.admin-toolbar');
 
+  if (toolbar && !toolbar.querySelector('[data-content-link]')) {
+    const link = document.createElement('a');
+    link.href = 'admin-content.html';
+    link.className = 'button button-primary';
+    link.dataset.contentLink = 'true';
+    link.textContent = 'Gestionar contenido';
+    toolbar.appendChild(link);
+  }
+
   if (toolbar && !toolbar.querySelector('[data-audit-link]')) {
     const link = document.createElement('a');
     link.href = 'admin-audit.html';
