@@ -8,28 +8,30 @@
   const categoryName = id => library.categories?.find(c => c.id === id)?.name || id;
   const normalize = value => String(value || '').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
 
-  const catalog = [
-    ...Object.entries(course.lessons || {}).map(([id,item]) => ({
-      key:`lesson:${id}`, type:'lesson', id, level:item.level, title:item.title, subtitle:item.subtitle || '',
-      meta:`Lección ${id} · Nivel ${item.level}`, url:`lesson.html?lesson=${id}`,
-      search:normalize([item.title,item.subtitle,item.objective,item.core,...(item.scriptures || []),...(item.sections || []).flatMap(s => [s.title,s.body]),...(item.keyPoints || [])].join(' '))
-    })),
-    ...(library.resources || []).map(item => ({
-      key:`resource:${item.id}`, type:'resource', id:item.id, level:item.level, title:item.title, subtitle:item.subtitle || item.summary || '',
-      meta:`${categoryName(item.category)} · Nivel ${item.level}`, url:`resource.html?id=${encodeURIComponent(item.id)}`,
-      search:normalize([item.title,item.subtitle,item.summary,item.takeaway,...(item.scriptures || []),...(item.sections || []).flat()].join(' '))
-    }))
-  ];
+  const lessons = Object.entries(course.lessons || {}).map(([id,item]) => ({
+    key:`lesson:${id}`, type:'lesson', id, level:item.level, title:item.title, subtitle:item.subtitle || '',
+    meta:`Lección ${id} · Nivel ${item.level}`, url:`lesson.html?lesson=${id}`,
+    search:normalize([item.title,item.subtitle,item.objective,item.core,...(item.scriptures || []),...(item.sections || []).flatMap(s => [s.title,s.body]),...(item.keyPoints || [])].join(' '))
+  })).sort((a,b) => Number(a.id) - Number(b.id));
 
+  const resources = (library.resources || []).map(item => ({
+    key:`resource:${item.id}`, type:'resource', id:item.id, level:item.level, title:item.title, subtitle:item.subtitle || item.summary || '',
+    meta:`${categoryName(item.category)} · Nivel ${item.level}`, url:`resource.html?id=${encodeURIComponent(item.id)}`,
+    search:normalize([item.title,item.subtitle,item.summary,item.takeaway,...(item.scriptures || []),...(item.sections || []).flat()].join(' '))
+  })).sort((a,b) => a.title.localeCompare(b.title,'es'));
+
+  const catalog = [...lessons, ...resources];
+  const PAGE_SIZE = 8;
   let view = 'search';
+  let visibleLimit = PAGE_SIZE;
 
   function state(){ return study.read(); }
 
   function renderStats(){
     const s = state();
     $('#studyStats').innerHTML = `
-      <div><small>LECCIONES</small><strong>${Object.keys(course.lessons || {}).length}</strong></div>
-      <div><small>RECURSOS</small><strong>${(library.resources || []).length}</strong></div>
+      <div><small>LECCIONES</small><strong>${lessons.length}</strong></div>
+      <div><small>RECURSOS</small><strong>${resources.length}</strong></div>
       <div><small>FAVORITOS</small><strong>${Object.keys(s.bookmarks).length}</strong></div>
       <div><small>NOTAS</small><strong>${Object.keys(s.notes).length}</strong></div>`;
     $('#bookmarkBadge').textContent = Object.keys(s.bookmarks).length;
@@ -57,6 +59,15 @@
 
   function catalogItem(entry){ return catalog.find(item => item.key === entry.key) || entry; }
 
+  function rankSearch(items, query){
+    if (!query) return items;
+    return [...items].sort((a,b) => {
+      const aTitle = normalize(a.title).includes(query) ? 0 : normalize(a.subtitle).includes(query) ? 1 : 2;
+      const bTitle = normalize(b.title).includes(query) ? 0 : normalize(b.subtitle).includes(query) ? 1 : 2;
+      return aTitle - bTitle || (a.type === b.type ? (a.type === 'lesson' ? Number(a.id) - Number(b.id) : a.title.localeCompare(b.title,'es')) : (a.type === 'lesson' ? -1 : 1));
+    });
+  }
+
   function render(){
     renderStats();
     const results = $('#studyResults');
@@ -67,10 +78,14 @@
     let items = [];
 
     if (view === 'search') {
-      items = catalog.filter(item => (!query || item.search.includes(query)) && (type === 'all' || item.type === type) && (level === 'all' || String(item.level) === level));
+      items = rankSearch(catalog.filter(item => (!query || item.search.includes(query)) && (type === 'all' || item.type === type) && (level === 'all' || String(item.level) === level)), query);
       $('#studyResultLabel').textContent = query ? 'COINCIDENCIAS' : 'RESULTADOS';
       $('#studyResultTitle').textContent = query ? `Buscar: “${$('#studySearch').value.trim()}”` : 'Toda la formación';
-      results.innerHTML = items.map(item => card(item)).join('');
+      const visible = items.slice(0, visibleLimit);
+      results.innerHTML = visible.map(item => card(item)).join('');
+      if (visible.length < items.length) {
+        results.insertAdjacentHTML('beforeend', `<div class="study-load-more"><button type="button" data-action="load-more">Mostrar ${Math.min(PAGE_SIZE, items.length - visible.length)} más <span>${visible.length}/${items.length}</span></button></div>`);
+      }
     } else if (view === 'bookmarks') {
       const entries = Object.values(state().bookmarks).sort((a,b) => new Date(b.addedAt || 0) - new Date(a.addedAt || 0));
       items = entries.map(catalogItem);
@@ -97,23 +112,30 @@
     results.hidden = items.length === 0;
   }
 
+  function resetSearchWindow(){ visibleLimit = PAGE_SIZE; }
+
   function setView(next){
     view = next;
+    resetSearchWindow();
     document.querySelectorAll('.study-tabs button').forEach(button => button.classList.toggle('active', button.dataset.view === view));
-    const searching = view === 'search';
-    document.querySelector('.study-search-panel').hidden = !searching;
+    document.querySelector('.study-search-panel').hidden = view !== 'search';
     render();
   }
 
-  $('#studySearch').addEventListener('input', render);
-  $('#studyType').addEventListener('change', render);
-  $('#studyLevel').addEventListener('change', render);
+  $('#studySearch').addEventListener('input', () => { resetSearchWindow(); render(); });
+  $('#studyType').addEventListener('change', () => { resetSearchWindow(); render(); });
+  $('#studyLevel').addEventListener('change', () => { resetSearchWindow(); render(); });
   document.querySelectorAll('.study-tabs button').forEach(button => button.addEventListener('click', () => setView(button.dataset.view)));
 
   $('#studyResults').addEventListener('click', event => {
     const action = event.target.closest('[data-action]');
     if (!action) return;
     const kind = action.dataset.action;
+    if (kind === 'load-more') {
+      visibleLimit += PAGE_SIZE;
+      render();
+      return;
+    }
     if (kind === 'clear-history') {
       study.clearHistory();
       render();
@@ -131,5 +153,5 @@
   window.addEventListener('mirmc-study-change', render);
   render();
 
-  function escapeHtml(value){ return String(value || '').replace(/[&<>'"]/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[char])); }
+  function escapeHtml(value){ return String(value || '').replace(/[&<>'\"]/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','\"':'&quot;'}[char])); }
 })();
