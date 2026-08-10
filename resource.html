@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#050813" />
+  <meta name="description" content="Recurso de la Biblioteca MIRMC Guerra Espiritual." />
+  <title>Recurso | MIRMC Guerra Espiritual</title>
+  <link rel="icon" href="assets/mirmc-shield.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="library.css" />
+</head>
+<body class="library-page resource-page">
+  <a class="skip-link" href="#resourceContent">Saltar al recurso</a>
+  <div class="ambient-grid" aria-hidden="true"></div>
+  <header class="library-header">
+    <div class="library-header-inner">
+      <a class="brand" href="index.html" aria-label="MIRMC Guerra Espiritual, inicio">
+        <img src="assets/mirmc-shield.svg" alt="" class="brand-mark" width="44" height="52" />
+        <span class="brand-copy"><strong>MIRMC</strong><small>GUERRA ESPIRITUAL</small></span>
+      </a>
+      <a class="library-back" href="library.html">← Biblioteca</a>
+    </div>
+  </header>
+
+  <main id="resourceContent" class="library-shell">
+    <section id="resourceMissing" class="library-empty" hidden><h3>Recurso no encontrado.</h3><p>Vuelve a la Biblioteca MIRMC para continuar.</p><a class="button button-primary" href="library.html">Abrir biblioteca</a></section>
+    <article class="resource-article" id="resourceArticle" hidden>
+      <div class="resource-breadcrumb"><a href="index.html">Inicio</a> · <a href="library.html">Biblioteca</a> · <span id="resourceCategory"></span></div>
+      <p class="library-eyebrow" id="resourceEyebrow"></p>
+      <h1 id="resourceTitle"></h1>
+      <p class="resource-lead" id="resourceSubtitle"></p>
+      <div class="resource-meta" id="resourceMeta"></div>
+      <div class="resource-scriptures" id="resourceScriptures"></div>
+      <div id="resourceSections"></div>
+      <section class="resource-takeaway"><span>PARA RETENER</span><blockquote id="resourceTakeaway"></blockquote></section>
+      <nav class="resource-actions"><a href="library.html">← Volver a la biblioteca</a><a href="index.html#entrenamiento">Ir a la Ruta MIRMC →</a></nav>
+    </article>
+  </main>
+
+  <footer class="lesson-footer"><div><span>MIRMC GUERRA ESPIRITUAL</span><span>CRISTO AL CENTRO · BIBLIA ABIERTA · DISCERNIMIENTO</span></div></footer>
+  <script src="resource-data.js"></script>
+  <script src="resource.js"></script>
+</body>
+</html>
