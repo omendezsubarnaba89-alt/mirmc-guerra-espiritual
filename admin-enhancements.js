@@ -19,9 +19,12 @@
       if (!userId) return;
       const link = document.createElement('a');
       link.href = `admin-user.html?id=${encodeURIComponent(userId)}`;
-      link.className = 'admin-detail-link';
+      link.className = 'button button-ghost admin-detail-link';
       link.dataset.detailLink = 'true';
       link.textContent = 'Ver expediente académico →';
+      link.style.display = 'inline-flex';
+      link.style.marginBottom = '14px';
+      link.style.justifyContent = 'center';
       const editor = card.querySelector('.admin-role-editor');
       if (editor) card.insertBefore(link, editor);
       else card.appendChild(link);
