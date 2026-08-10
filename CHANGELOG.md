@@ -2,89 +2,61 @@
 
 Todos los cambios relevantes de MIRMC Guerra Espiritual se documentan aquí.
 
+## V8 — 10 de agosto de 2026
+
+### Cuaderno MIRMC
+- Nueva página `study.html` con búsqueda global.
+- Indexa las 15 lecciones y los 12 recursos escritos.
+- Filtros por tipo de contenido y nivel.
+- Favoritos personales y contador.
+- Notas personales por lección/recurso, hasta 12.000 caracteres.
+- Historial de hasta 30 contenidos recientes.
+- Nueva tarjeta `Cuaderno personal` insertada dentro de lecciones y recursos.
+- Acceso directo al Cuaderno desde la Ruta MIRMC.
+- Favoritos, notas e historial se incluyen en respaldo JSON.
+- `cloud-sync.js` incorpora el estado de estudio en la futura sincronización.
+- Service worker actualizado a V8 para cachear Cuaderno y herramientas de estudio.
+- Añadido `scripts/validate-study.mjs` y validación de sintaxis en GitHub Actions.
+
 ## V7 — 10 de agosto de 2026
 
 ### Cuenta y sincronización preparada
 - Nueva página `account.html` con modo local y modo nube.
-- Acceso por correo/contraseña preparado con Supabase Auth.
-- Botón de Google OAuth preparado con redirect a `account.html`.
-- Perfil de alumno con nombre visible.
-- Nuevo motor `cloud-sync.js` para fusionar progreso local y remoto.
-- La fusión conserva lecciones completadas, mejores resultados de quiz y mejores notas de exámenes.
-- Controles manuales para `Sincronizar ahora`, subir el estado de este dispositivo o restaurar desde nube.
-- La Ruta MIRMC incorpora acceso visible a `Mi cuenta`.
-- `cloud-config.js` queda deshabilitado hasta disponer de un proyecto real; el modo local continúa funcionando sin cambios.
-
-### Backend preparado
-- Añadida migración Supabase `20260810143000_init_mirmc_cloud.sql`.
-- Tablas `profiles` y `user_learning_state`.
-- RLS obligatoria y políticas `authenticated` por `auth.uid() = user_id`.
-- Acceso anónimo revocado a datos de perfiles y progreso.
-- Trigger para crear perfil al registrarse y timestamps automáticos.
-- Runbook de activación en `supabase/README.md`.
-- Ninguna clave `service_role` forma parte del frontend.
-
-### PWA y calidad
-- Service worker actualizado a caché V7 con cuenta y adaptadores cloud.
-- Añadido `scripts/validate-cloud.mjs`.
-- GitHub Actions comprueba sintaxis, RLS, referencias y ausencia de service-role en configuración pública.
-- El validador permite la transición futura `enabled:false` → `enabled:true` solo con URL y publishable key válidas.
+- Acceso por correo/contraseña y Google OAuth preparados con Supabase Auth.
+- Perfil de alumno y sincronización inteligente local/remota.
+- Controles manuales de subir/restaurar estado.
+- `cloud-config.js` queda deshabilitado hasta disponer de un proyecto Supabase real.
+- Migración Supabase con tablas `profiles` y `user_learning_state`.
+- RLS por `auth.uid() = user_id`, acceso anónimo revocado y ninguna service-role en frontend.
+- Nuevo validador cloud/RLS.
 
 ## V6 — 10 de agosto de 2026
-
-### Respaldo y offline
-- Página `settings.html` para exportar/importar Guardia, curso, exámenes y nombre del certificado.
-- Restablecimiento explícito de datos locales.
-- Service worker y caché del shell esencial.
-- Base PWA standalone mediante `manifest.webmanifest`.
-- Validación automática de referencias offline.
+- Respaldo JSON de progreso y restauración.
+- Restablecimiento local explícito.
+- Service worker y primera capa PWA/offline.
 
 ## V5 — 10 de agosto de 2026
-
-### Evaluaciones finales y expediente
-- Tres evaluaciones finales de 10 preguntas; aprobación mínima 80%.
+- Tres evaluaciones finales de 10 preguntas; aprobación 80%.
 - Gates académicos entre niveles.
-- Registro académico local con promedio e intentos.
-- Certificado interno imprimible habilitado con 15/15 + tres exámenes aprobados.
-- Validación académica automática.
+- Registro académico y certificado interno imprimible.
 
 ## V4 — 10 de agosto de 2026
-
-### Biblioteca MIRMC real
-- `library.html` con búsqueda y filtros.
-- 12 recursos escritos iniciales.
-- Lector dinámico `resource.html?id=...`.
-- Las tarjetas del home abren categorías reales de Biblioteca.
+- Biblioteca real con búsqueda, filtros, 12 recursos y lector dinámico.
 
 ## V3.1 — 10 de agosto de 2026
-
-- Corregido el panel falso de lección bloqueada causado por CSS sobrescribiendo `hidden`.
-- Navegación inferior de lección refinada para móvil.
+- Corrección del falso panel de lección bloqueada y navegación móvil.
 
 ## V3 — 10 de agosto de 2026
-
-### Curso navegable
-- 3 niveles y 15 lecciones.
-- Objetivo, Biblia, desarrollo, ejercicio, reflexión y mini evaluación por lección.
-- Progreso secuencial guardado en `localStorage`.
-- Estados Abrir/Bloqueada/Completada y botón inteligente Continuar ruta.
+- Ruta de 3 niveles y 15 lecciones con progreso secuencial y mini evaluaciones.
 
 ## V2.2 — 10 de agosto de 2026
-
-- Corrección estructural del desbordamiento horizontal en Android.
-- Viewport, grids, flex, pseudoelementos y elementos absolutos limitados correctamente.
+- Corrección estructural del overflow horizontal en Android.
 
 ## V2.1 — 10 de agosto de 2026
-
-- Primera prueba real en Samsung/Chrome.
-- Hardening móvil, compactación vertical y centrado de elementos visuales.
+- Primera auditoría real en Samsung/Chrome y hardening móvil.
 
 ## V2 — 10 de agosto de 2026
-
-- Reconstrucción visual completa.
-- Sala de discernimiento, Armadura interactiva, Guardia de Hoy y Ruta MIRMC.
-- SEO, PWA inicial, accesibilidad y GitHub Actions.
+- Reconstrucción visual, discernimiento, armadura, Guardia, SEO, accesibilidad y CI.
 
 ## V1 — 10 de agosto de 2026
-
-- Primera landing funcional publicada mediante GitHub Pages.
+- Primera landing publicada mediante GitHub Pages.
