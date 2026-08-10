@@ -1,0 +1,56 @@
+name: Apply mobile hardening
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'mobile-fixes.css'
+      - '.github/workflows/apply-mobile-fixes.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Merge mobile overrides into stylesheet
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          target = Path('styles.css')
+          source = Path('mobile-fixes.css')
+          start = '/* === MIRMC MOBILE HARDENING:START ==='
+          end = '/* === MIRMC MOBILE HARDENING:END === */'
+
+          css = target.read_text(encoding='utf-8')
+          fixes = source.read_text(encoding='utf-8').strip()
+
+          if start in css and end in css:
+              before = css.split(start, 1)[0].rstrip()
+              after = css.split(end, 1)[1].lstrip()
+              css = before + ('\n\n' + after if after else '')
+
+          merged = css.rstrip() + '\n\n' + fixes + '\n'
+          target.write_text(merged, encoding='utf-8')
+          PY
+
+      - name: Commit generated stylesheet
+        shell: bash
+        run: |
+          if git diff --quiet -- styles.css; then
+            echo "styles.css already contains the current mobile hardening block."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add styles.css
+          git commit -m "fix: apply Android mobile hardening [skip ci]"
+          git push
