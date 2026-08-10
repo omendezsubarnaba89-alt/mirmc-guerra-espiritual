@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 112" role="img" aria-labelledby="title desc">
+  <title id="title">Escudo MIRMC Guerra Espiritual</title>
+  <desc id="desc">Escudo dorado con una cruz al centro.</desc>
+  <defs>
+    <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#f2dc97"/>
+      <stop offset=".5" stop-color="#d4ad51"/>
+      <stop offset="1" stop-color="#8f6824"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="50%" cy="40%" r="60%">
+      <stop offset="0" stop-color="#d4ad51" stop-opacity=".14"/>
+      <stop offset="1" stop-color="#d4ad51" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <circle cx="48" cy="52" r="43" fill="url(#glow)"/>
+  <path d="M48 6 80 18v28c0 25-13 44-32 58C29 90 16 71 16 46V18L48 6Z" fill="#07101f" stroke="url(#gold)" stroke-width="3"/>
+  <path d="M48 28v48M34 44h28" fill="none" stroke="url(#gold)" stroke-width="5" stroke-linecap="round"/>
+  <path d="M24 25 48 16l24 9" fill="none" stroke="#f2dc97" stroke-opacity=".28" stroke-width="1"/>
+</svg>
