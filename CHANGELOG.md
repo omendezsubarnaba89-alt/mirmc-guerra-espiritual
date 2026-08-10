@@ -2,6 +2,37 @@
 
 Todos los cambios relevantes de MIRMC Guerra Espiritual se documentan aquí.
 
+## V4 — 10 de agosto de 2026
+
+### Biblioteca MIRMC real
+- La Biblioteca deja de ser una cuadrícula conceptual y pasa a ser una experiencia navegable independiente.
+- Nueva página `library.html` con búsqueda instantánea, filtro por categoría y filtro por nivel.
+- 12 recursos escritos iniciales distribuidos entre Formación, Guías prácticas, Casos y escenarios, Liderazgo, Preguntas y respuestas y Devocional.
+- Recursos destacados cuando no hay filtros activos.
+- Nueva página dinámica `resource.html?id=...` para leer cada recurso completo sin duplicar plantillas.
+- Cada recurso incluye categoría, nivel, formato, duración, base bíblica, desarrollo por secciones e idea para retener.
+- Las seis tarjetas de Biblioteca del home ahora abren automáticamente el filtro correspondiente.
+- Botón `Abrir biblioteca completa` añadido al home.
+- No se muestran descargas, PDFs ni audios ficticios: la biblioteca solamente ofrece formatos que existen realmente.
+
+### Arquitectura
+- `resource-data.js` centraliza categorías y recursos.
+- `library.js` gestiona búsqueda, filtros, URL de estado y renderizado.
+- `resource.js` renderiza el lector individual.
+- `library.css` sirve tanto la Biblioteca como el lector de recursos.
+- `scripts/validate-library.mjs` comprueba IDs, categorías, niveles, contenido, base bíblica y referencias locales.
+- GitHub Actions valida sintaxis y arquitectura de la Biblioteca en cada push.
+
+## V3.1 — 10 de agosto de 2026
+
+### Corrección de estado de lección
+- Prueba real en Chrome/Android confirmó que la lección 01 funcionaba y permitía aprobar 3/3, pero el panel `Esta lección todavía está bloqueada` se mostraba simultáneamente.
+- Causa: la regla `.lesson-locked { display:grid; }` sobrescribía visualmente el atributo HTML `hidden`.
+- Añadida una regla explícita para que `hidden` gane siempre en loading, pantalla bloqueada y experiencia de lección.
+- `lesson.js` ahora establece de forma inequívoca el estado inicial antes de resolver el acceso.
+- La primera lección ya no muestra una tarjeta `Anterior` deshabilitada; ahora ofrece `Volver al inicio de la ruta`.
+- Navegación inferior refinada para móvil.
+
 ## V3 — 10 de agosto de 2026
 
 ### Curso navegable
