@@ -6,108 +6,85 @@ Centro web de formación bíblica, enseñanza y entrenamiento para comprender la
 
 https://omendezsubarnaba89-alt.github.io/mirmc-guerra-espiritual/
 
-## Estado actual — V7
+## Estado actual — V8
 
-La plataforma ya incluye centro de entrenamiento, curso navegable, biblioteca, evaluaciones finales, expediente académico, certificado, respaldo local, PWA/offline y una capa completa de **cuenta + sincronización preparada para Supabase**.
+La plataforma combina formación, curso, biblioteca, evaluaciones, expediente, certificado, respaldo/PWA, arquitectura de cuentas en nube y ahora un **Cuaderno MIRMC** para búsqueda, favoritos, notas y actividad reciente.
 
 ### Formación
-
-- Portada responsive y navegación móvil.
-- Sala de discernimiento y Armadura de Dios interactiva.
-- Guardia de hoy con progreso local.
-- Ruta MIRMC de 3 niveles y 15 lecciones.
+- 3 niveles y 15 lecciones navegables.
 - Mini evaluación por lección.
 - 3 exámenes finales de 10 preguntas; aprobación mínima 80%.
-- Gates académicos: Nivel 2 exige examen del Nivel 1; Nivel 3 exige examen del Nivel 2.
-- Registro académico local y certificado interno imprimible.
+- Gates académicos entre niveles.
+- Registro académico y certificado interno imprimible.
+- Sala de discernimiento, Armadura de Dios y Guardia de hoy.
 
 ### Biblioteca
-
-- `library.html` con búsqueda y filtros.
 - 12 recursos escritos iniciales.
-- Lector dinámico `resource.html?id=...`.
-- Categorías de formación, estudio, casos, liderazgo, repaso y devocional.
+- Búsqueda y filtros por categoría/nivel.
+- Lector dinámico para cada recurso.
 
-### Datos locales y PWA
+### V8 · Cuaderno MIRMC
+- Nueva página `study.html`.
+- Búsqueda global sobre las 15 lecciones y los 12 recursos.
+- Filtros por tipo y nivel.
+- Favoritos personales.
+- Notas de hasta 12.000 caracteres por lección o recurso.
+- Historial de hasta 30 contenidos recientes.
+- Lecciones y recursos incorporan una tarjeta `Cuaderno personal`.
+- Acceso `Cuaderno` desde la Ruta MIRMC del home.
+- Notas/favoritos forman parte del respaldo JSON.
+- `cloud-sync.js` ya incluye Cuaderno en la futura sincronización.
+- El service worker cachea también la experiencia del Cuaderno.
 
-- `settings.html` permite exportar/importar respaldo JSON.
-- Restablecimiento deliberado de datos locales.
-- `sw.js` cachea el shell esencial para experiencia offline selectiva.
-- `manifest.webmanifest` mantiene la app en modo standalone cuando el navegador permite instalación.
+### Cuenta y nube · V7
+- `account.html` preparado para correo/contraseña y Google OAuth.
+- `cloud-config.js` permanece deshabilitado hasta disponer de un proyecto Supabase real.
+- `cloud-client.js` carga Supabase solo cuando se activa la nube.
+- `cloud-sync.js` fusiona progreso local/remoto conservando avances y mejores notas.
+- Migración Supabase con `profiles`, `user_learning_state` y RLS por usuario en `supabase/migrations/20260810143000_init_mirmc_cloud.sql`.
+- Ninguna `service_role` pertenece al frontend.
 
-### V7 · Cuenta y nube
+### Datos y PWA
+- `settings.html` exporta/importa respaldo local.
+- `sw.js` ofrece caché del shell esencial.
+- `manifest.webmanifest` mantiene la app preparada para modo standalone.
 
-- Nueva página `account.html`.
-- Modo local y modo nube diferenciados visualmente.
-- Acceso por correo/contraseña preparado.
-- OAuth con Google preparado mediante Supabase Auth.
-- Perfil de alumno con nombre visible.
-- Sincronización inteligente que combina progreso local/remoto.
-- Controles manuales para subir el estado del dispositivo o restaurar la copia remota.
-- `cloud-config.js` permanece `enabled:false` hasta disponer de un proyecto Supabase real.
-- `cloud-client.js` carga el cliente Supabase solo cuando la nube está configurada.
-- `cloud-sync.js` conserva lecciones completadas y mejores notas al fusionar dispositivos.
-
-### Backend preparado
-
-`supabase/migrations/20260810143000_init_mirmc_cloud.sql` crea:
-
-- `public.profiles`;
-- `public.user_learning_state`;
-- RLS en ambas tablas;
-- políticas `authenticated` limitadas a `auth.uid() = user_id`;
-- trigger para crear perfil al registrarse;
-- timestamps automáticos.
-
-El navegador **nunca necesita una service role**. Solo se configurarán Project URL + publishable key cuando exista el backend. Consulta `supabase/README.md` para el runbook de activación.
-
-## Estructura principal
+## Archivos principales
 
 ### Curso
-- `course-data.js`, `course-progress.js`, `course-enhancements.js`, `course-index.css`
-- `lesson.html`, `lesson.css`, `lesson.js`
+`course-data.js`, `course-progress.js`, `course-enhancements.js`, `course-index.css`, `lesson.html`, `lesson.css`, `lesson.js`
 
-### Evaluaciones y expediente
-- `assessment-data.js`, `assessment-progress.js`
-- `assessment.html`, `assessment.css`, `assessment.js`
-- `academic.html`, `academic.css`, `academic.js`
-- `certificate.html`, `certificate.css`, `certificate.js`
+### Evaluación
+`assessment-data.js`, `assessment-progress.js`, `assessment.html`, `assessment.css`, `assessment.js`, `academic.html`, `certificate.html`
 
 ### Biblioteca
-- `resource-data.js`
-- `library.html`, `library.css`, `library.js`
-- `resource.html`, `resource.js`
+`resource-data.js`, `library.html`, `library.css`, `library.js`, `resource.html`, `resource.js`
 
-### Cuenta, datos y nube
-- `settings.html`, `settings.css`, `settings.js`
-- `account.html`, `account.css`, `account.js`
-- `cloud-config.js`, `cloud-client.js`, `cloud-sync.js`
-- `supabase/migrations/20260810143000_init_mirmc_cloud.sql`
+### Cuaderno
+`study.html`, `study.css`, `study.js`, `study-data.js`, `study-tools.js`, `study-tools.css`
+
+### Cuenta y datos
+`account.html`, `account.css`, `account.js`, `cloud-config.js`, `cloud-client.js`, `cloud-sync.js`, `settings.html`, `settings.js`, `sw.js`
+
+### Backend preparado
+`supabase/migrations/20260810143000_init_mirmc_cloud.sql`, `supabase/README.md`
 
 ### Calidad
-- `scripts/validate.mjs`
-- `scripts/validate-course.mjs`
-- `scripts/validate-library.mjs`
-- `scripts/validate-academic.mjs`
-- `scripts/validate-local-data.mjs`
-- `scripts/validate-cloud.mjs`
-- `.github/workflows/validate.yml`
+GitHub Actions valida sitio, curso, biblioteca, evaluaciones, respaldo/offline, nube/RLS y Cuaderno en cada push.
 
 ## Arquitectura actual
 
-Mientras `cloud-config.js` siga desactivado, todo continúa funcionando con `localStorage` y respaldo JSON. Nada de la experiencia existente depende de que Supabase esté disponible.
+Mientras `cloud-config.js` tenga `enabled:false`, toda la aplicación sigue funcionando con almacenamiento local y respaldo JSON. La ausencia de Supabase no bloquea ninguna función local.
 
-Cuando se active la nube, el mismo progreso se puede fusionar con la fila privada del usuario. Esto evita reconstruir curso, evaluaciones o certificado durante la migración a cuentas reales.
+Cuando se cree el proyecto Supabase, se aplicará la migración y se configurarán únicamente Project URL + publishable key. El contenido y el progreso ya están desacoplados para evitar reconstrucciones.
 
 ## Próximas etapas
-
-1. Activar un proyecto Supabase y ejecutar la migración V7.
-2. Probar registro, Google OAuth y sincronización entre dos dispositivos reales.
-3. Añadir cuaderno de estudio, favoritos y búsqueda global.
-4. Panel administrativo seguro para contenidos cuando existan roles/backend.
-5. Multimedia real: PDFs, audios y videos.
-6. Verificación remota de certificados.
+1. Activar Supabase y probar sincronización real en dos dispositivos.
+2. Panel administrativo seguro una vez existan roles/backend.
+3. Multimedia real: PDFs, audios y videos.
+4. Verificación remota de certificados.
+5. Refinamiento PWA con iconos PNG dedicados y pruebas offline reales.
 
 ## Publicación
 
-GitHub Pages publica desde `main` y `/ (root)`. Los cambios que llegan a `main` se reflejan automáticamente en el sitio.
+GitHub Pages publica desde `main` y `/ (root)`.
