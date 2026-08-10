@@ -104,9 +104,43 @@
     decorating = false;
   }
 
+  function decorateLibraryHome() {
+    const resourceGrid = document.querySelector('.resource-grid');
+    if (!resourceGrid) return;
+    const mappings = ['formacion','estudio','discernimiento','liderazgo','repaso','devocional'];
+    const cards = [...resourceGrid.querySelectorAll('.resource-card')];
+    cards.forEach((card, index) => {
+      if (card.dataset.libraryReady === 'true') return;
+      const type = mappings[index] || 'formacion';
+      const url = `library.html?type=${type}`;
+      card.dataset.libraryReady = 'true';
+      card.classList.add('library-clickable');
+      card.setAttribute('role','link');
+      card.setAttribute('tabindex','0');
+      card.setAttribute('aria-label', `${card.querySelector('h3')?.textContent || 'Recurso'}: abrir en la Biblioteca MIRMC`);
+      const go = () => { location.href = url; };
+      card.addEventListener('click', go);
+      card.addEventListener('keydown', event => {
+        if (event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault();
+          go();
+        }
+      });
+    });
+
+    if (!document.getElementById('libraryHomeCta')) {
+      const cta = document.createElement('div');
+      cta.id = 'libraryHomeCta';
+      cta.className = 'library-home-cta';
+      cta.innerHTML = '<a class="button button-primary" href="library.html">Abrir biblioteca completa <span>→</span></a>';
+      resourceGrid.after(cta);
+    }
+  }
+
   createOverview();
   updateOverview();
   decorateRows();
+  decorateLibraryHome();
 
   const observer = new MutationObserver(() => {
     if (decorating) return;
