@@ -9,7 +9,8 @@ const required = [
   'supabase/migrations/20260810204844_default_student_role_on_signup.sql',
   'supabase/migrations/20260810205017_remove_exposed_admin_security_definer_rpcs.sql',
   'supabase/migrations/20260810210036_add_admin_audit_log.sql',
-  'supabase/migrations/20260810210215_explicitly_deny_client_audit_log.sql'
+  'supabase/migrations/20260810210215_explicitly_deny_client_audit_log.sql',
+  'supabase/migrations/20260810210340_optimize_user_roles_rls.sql'
 ];
 for (const file of required) if (!fs.existsSync(file)) throw new Error(`Missing V10 admin file: ${file}`);
 
@@ -47,6 +48,8 @@ const deny = fs.readFileSync('supabase/migrations/20260810210215_explicitly_deny
 for (const marker of ['admin_audit_log_deny_clients','to anon, authenticated','using (false)','with check (false)']) {
   if (!deny.includes(marker)) throw new Error(`Audit deny policy missing: ${marker}`);
 }
+const optimized = fs.readFileSync('supabase/migrations/20260810210340_optimize_user_roles_rls.sql','utf8').toLowerCase();
+if (!optimized.includes('(select auth.uid())')) throw new Error('Optimized role RLS policy is missing select auth.uid().');
 
 const sw = fs.readFileSync('sw.js','utf8');
 for (const marker of ['./admin.html','./admin.css','./admin.js','./admin-user.html','./admin-user.js','./admin-audit.html','./admin-audit.js']) {
