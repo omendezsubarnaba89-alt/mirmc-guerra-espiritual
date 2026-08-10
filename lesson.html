@@ -46,11 +46,7 @@
           <p class="lesson-eyebrow" id="lessonLevel"></p>
           <h1 id="lessonTitle"></h1>
           <p class="lesson-subtitle" id="lessonSubtitle"></p>
-          <div class="lesson-meta">
-            <span id="lessonDuration"></span>
-            <span id="lessonPosition"></span>
-            <span id="lessonState"></span>
-          </div>
+          <div class="lesson-meta"><span id="lessonDuration"></span><span id="lessonPosition"></span><span id="lessonState"></span></div>
         </div>
         <aside class="lesson-progress-card">
           <div class="lesson-progress-head"><span>PROGRESO TOTAL</span><b id="courseProgressText">0/15</b></div>
@@ -62,70 +58,25 @@
 
       <div class="lesson-layout">
         <article class="lesson-article">
-          <section class="lesson-objective lesson-block">
-            <span class="block-label">OBJETIVO</span>
-            <p id="lessonObjective"></p>
-          </section>
-
-          <section class="lesson-scriptures lesson-block">
-            <div>
-              <span class="block-label">BASE BÍBLICA</span>
-              <h2>Lee antes de concluir.</h2>
-            </div>
-            <div class="scripture-chips" id="lessonScriptures"></div>
-          </section>
-
-          <section class="lesson-core lesson-block">
-            <span class="block-label">IDEA CENTRAL</span>
-            <blockquote id="lessonCore"></blockquote>
-          </section>
-
+          <section class="lesson-objective lesson-block"><span class="block-label">OBJETIVO</span><p id="lessonObjective"></p></section>
+          <section class="lesson-scriptures lesson-block"><div><span class="block-label">BASE BÍBLICA</span><h2>Lee antes de concluir.</h2></div><div class="scripture-chips" id="lessonScriptures"></div></section>
+          <section class="lesson-core lesson-block"><span class="block-label">IDEA CENTRAL</span><blockquote id="lessonCore"></blockquote></section>
           <div id="lessonSections"></div>
-
-          <section class="lesson-points lesson-block">
-            <span class="block-label">LO QUE DEBES RETENER</span>
-            <h2>Tres anclas para no perder el centro.</h2>
-            <ol id="lessonKeyPoints"></ol>
-          </section>
-
-          <section class="lesson-practice lesson-block">
-            <span class="block-label">EJERCICIO DE APLICACIÓN</span>
-            <h2>La enseñanza tiene que aterrizar.</h2>
-            <p id="lessonPractice"></p>
-          </section>
-
-          <section class="lesson-reflection lesson-block">
-            <span class="block-label">PREGUNTA DE REFLEXIÓN</span>
-            <h2 id="lessonReflection"></h2>
-            <p>No tienes que responderla en la página. Detente, escríbela y sé específico contigo mismo.</p>
-          </section>
-
+          <section class="lesson-points lesson-block"><span class="block-label">LO QUE DEBES RETENER</span><h2>Tres anclas para no perder el centro.</h2><ol id="lessonKeyPoints"></ol></section>
+          <section class="lesson-practice lesson-block"><span class="block-label">EJERCICIO DE APLICACIÓN</span><h2>La enseñanza tiene que aterrizar.</h2><p id="lessonPractice"></p></section>
+          <section class="lesson-reflection lesson-block"><span class="block-label">PREGUNTA DE REFLEXIÓN</span><h2 id="lessonReflection"></h2><p>No tienes que responderla en la página. Detente, escríbela y sé específico contigo mismo.</p></section>
           <section class="lesson-quiz lesson-block" id="quizSection">
-            <div class="quiz-heading">
-              <div><span class="block-label">VERIFICACIÓN</span><h2>Comprueba que entendiste.</h2></div>
-              <span class="quiz-threshold">Aprueba con 2 de 3</span>
-            </div>
+            <div class="quiz-heading"><div><span class="block-label">VERIFICACIÓN</span><h2>Comprueba que entendiste.</h2></div><span class="quiz-threshold">Aprueba con 2 de 3</span></div>
             <form id="quizForm"></form>
             <button class="button button-ghost quiz-check" id="quizCheck" type="button">Revisar respuestas</button>
             <div class="quiz-result" id="quizResult" aria-live="polite"></div>
           </section>
-
           <section class="lesson-complete-panel lesson-block" id="completePanel">
-            <div>
-              <span class="block-label">CIERRE DE LECCIÓN</span>
-              <h2>Marca la lección cuando hayas comprendido y aplicado.</h2>
-              <p>Para habilitar el avance debes aprobar la verificación con al menos dos respuestas correctas.</p>
-            </div>
+            <div><span class="block-label">CIERRE DE LECCIÓN</span><h2>Marca la lección cuando hayas comprendido y aplicado.</h2><p>Para habilitar el avance debes aprobar la verificación con al menos dos respuestas correctas.</p></div>
             <button class="button button-primary" id="completeLesson" type="button" disabled>Completar lección <span>✓</span></button>
           </section>
         </article>
-
-        <aside class="lesson-sidebar">
-          <div class="sidebar-sticky">
-            <div class="sidebar-title"><span>RUTA MIRMC</span><strong id="sidebarLevel"></strong></div>
-            <nav id="lessonNavigator" aria-label="Lecciones del nivel"></nav>
-          </div>
-        </aside>
+        <aside class="lesson-sidebar"><div class="sidebar-sticky"><div class="sidebar-title"><span>RUTA MIRMC</span><strong id="sidebarLevel"></strong></div><nav id="lessonNavigator" aria-label="Lecciones del nivel"></nav></div></aside>
       </div>
 
       <nav class="lesson-footer-nav" aria-label="Navegación entre lecciones">
@@ -135,14 +86,18 @@
     </div>
   </main>
 
-  <footer class="lesson-footer">
-    <div><span>MIRMC GUERRA ESPIRITUAL</span><span>CRISTO AL CENTRO · BIBLIA ABIERTA · DISCERNIMIENTO</span></div>
-  </footer>
+  <footer class="lesson-footer"><div><span>MIRMC GUERRA ESPIRITUAL</span><span>CRISTO AL CENTRO · BIBLIA ABIERTA · DISCERNIMIENTO</span></div></footer>
 
   <script src="course-data.js"></script>
+  <script src="cloud-config.js"></script>
+  <script src="content-runtime.js"></script>
   <script src="course-progress.js"></script>
-  <script src="lesson.js"></script>
-  <script src="study-data.js"></script>
-  <script src="study-tools.js"></script>
+  <script>
+    window.MIRMCContent.ready.finally(() => {
+      const l=document.createElement('script'); l.src='lesson.js';
+      l.onload=()=>{const d=document.createElement('script');d.src='study-data.js';d.onload=()=>{const t=document.createElement('script');t.src='study-tools.js';document.body.appendChild(t);};document.body.appendChild(d);};
+      document.body.appendChild(l);
+    });
+  </script>
 </body>
 </html>
