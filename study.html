@@ -51,7 +51,9 @@
   <footer class="lesson-footer"><div><span>MIRMC GUERRA ESPIRITUAL</span><span>ESTUDIO · MEMORIA · APLICACIÓN</span></div></footer>
   <script src="course-data.js"></script>
   <script src="resource-data.js"></script>
+  <script src="cloud-config.js"></script>
+  <script src="content-runtime.js"></script>
   <script src="study-data.js"></script>
-  <script src="study.js"></script>
+  <script>window.MIRMCContent.ready.finally(() => { const s=document.createElement('script'); s.src='study.js'; document.body.appendChild(s); });</script>
 </body>
 </html>
