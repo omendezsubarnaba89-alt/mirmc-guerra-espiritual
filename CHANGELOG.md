@@ -2,6 +2,22 @@
 
 Todos los cambios relevantes de MIRMC Guerra Espiritual se documentan aquí.
 
+## V2.1 — 10 de agosto de 2026
+
+### Prueba real en Android
+- Validación visual realizada en Chrome sobre dispositivo Samsung.
+- Corregido el desplazamiento horizontal accidental detectado en la portada.
+- Blindaje de `html` y `body` contra desbordamiento lateral generado por elementos absolutos.
+- Radar, resplandor, escudo y consola de portada encerrados dentro del ancho real del dispositivo.
+- Consola inferior convertida a distribución flexible para impedir que ensanche el documento.
+- Reducción de altura del bloque visual de la portada en móvil.
+- Títulos móviles refinados para conservar impacto sin ocupar pantallas completas innecesariamente.
+- Espaciado vertical reducido entre Fundamento, Discernimiento, Armadura, Guardia y Ruta MIRMC.
+- Tarjetas de Fundamento, Discernimiento, Armadura y Ruta compactadas en teléfonos.
+- Progreso semanal y controles interactivos reforzados para anchos pequeños.
+- Añadido `mobile-fixes.css` como fuente mantenible de ajustes de dispositivo real.
+- Añadido workflow `Apply mobile hardening` para incorporar automáticamente estos ajustes al final de `styles.css` sin reescribir manualmente la hoja base.
+
 ## V2 — 10 de agosto de 2026
 
 ### Experiencia
