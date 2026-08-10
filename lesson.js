@@ -10,7 +10,6 @@
   const locked = $('#lessonLocked');
   const experience = $('#lessonExperience');
 
-  // Estado inicial inequívoco: solo se revela una experiencia después de resolver acceso.
   if (locked) locked.hidden = true;
   if (experience) experience.hidden = true;
 
@@ -29,7 +28,13 @@
     loading.hidden = true;
     locked.hidden = false;
     const btn = $('#lockedPrevious');
-    if (prevId) {
+    if (id === '06' && !progress.examPassed(1)) {
+      btn.href = 'assessment.html?level=1';
+      btn.textContent = 'Presentar evaluación del Nivel 1';
+    } else if (id === '11' && !progress.examPassed(2)) {
+      btn.href = 'assessment.html?level=2';
+      btn.textContent = 'Presentar evaluación del Nivel 2';
+    } else if (prevId) {
       btn.href = `lesson.html?lesson=${prevId}`;
       btn.textContent = `Completar lección ${prevId}`;
     } else {
@@ -155,16 +160,16 @@
     configureFooterNav();
     const panel = $('#completePanel');
     panel.animate([{opacity:.45,transform:'translateY(5px)'},{opacity:1,transform:'none'}],{duration:300,easing:'ease-out'});
-    if (nextId) {
-      setTimeout(() => $('#nextLesson')?.focus(), 250);
-    }
+    setTimeout(() => $('#nextLesson')?.focus(), 250);
   });
 
   function configureFooterNav() {
     const prev = $('#prevLesson');
     const next = $('#nextLesson');
+    const levelEnd = id === '05' ? 1 : id === '10' ? 2 : id === '15' ? 3 : null;
     prev.classList.remove('disabled','route-home');
-    next.classList.remove('route-home');
+    next.classList.remove('route-home','disabled');
+    next.removeAttribute('aria-disabled');
 
     if (prevId) {
       prev.href = `lesson.html?lesson=${prevId}`;
@@ -177,6 +182,16 @@
       prev.querySelector('strong').textContent = 'Volver al inicio de la ruta';
     }
 
+    if (levelEnd) {
+      const completed = progress.isComplete(id);
+      next.href = completed ? `assessment.html?level=${levelEnd}` : '#';
+      next.classList.toggle('disabled', !completed);
+      next.setAttribute('aria-disabled', String(!completed));
+      next.querySelector('small').textContent = `CIERRE DEL NIVEL ${levelEnd}`;
+      next.querySelector('strong').textContent = completed ? `Presentar evaluación final del Nivel ${levelEnd}` : 'Completa esta lección para habilitar la evaluación final';
+      return;
+    }
+
     if (nextId) {
       const nextUnlocked = progress.isUnlocked(nextId);
       next.href = nextUnlocked ? `lesson.html?lesson=${nextId}` : '#';
@@ -184,12 +199,6 @@
       next.setAttribute('aria-disabled', String(!nextUnlocked));
       next.querySelector('small').textContent = 'SIGUIENTE';
       next.querySelector('strong').textContent = nextUnlocked ? `${nextId} · ${data.lessons[nextId].title}` : `Completa esta lección para desbloquear ${nextId}`;
-    } else {
-      next.href = 'index.html#entrenamiento';
-      next.classList.remove('disabled');
-      next.removeAttribute('aria-disabled');
-      next.querySelector('small').textContent = 'RUTA COMPLETADA';
-      next.querySelector('strong').textContent = 'Volver al centro de entrenamiento';
     }
   }
 
