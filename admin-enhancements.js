@@ -2,32 +2,20 @@
   const usersWrap = document.querySelector('#adminUsers');
   const toolbar = document.querySelector('.admin-toolbar');
 
-  if (toolbar && !toolbar.querySelector('[data-content-link]')) {
+  function addToolbarLink(selector, href, className, text, datasetName) {
+    if (!toolbar || toolbar.querySelector(selector)) return;
     const link = document.createElement('a');
-    link.href = 'admin-content.html';
-    link.className = 'button button-primary';
-    link.dataset.contentLink = 'true';
-    link.textContent = 'Gestionar contenido';
+    link.href = href;
+    link.className = className;
+    link.dataset[datasetName] = 'true';
+    link.textContent = text;
     toolbar.appendChild(link);
   }
 
-  if (toolbar && !toolbar.querySelector('[data-content-audit-link]')) {
-    const link = document.createElement('a');
-    link.href = 'admin-content-audit.html';
-    link.className = 'button button-ghost';
-    link.dataset.contentAuditLink = 'true';
-    link.textContent = 'Historial editorial';
-    toolbar.appendChild(link);
-  }
-
-  if (toolbar && !toolbar.querySelector('[data-audit-link]')) {
-    const link = document.createElement('a');
-    link.href = 'admin-audit.html';
-    link.className = 'button button-ghost';
-    link.dataset.auditLink = 'true';
-    link.textContent = 'Bitácora de seguridad';
-    toolbar.appendChild(link);
-  }
+  addToolbarLink('[data-content-link]','admin-content.html','button button-primary','Gestionar contenido','contentLink');
+  addToolbarLink('[data-certificates-link]','admin-certificates.html','button button-ghost','Certificados verificables','certificatesLink');
+  addToolbarLink('[data-content-audit-link]','admin-content-audit.html','button button-ghost','Historial editorial','contentAuditLink');
+  addToolbarLink('[data-audit-link]','admin-audit.html','button button-ghost','Bitácora de seguridad','auditLink');
 
   function enhanceCards() {
     if (!usersWrap) return;
