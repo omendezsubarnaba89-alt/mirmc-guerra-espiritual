@@ -72,6 +72,16 @@
     return match ? Number(match[1]) : Number(tabs.find(t => t.classList.contains('active'))?.dataset.level || 1);
   }
 
+  function syncRowCopy(row, number) {
+    const item = data.lessons[number];
+    if (!item) return;
+    const copy = row.querySelector(':scope > div');
+    const title = copy?.querySelector('strong');
+    const subtitle = copy?.querySelector('small');
+    if (title) title.textContent = item.title || title.textContent;
+    if (subtitle) subtitle.textContent = item.subtitle || subtitle.textContent;
+  }
+
   function decorateRows() {
     if (decorating) return;
     decorating = true;
@@ -79,6 +89,7 @@
     rows.forEach(row => {
       const number = row.querySelector(':scope > span')?.textContent?.trim();
       if (!number || !data.lessons[number]) return;
+      syncRowCopy(row, number);
       row.classList.add('course-lesson-row');
       row.querySelector('.course-row-action')?.remove();
       row.classList.remove('is-complete','is-locked','is-open');
@@ -160,10 +171,34 @@
     }
   }
 
+  function loadScript(src) {
+    return new Promise((resolve,reject) => {
+      const existing = [...document.scripts].find(s => s.src && s.src.endsWith('/' + src));
+      if (existing) { resolve(existing); return; }
+      const script = document.createElement('script');
+      script.src = src;
+      script.onload = () => resolve(script);
+      script.onerror = reject;
+      document.head.appendChild(script);
+    });
+  }
+
+  async function hydratePublishedCourse() {
+    try {
+      if (!window.MIRMC_CLOUD_CONFIG) await loadScript('cloud-config.js');
+      if (!window.MIRMCContent) await loadScript('content-runtime.js');
+      await window.MIRMCContent?.ready;
+      decorateRows();
+    } catch {
+      // Static course data remains the safe fallback.
+    }
+  }
+
   createOverview();
   updateOverview();
   decorateRows();
   decorateLibraryHome();
+  hydratePublishedCourse();
 
   const observer = new MutationObserver(() => {
     if (decorating) return;
@@ -174,6 +209,7 @@
   tabs.forEach(tab => tab.addEventListener('click', () => setTimeout(decorateRows, 20)));
   window.addEventListener('mirmc-course-progress', () => { updateOverview(); decorateRows(); });
   window.addEventListener('storage', () => { updateOverview(); decorateRows(); });
+  window.addEventListener('mirmc-content-ready', decorateRows);
 
   if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(() => {});
 })();
