@@ -9,6 +9,13 @@
     return {client,session:data.session,reason:null};
   }
 
+  function waitLabel(seconds){
+    const total=Math.max(1,Number(seconds)||0);
+    if(total>=3600){const hours=Math.ceil(total/3600);return `${hours} hora${hours===1?'':'s'}`;}
+    if(total>=60){const minutes=Math.ceil(total/60);return `${minutes} minuto${minutes===1?'':'s'}`;}
+    return `${Math.ceil(total)} segundos`;
+  }
+
   async function call(action,payload={}){
     const {session,reason}=await sessionContext();
     if(!session){const err=new Error(reason==='not_signed_in'?'Inicia sesión para registrar esta evaluación como oficial.':'La nube no está disponible para validación oficial.');err.code=reason;throw err;}
@@ -26,7 +33,8 @@
         invalid_exam_submission:'La evaluación final no tiene un formato válido.',
         lesson_prerequisite:`Primero debes validar oficialmente la lección ${body?.required_lesson||'anterior'}.`,
         exam_prerequisite:`Primero debes aprobar oficialmente el examen del Nivel ${body?.required_exam||'anterior'}.`,
-        lessons_prerequisite:`Faltan validaciones oficiales: ${(body?.missing_lessons||[]).join(', ')}.`
+        lessons_prerequisite:`Faltan validaciones oficiales: ${(body?.missing_lessons||[]).join(', ')}.`,
+        exam_rate_limit:`Ya utilizaste los ${Number(body?.max_attempts||3)} intentos oficiales permitidos en 24 horas para este nivel. Podrás intentarlo de nuevo aproximadamente en ${waitLabel(body?.retry_after_seconds)}.`
       };
       const error=new Error(map[body?.error]||'No se pudo registrar la validación oficial.');
       error.code=body?.error||'official_error';error.details=body;throw error;
