@@ -2,6 +2,41 @@
 
 Todos los cambios relevantes de MIRMC Guerra Espiritual se documentan aquí.
 
+## V5 — 10 de agosto de 2026
+
+### Evaluaciones finales y expediente académico
+- Añadidas evaluaciones finales para los tres niveles.
+- Cada evaluación contiene 10 preguntas de opción múltiple y requiere 80% para aprobar.
+- Se conserva el mejor resultado y el número de intentos en `localStorage`.
+- El Nivel 2 ya no se habilita únicamente al terminar la lección 05: también exige aprobar el examen del Nivel 1.
+- El Nivel 3 exige completar 06–10 y aprobar el examen del Nivel 2.
+- Las lecciones 05, 10 y 15 conducen directamente al cierre académico correspondiente.
+- La Ruta MIRMC muestra el estado del examen cuando las cinco lecciones de un nivel están completas.
+- Nuevo acceso `Registro académico` desde el panel de progreso del home.
+
+### Registro académico
+- Nueva página `academic.html` con progreso total, lecciones completadas, exámenes aprobados y promedio acumulado.
+- Cada nivel muestra sus cinco lecciones, su estado y el cierre académico.
+- Los exámenes permanecen bloqueados hasta completar las cinco lecciones de su nivel.
+- El expediente permanece local al navegador en esta etapa.
+
+### Certificado
+- Nueva página `certificate.html` con certificado interno MIRMC imprimible.
+- Solo se habilita al completar 15/15 lecciones y aprobar los tres exámenes.
+- Permite escribir el nombre del participante y usar la impresión del navegador para guardar como PDF.
+- Muestra promedio final, fecha de finalización y código de registro local.
+- Incluye aclaración explícita de que no constituye acreditación académica oficial.
+
+### Arquitectura y calidad
+- `assessment-data.js` centraliza 30 preguntas finales.
+- `assessment-progress.js` gestiona intentos, mejores notas y estados aprobados.
+- `assessment.html` / `assessment.css` / `assessment.js` implementan la experiencia de examen.
+- `academic.html` / `academic.css` / `academic.js` implementan el expediente local.
+- `certificate.html` / `certificate.css` / `certificate.js` implementan elegibilidad, vista e impresión.
+- `course-progress.js` incorpora gates académicos entre niveles.
+- `scripts/validate-academic.mjs` valida 3 exámenes, 30 preguntas, respuestas, gates y certificado.
+- GitHub Actions ahora revisa sintaxis y arquitectura académica en cada push.
+
 ## V4 — 10 de agosto de 2026
 
 ### Biblioteca MIRMC real
