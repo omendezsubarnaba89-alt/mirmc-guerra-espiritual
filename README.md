@@ -6,9 +6,9 @@ Centro web de formación bíblica, enseñanza y entrenamiento para comprender la
 
 https://omendezsubarnaba89-alt.github.io/mirmc-guerra-espiritual/
 
-## Estado actual — V4
+## Estado actual — V5
 
-La V4 ya combina tres experiencias funcionales: centro de entrenamiento, curso navegable y biblioteca real.
+La plataforma ya combina centro de entrenamiento, curso navegable, biblioteca real, evaluaciones finales, registro académico local y certificado interno de finalización.
 
 ### Experiencia principal
 
@@ -18,29 +18,47 @@ La V4 ya combina tres experiencias funcionales: centro de entrenamiento, curso n
 - **Guardia de hoy** con siete entrenamientos rotativos y progreso local.
 - Ruta MIRMC con **3 niveles y 15 lecciones navegables**.
 - Progreso total y por nivel guardado en el navegador.
-- Desbloqueo secuencial de lecciones.
-- Evaluación de tres preguntas por lección; se requieren al menos dos respuestas correctas para completarla.
-- Navegación anterior/siguiente y navegador por nivel.
-- Estado visual `ABRIR`, `BLOQUEADA` o `COMPLETADA` desde la portada.
-- Botón inteligente `Comenzar/Continuar ruta` que abre la próxima lección disponible.
+- Mini evaluación de 3 preguntas por lección; se requieren al menos dos respuestas correctas para completarla.
+- Estados `ABRIR`, `BLOQUEADA`, `EXAMEN PENDIENTE` y `COMPLETADA`.
+- Botón inteligente `Comenzar/Continuar ruta` que también detecta cierres académicos pendientes.
+
+### Evaluaciones finales
+
+- Tres evaluaciones finales, una por nivel.
+- 10 preguntas por evaluación.
+- Umbral de aprobación: 80%.
+- Se conserva mejor nota, intentos y fecha de aprobación.
+- Nivel 2 exige examen aprobado del Nivel 1.
+- Nivel 3 exige examen aprobado del Nivel 2.
+- Las lecciones 05, 10 y 15 llevan directamente al cierre del nivel.
+
+### Registro académico
+
+- Página `academic.html` con progreso general, 15 lecciones, 3 exámenes y promedio.
+- Estado independiente para cada nivel.
+- Acceso desde la Ruta MIRMC del home.
+- Todo permanece local al navegador en esta etapa.
+
+### Certificado
+
+- Página `certificate.html`.
+- Solo se habilita con 15/15 lecciones y los tres exámenes aprobados.
+- Nombre editable localmente.
+- Promedio, fecha y código de registro local.
+- Diseño preparado para imprimir o guardar como PDF desde el navegador.
+- Es un certificado interno MIRMC de finalización; no representa acreditación académica oficial.
 
 ### Biblioteca MIRMC
 
 - Página independiente `library.html`.
 - 12 recursos escritos iniciales.
-- Búsqueda instantánea.
-- Filtros por categoría y nivel.
-- Recursos destacados.
-- Categorías: Formación, Guías prácticas, Casos y escenarios, Liderazgo, Preguntas y respuestas y Devocional.
+- Búsqueda instantánea y filtros por categoría/nivel.
 - Lector dinámico `resource.html?id=...`.
-- Cada recurso incluye nivel, formato, duración, base bíblica, desarrollo e idea para retener.
-- Las seis tarjetas de Biblioteca del home llevan al filtro correspondiente.
-- La plataforma no muestra descargas, PDFs ni audios que todavía no existan.
+- Categorías: Formación, Guías prácticas, Casos y escenarios, Liderazgo, Preguntas y respuestas y Devocional.
 
 ## Estructura
 
 ### Sitio principal
-
 - `index.html` — experiencia principal.
 - `styles.css` — sistema visual responsive.
 - `script.js` — portada, menú, armadura, discernimiento, Guardia y efectos.
@@ -48,45 +66,48 @@ La V4 ya combina tres experiencias funcionales: centro de entrenamiento, curso n
 - `assets/mirmc-shield.svg` — identidad visual.
 
 ### Motor del curso
+- `course-data.js` — 3 niveles y 15 lecciones.
+- `course-progress.js` — progreso, desbloqueos, gates académicos y estadísticas.
+- `course-enhancements.js` — integración del curso, evaluaciones y Biblioteca en el home.
+- `course-index.css` — componentes de progreso y cierres del home.
+- `lesson.html` / `lesson.css` / `lesson.js` — experiencia de lección.
 
-- `course-data.js` — contenido estructurado de los 3 niveles y 15 lecciones.
-- `course-progress.js` — progreso, desbloqueos, navegación y estadísticas.
-- `course-enhancements.js` — integra curso y accesos a Biblioteca en el home.
-- `course-index.css` — componentes de progreso del home.
-- `lesson.html` — plantilla dinámica de lección.
-- `lesson.css` — experiencia visual de estudio.
-- `lesson.js` — render, quiz, finalización y navegación.
+### Evaluación y expediente
+- `assessment-data.js` — 30 preguntas finales.
+- `assessment-progress.js` — intentos, mejores notas y aprobaciones.
+- `assessment.html` / `assessment.css` / `assessment.js` — experiencia de examen.
+- `academic.html` / `academic.css` / `academic.js` — expediente académico local.
+- `certificate.html` / `certificate.css` / `certificate.js` — certificado imprimible.
 
 ### Biblioteca
-
 - `resource-data.js` — categorías y recursos estructurados.
 - `library.html` / `library.css` / `library.js` — búsqueda, filtros y catálogo.
-- `resource.html` / `resource.js` — lector dinámico de recursos.
+- `resource.html` / `resource.js` — lector dinámico.
 
 ### Calidad y publicación
-
 - `scripts/validate.mjs` — referencias estáticas y estructura principal.
-- `scripts/validate-course.mjs` — coherencia de niveles, 15 lecciones, evaluaciones y archivos del curso.
-- `scripts/validate-library.mjs` — coherencia de recursos, categorías, niveles y páginas de Biblioteca.
+- `scripts/validate-course.mjs` — curso y quizzes de lección.
+- `scripts/validate-library.mjs` — recursos y Biblioteca.
+- `scripts/validate-academic.mjs` — 3 exámenes, 30 preguntas, gates, expediente y certificado.
 - `.github/workflows/validate.yml` — validación automática.
 - `.github/workflows/integrate-course.yml` — integra assets del curso en `index.html`.
-- `.github/workflows/apply-mobile-fixes.yml` — aplica hardening móvil a la hoja principal.
+- `.github/workflows/apply-mobile-fixes.yml` — aplica hardening móvil.
 - `manifest.webmanifest`, `robots.txt`, `sitemap.xml`, `.nojekyll` — publicación e indexación.
 
 ## Arquitectura actual
 
-La aplicación sigue siendo **100% estática** y no depende de Supabase, bases de datos, servidores propios ni créditos de IA. El progreso de Guardia y Curso usa `localStorage`, por lo que permanece en el navegador del dispositivo actual.
+La aplicación sigue siendo **100% estática** y no depende de Supabase, bases de datos, servidores propios ni créditos de IA. Guardia, curso, evaluaciones, expediente y nombre del certificado usan `localStorage`, por lo que pertenecen al navegador del dispositivo actual.
 
-Esto permite validar primero la experiencia completa antes de añadir autenticación y backend. El contenido, el progreso y la presentación están separados para que podamos incorporar persistencia remota después sin reconstruir la plataforma.
+El contenido, el progreso, las evaluaciones y la presentación están separados. Esto deja el proyecto preparado para sustituir almacenamiento local por persistencia remota cuando incorporemos autenticación y backend, sin reconstruir las lecciones ni la Biblioteca.
 
 ## Próximas etapas previstas
 
-1. Evaluaciones finales por nivel y calificación acumulada.
-2. Perfil de alumno y sincronización de progreso con backend.
+1. Perfil de alumno y sincronización de progreso con backend.
+2. Copia de seguridad/exportación del progreso antes del backend.
 3. Panel administrativo para publicar y editar lecciones/recursos.
 4. Recursos multimedia reales: PDFs, audios y videos cuando sean cargados.
-5. Certificados y seguimiento del curso.
-6. Modo instalable/PWA mejorado y funcionamiento offline selectivo.
+5. PWA/offline mejorado.
+6. Validación/verificación remota de certificados cuando exista backend.
 
 ## Publicación
 
