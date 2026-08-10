@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#050813" />
+  <meta name="robots" content="noindex,nofollow" />
+  <title>Detalle del alumno | MIRMC Guerra Espiritual</title>
+  <link rel="icon" href="assets/mirmc-shield.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="admin.css" />
+  <link rel="stylesheet" href="admin-detail.css" />
+</head>
+<body class="admin-page">
+  <div class="ambient-grid" aria-hidden="true"></div>
+  <header class="admin-header"><div>
+    <a class="brand" href="admin.html"><img src="assets/mirmc-shield.svg" alt="" class="brand-mark" width="44" height="52" /><span class="brand-copy"><strong>MIRMC</strong><small>ADMINISTRACIÓN</small></span></a>
+    <a href="admin.html">← Usuarios</a>
+  </div></header>
+
+  <main class="admin-shell">
+    <section class="admin-hero detail-hero">
+      <div><p class="admin-eyebrow">EXPEDIENTE ACADÉMICO</p><h1>Progreso del <em>alumno.</em></h1><p>Seguimiento académico sin exponer las notas privadas del Cuaderno MIRMC.</p></div>
+      <div class="admin-role" id="detailRole"><span>VERIFICANDO</span><strong>Permisos</strong></div>
+    </section>
+
+    <section class="admin-loading" id="detailLoading">Cargando expediente…</section>
+    <section class="admin-denied" id="detailDenied" hidden><span>ACCESO RESTRINGIDO</span><h2>No puedes abrir este expediente.</h2><p>Comprueba tu sesión administrativa e inténtalo nuevamente.</p><a class="button button-ghost" href="admin.html">Volver al panel</a></section>
+
+    <section id="detailApp" hidden>
+      <div class="detail-identity" id="detailIdentity"></div>
+      <div class="admin-summary" id="detailSummary"></div>
+
+      <section class="detail-section">
+        <div class="detail-section-head"><p class="admin-eyebrow">RUTA MIRMC</p><h2>Lecciones 01–15</h2></div>
+        <div class="detail-lessons" id="detailLessons"></div>
+      </section>
+
+      <section class="detail-section">
+        <div class="detail-section-head"><p class="admin-eyebrow">EVALUACIONES</p><h2>Cierres de nivel</h2></div>
+        <div class="detail-exams" id="detailExams"></div>
+      </section>
+
+      <div class="admin-message" id="detailMessage" aria-live="polite"></div>
+    </section>
+  </main>
+
+  <footer class="lesson-footer"><div><span>MIRMC GUERRA ESPIRITUAL</span><span>EXPEDIENTE · PROGRESO · PRIVACIDAD</span></div></footer>
+
+  <script src="course-data.js"></script>
+  <script src="cloud-config.js"></script>
+  <script src="cloud-client.js"></script>
+  <script src="admin-user.js"></script>
+</body>
+</html>
