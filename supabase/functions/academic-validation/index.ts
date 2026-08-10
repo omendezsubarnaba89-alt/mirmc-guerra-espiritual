@@ -15,6 +15,7 @@ const LESSON_KEYS:Record<string,number[]>={
 };
 const EXAM_KEYS:Record<number,number[]>={1:[1,1,1,0,1,0,1,1,1,1],2:[1,0,1,0,1,0,1,0,1,0],3:[1,1,0,1,0,1,1,1,1,1]};
 const LEVEL_LESSONS:Record<number,string[]>={1:['01','02','03','04','05'],2:['06','07','08','09','10'],3:['11','12','13','14','15']};
+const MAX_EXAM_ATTEMPTS_24H=3;
 
 Deno.serve(async(req:Request)=>{
   const origin=req.headers.get('origin');
@@ -39,6 +40,16 @@ Deno.serve(async(req:Request)=>{
     const answers=quiz.map((q:any)=>Number(q?.answer));
     if(answers.some((x:number,index:number)=>!Number.isInteger(x)||x<0||x>=Number(quiz[index]?.options?.length||0)))return fallback;
     return answers;
+  };
+  const examRate=async(level:number)=>{
+    const since=new Date(Date.now()-24*60*60*1000).toISOString();
+    const {data,error}=await admin.from('exam_attempt_log').select('submitted_at').eq('user_id',user.id).eq('level',level).gte('submitted_at',since).order('submitted_at',{ascending:true});
+    if(error)return {error,count:0,retry_after_seconds:0};
+    const rows=data||[];
+    if(rows.length<MAX_EXAM_ATTEMPTS_24H)return {error:null,count:rows.length,retry_after_seconds:0};
+    const earliest=new Date(rows[0].submitted_at).getTime();
+    const retry=Math.max(1,Math.ceil((earliest+24*60*60*1000-Date.now())/1000));
+    return {error:null,count:rows.length,retry_after_seconds:retry};
   };
 
   if(action==='status'){
@@ -70,11 +81,16 @@ Deno.serve(async(req:Request)=>{
     const required=LEVEL_LESSONS[level]||[];const {data:records,error:recordsError}=await admin.from('lesson_validations').select('lesson_key,passed').eq('user_id',user.id).in('lesson_key',required);
     if(recordsError)return reply({error:'prerequisite_lookup_failed'},500,origin);const passedSet=new Set((records||[]).filter((x:any)=>x.passed).map((x:any)=>x.lesson_key));const missing=required.filter(k=>!passedSet.has(k));
     if(missing.length)return reply({error:'lessons_prerequisite',missing_lessons:missing},409,origin);
+    const existingResult=await admin.from('exam_validations').select('*').eq('user_id',user.id).eq('level',level).maybeSingle();
+    if(existingResult.data?.passed)return reply({official:true,level,score:existingResult.data.best_score,total:10,pct:existingResult.data.best_pct,passed:true,already_passed:true,next:{attempts:existingResult.data.attempts,best_score:existingResult.data.best_score,best_pct:existingResult.data.best_pct,passed:true,passed_at:existingResult.data.passed_at}},200,origin);
+    const rate=await examRate(level);if(rate.error)return reply({error:'rate_lookup_failed'},500,origin);
+    if(rate.retry_after_seconds>0)return reply({error:'exam_rate_limit',max_attempts:MAX_EXAM_ATTEMPTS_24H,retry_after_seconds:rate.retry_after_seconds},429,origin);
     const score=answers.reduce((sum:number,value:number,index:number)=>sum+(value===answerKey[index]?1:0),0);const pct=Math.round(score/answerKey.length*100);const passed=pct>=80;const now=new Date().toISOString();
-    const {data:old}=await admin.from('exam_validations').select('*').eq('user_id',user.id).eq('level',level).maybeSingle();
+    const {error:logError}=await admin.from('exam_attempt_log').insert({user_id:user.id,level,score,pct,passed,submitted_at:now});if(logError)return reply({error:'attempt_log_failed'},500,origin);
+    const old=existingResult.data;
     const next={user_id:user.id,level,attempts:Number(old?.attempts||0)+1,best_score:Math.max(Number(old?.best_score||0),score),best_pct:Math.max(Number(old?.best_pct||0),pct),passed:Boolean(old?.passed||passed),passed_at:old?.passed_at||(passed?now:null),last_attempt_at:now,updated_at:now};
     const {error}=await admin.from('exam_validations').upsert(next,{onConflict:'user_id,level'});if(error)return reply({error:'exam_record_failed'},500,origin);
-    return reply({official:true,level,score,total:10,pct,passed,next:{attempts:next.attempts,best_score:next.best_score,best_pct:next.best_pct,passed:next.passed,passed_at:next.passed_at}},200,origin);
+    return reply({official:true,level,score,total:10,pct,passed,attempts_remaining:Math.max(0,MAX_EXAM_ATTEMPTS_24H-(rate.count+1)),next:{attempts:next.attempts,best_score:next.best_score,best_pct:next.best_pct,passed:next.passed,passed_at:next.passed_at}},200,origin);
   }
   return reply({error:'unknown_action'},400,origin);
 });
