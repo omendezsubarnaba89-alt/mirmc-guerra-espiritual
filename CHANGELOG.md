@@ -2,6 +2,24 @@
 
 Todos los cambios relevantes de MIRMC Guerra Espiritual se documentan aquí.
 
+## V10 — 10 de agosto de 2026
+
+### Roles y administración segura
+- Confirmada cuenta real del propietario y primera sincronización en nube.
+- Añadida tabla `user_roles` con roles `student`, `admin` y `super_admin`.
+- Nuevos usuarios reciben rol `student` automáticamente mediante trigger protegido.
+- Cuenta propietaria configurada como `super_admin`.
+- El Security Advisor detectó RPC administrativas `SECURITY DEFINER` expuestas durante la primera implementación; fueron retiradas.
+- Administración movida a Edge Function `admin-management` con JWT obligatorio.
+- La Edge Function valida sesión, rol activo y reserva cambios de rol al `super_admin`.
+- La `service_role` se utiliza únicamente dentro del entorno servidor de Supabase Edge Functions; nunca llega al navegador ni a GitHub como secreto.
+- Nuevo `admin.html` con listado de usuarios, estado de correo, progreso, últimos accesos y control de roles.
+- `Mi cuenta` muestra acceso administrativo únicamente cuando el rol autenticado es `admin` o `super_admin`.
+- Corregida la presentación móvil del correo autenticado para evitar títulos desbordados.
+- Service worker actualizado a V10 e incorpora el shell administrativo.
+- Nuevo CI `validate-admin.yml` para comprobar archivos, fronteras de seguridad y ausencia de `service_role` en el JavaScript del navegador.
+- Security Advisor posterior: sin advertencias de funciones administrativas; queda únicamente la recomendación de Auth para activar Leaked Password Protection desde Dashboard.
+
 ## V9 — 10 de agosto de 2026
 
 ### Nube real y sincronización
