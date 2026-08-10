@@ -8,8 +8,13 @@ const missing = required.filter(path => !fs.existsSync(path));
 if (missing.length) throw new Error(`Cloud files missing: ${missing.join(', ')}`);
 
 const config = fs.readFileSync('cloud-config.js','utf8');
-if (!config.includes('enabled: false')) throw new Error('cloud-config.js must stay disabled until real Supabase values are configured.');
 if (/service[_-]?role/i.test(config)) throw new Error('Administrative service role material must never be present in cloud-config.js.');
+const cloudEnabled = /enabled\s*:\s*true/.test(config);
+if (cloudEnabled) {
+  if (!/https:\/\/.+\.supabase\.co/.test(config)) throw new Error('Cloud is enabled but cloud-config.js has no Supabase project URL.');
+  const keyMatch = config.match(/supabasePublishableKey\s*:\s*['"]([^'"]+)['"]/);
+  if (!keyMatch || keyMatch[1].length < 20) throw new Error('Cloud is enabled but no valid publishable key is configured.');
+}
 
 const client = fs.readFileSync('cloud-client.js','utf8');
 if (!client.includes('persistSession: true') || !client.includes('autoRefreshToken: true')) throw new Error('Browser auth persistence configuration missing.');
@@ -37,4 +42,4 @@ for (const ref of ['cloud-config.js','cloud-client.js','cloud-sync.js','account.
   if (!account.includes(ref)) throw new Error(`account.html missing ${ref}`);
 }
 
-console.log('Cloud/account validation passed.');
+console.log(`Cloud/account validation passed (${cloudEnabled ? 'cloud enabled' : 'local mode'}).`);
