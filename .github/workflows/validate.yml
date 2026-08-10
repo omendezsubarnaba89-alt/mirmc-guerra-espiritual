@@ -36,6 +36,8 @@ jobs:
           node --check assessment.js
           node --check academic.js
           node --check certificate.js
+          node --check settings.js
+          node --check sw.js
 
       - name: Validate static references
         run: node scripts/validate.mjs
@@ -48,3 +50,6 @@ jobs:
 
       - name: Validate academic architecture
         run: node scripts/validate-academic.mjs
+
+      - name: Validate local data and offline architecture
+        run: node scripts/validate-local-data.mjs
