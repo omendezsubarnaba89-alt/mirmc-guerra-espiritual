@@ -2,6 +2,30 @@
 
 Todos los cambios relevantes de MIRMC Guerra Espiritual se documentan aquí.
 
+## V3 — 10 de agosto de 2026
+
+### Curso navegable
+- La Ruta MIRMC deja de ser una lista informativa y pasa a ser un curso interactivo real.
+- Añadidas 15 lecciones estructuradas en 3 niveles de 5 lecciones.
+- Cada lección incluye objetivo, base bíblica, idea central, desarrollo, puntos clave, ejercicio, reflexión y evaluación.
+- Nueva página dinámica `lesson.html?lesson=XX` para servir cualquier lección sin duplicar plantillas.
+- Navegación anterior/siguiente y navegador lateral por nivel.
+- Desbloqueo secuencial: la siguiente lección se habilita al completar la anterior.
+- Evaluación de 3 preguntas por lección; se requieren al menos 2 respuestas correctas para completar.
+- Progreso total y por nivel guardado localmente mediante `localStorage`.
+- La portada muestra porcentaje, número de lecciones completadas, próxima lección y estados Abrir/Bloqueada/Completada.
+- Botón Continuar ruta lleva automáticamente a la próxima lección disponible.
+
+### Arquitectura
+- `course-data.js` centraliza niveles, orden, contenido y evaluaciones.
+- `course-progress.js` gestiona progreso, desbloqueos, navegación y estadísticas.
+- `course-enhancements.js` conecta la Ruta MIRMC de la portada con el motor del curso.
+- `course-index.css` contiene los componentes de progreso del home.
+- `lesson.css` y `lesson.js` implementan la experiencia de estudio.
+- Workflow `Integrate course experience` inyecta automáticamente los assets del curso en `index.html`.
+- Añadido `scripts/validate-course.mjs` para revisar numeración, niveles, contenido, quizzes, referencias y archivos.
+- El workflow de validación ahora comprueba sintaxis de todos los scripts del curso además de la landing.
+
 ## V2.2 — 10 de agosto de 2026
 
 ### Corrección estructural de desbordamiento móvil
