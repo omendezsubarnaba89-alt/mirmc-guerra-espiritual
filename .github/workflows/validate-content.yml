@@ -27,6 +27,7 @@ jobs:
           node --check admin-content.js
           node --check admin-content-audit.js
           node --check admin-preview.js
+          node --check admin-versions.js
           node --check library.js
           node --check resource.js
           node --check lesson.js
