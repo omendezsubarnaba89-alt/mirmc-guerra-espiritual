@@ -371,3 +371,404 @@ img,svg{display:block;max-width:100%}
   *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
   .reveal{opacity:1;transform:none}
 }
+
+/* === MIRMC MOBILE HARDENING:START ===
+   Ajustes de dispositivo real detectados en Chrome/Android.
+   Este bloque se incorpora al final de styles.css mediante GitHub Actions.
+=== */
+
+/* Blindaje global contra desplazamiento horizontal accidental */
+html,
+body {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+@supports (overflow: clip) {
+  html,
+  body {
+    overflow-x: clip;
+  }
+}
+
+main,
+.site-header,
+.header-inner,
+.section-shell,
+.hero,
+.hero-copy,
+.hero-visual,
+.manifesto,
+.discernment,
+.armor,
+.daily,
+.training,
+.field-code,
+.resources,
+.faq,
+.discernment-shell,
+.armor-layout,
+.armor-stage,
+.daily-card,
+.training-tabs,
+.level-stage,
+.code-grid,
+.resource-grid {
+  min-width: 0;
+  max-width: 100%;
+}
+
+.hero-visual,
+.armor-stage {
+  overflow: hidden;
+}
+
+.hero-actions,
+.hero-pillars,
+.hero-reference,
+.section-heading,
+.manifesto-grid,
+.daily-main,
+.level-summary,
+.lesson-list {
+  min-width: 0;
+  max-width: 100%;
+}
+
+/* Decoraciones: centradas sin aumentar el ancho desplazable */
+.hero-visual .radar,
+.hero-visual .crest-glow {
+  left: 50%;
+  top: 50%;
+  translate: -50% -50%;
+}
+
+.hero-visual .crest-shell {
+  justify-self: center;
+  align-self: center;
+}
+
+/* La consola de la portada no debe convertir el sitio en un lienzo horizontal */
+.hero-console {
+  width: min(100%, 410px);
+  max-width: calc(100% - 20px);
+  justify-content: stretch;
+}
+
+.hero-console span {
+  flex: 1 1 0;
+  min-width: 0;
+  text-align: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Ninguna tarjeta interactiva debe forzar un ancho mínimo implícito */
+.discernment-tab,
+.armor-item,
+.training-tab,
+.resource-card,
+.code-card,
+.foundation-card,
+.response-grid > div,
+.lesson-list li {
+  min-width: 0;
+}
+
+@media (max-width: 820px) {
+  /* Portada más contenida y centrada en teléfonos/tablets estrechos */
+  .hero {
+    width: 100%;
+    overflow: hidden;
+    gap: 8px;
+    padding-bottom: 60px;
+  }
+
+  .hero-copy {
+    width: 100%;
+  }
+
+  .hero-visual {
+    width: 100%;
+    height: 390px;
+    margin-top: 0;
+    contain: layout paint;
+  }
+
+  .hero-reference {
+    width: 100%;
+  }
+
+  .hero-pillars {
+    width: 100%;
+  }
+
+  .hero-console {
+    bottom: 10px;
+  }
+
+  .discernment-shell,
+  .armor-layout,
+  .daily-card,
+  .level-stage {
+    width: 100%;
+  }
+
+  /* Menos vacío entre experiencias consecutivas */
+  .manifesto,
+  .discernment,
+  .armor,
+  .daily,
+  .training,
+  .field-code,
+  .resources,
+  .faq {
+    padding-top: 68px;
+    padding-bottom: 68px;
+  }
+
+  .section-heading {
+    margin-bottom: 32px;
+  }
+}
+
+@media (max-width: 560px) {
+  /* Bloqueamos cualquier elemento decorativo que intente salir de la columna */
+  .section-shell,
+  .header-inner {
+    max-width: calc(100% - 28px);
+  }
+
+  .hero {
+    padding-top: 30px;
+    padding-bottom: 50px;
+  }
+
+  .hero-visual {
+    height: 342px;
+    margin-top: 0;
+  }
+
+  .hero-kicker {
+    max-width: 100%;
+    white-space: normal;
+    line-height: 1.4;
+  }
+
+  .hero h1 span {
+    font-size: clamp(2.55rem, 12.8vw, 3.65rem);
+  }
+
+  .hero h1 em {
+    font-size: clamp(2.32rem, 11.7vw, 3.35rem);
+  }
+
+  .hero-lead {
+    max-width: 34rem;
+  }
+
+  .hero-actions {
+    gap: 9px;
+  }
+
+  .hero-pillars {
+    margin-bottom: 24px;
+    gap: 7px;
+  }
+
+  .radar-one {
+    width: 270px;
+    height: 270px;
+  }
+
+  .radar-two {
+    width: 324px;
+    height: 324px;
+  }
+
+  .crest {
+    width: 164px;
+    height: 204px;
+  }
+
+  .crest-glow {
+    width: 190px;
+    height: 190px;
+  }
+
+  .cross-vertical {
+    height: 96px;
+  }
+
+  .cross-horizontal {
+    width: 58px;
+  }
+
+  .hero-console {
+    width: calc(100% - 16px);
+    max-width: calc(100% - 16px);
+  }
+
+  .hero-console span {
+    padding: 8px 3px;
+    font-size: .36rem;
+    letter-spacing: .055em;
+  }
+
+  /* Ritmo vertical más editorial */
+  .manifesto,
+  .discernment,
+  .armor,
+  .daily,
+  .training,
+  .field-code,
+  .resources,
+  .faq {
+    padding-top: 56px;
+    padding-bottom: 56px;
+  }
+
+  .manifesto-intro {
+    padding-bottom: 28px;
+  }
+
+  .section-heading {
+    margin-bottom: 27px;
+  }
+
+  .section-heading h2,
+  .manifesto h2,
+  .cta-content h2 {
+    font-size: clamp(1.92rem, 8.8vw, 2.72rem);
+    line-height: 1.08;
+  }
+
+  .manifesto-grid > p,
+  .section-heading > p:last-child {
+    max-width: 100%;
+  }
+
+  /* Fundamentos: menos alto sin perder aire */
+  .foundation-card {
+    min-height: 0;
+    padding: 25px;
+  }
+
+  .line-icon {
+    margin-bottom: 25px;
+  }
+
+  .foundation-card p {
+    line-height: 1.68;
+  }
+
+  /* Sala de discernimiento */
+  .discernment-stage {
+    padding: 26px 20px;
+  }
+
+  .discernment-stage h3 {
+    font-size: clamp(1.7rem, 8vw, 2.05rem);
+  }
+
+  .response-grid > div {
+    padding: 17px;
+  }
+
+  /* Armadura */
+  .armor-stage {
+    padding: 27px 20px 30px;
+  }
+
+  .armor-symbol {
+    height: 215px;
+  }
+
+  .armor-symbol svg {
+    width: 132px;
+  }
+
+  .symbol-ring {
+    width: 190px;
+    height: 190px;
+  }
+
+  .armor-detail blockquote {
+    margin-top: 17px;
+  }
+
+  /* Guardia */
+  .daily-main {
+    padding: 26px 20px;
+  }
+
+  .daily-progress {
+    padding: 27px 20px;
+  }
+
+  .progress-ring {
+    width: 146px;
+    height: 146px;
+    margin: 25px 0 21px;
+  }
+
+  .week-dots {
+    gap: 4px;
+  }
+
+  .week-dot {
+    min-width: 0;
+    height: 30px;
+  }
+
+  /* Ruta MIRMC */
+  .training-tabs {
+    margin-bottom: 10px;
+  }
+
+  .training-tab {
+    min-height: 58px;
+  }
+
+  .level-summary {
+    padding: 27px 21px;
+  }
+
+  .level-summary h3 {
+    font-size: clamp(1.7rem, 8.2vw, 2.15rem);
+    line-height: 1.08;
+  }
+
+  .lesson-list li {
+    padding: 16px 15px;
+  }
+
+  /* Footer y cierre */
+  .final-cta {
+    min-height: 510px;
+  }
+}
+
+@media (max-width: 380px) {
+  .hero-visual {
+    height: 320px;
+  }
+
+  .radar-two {
+    width: 300px;
+    height: 300px;
+  }
+
+  .radar-one {
+    width: 250px;
+    height: 250px;
+  }
+
+  .hero-console span {
+    font-size: .33rem;
+    padding-inline: 2px;
+  }
+}
+
+/* === MIRMC MOBILE HARDENING:END === */
