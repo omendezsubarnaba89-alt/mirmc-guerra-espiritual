@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#050813" />
+  <meta name="description" content="Biblioteca MIRMC Guerra Espiritual: enseñanzas, guías, casos, liderazgo y recursos de formación bíblica." />
+  <title>Biblioteca MIRMC | Guerra Espiritual</title>
+  <link rel="icon" href="assets/mirmc-shield.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="library.css" />
+</head>
+<body class="library-page">
+  <a class="skip-link" href="#libraryContent">Saltar al contenido</a>
+  <div class="ambient-grid" aria-hidden="true"></div>
+
+  <header class="library-header">
+    <div class="library-header-inner">
+      <a class="brand" href="index.html" aria-label="MIRMC Guerra Espiritual, inicio">
+        <img src="assets/mirmc-shield.svg" alt="" class="brand-mark" width="44" height="52" />
+        <span class="brand-copy"><strong>MIRMC</strong><small>GUERRA ESPIRITUAL</small></span>
+      </a>
+      <a class="library-back" href="index.html#recursos">← Centro de entrenamiento</a>
+    </div>
+  </header>
+
+  <main id="libraryContent" class="library-shell">
+    <section class="library-hero">
+      <p class="library-eyebrow">BIBLIOTECA DE CAMPO</p>
+      <h1>Estudia con profundidad. <em>Sin fórmulas mágicas.</em></h1>
+      <p>Enseñanzas, guías, casos y herramientas para formar discernimiento bíblico con Cristo como centro.</p>
+      <div class="library-stats" id="libraryStats"></div>
+    </section>
+
+    <section class="library-controls" aria-label="Filtros de biblioteca">
+      <label class="library-search">
+        <span>BUSCAR</span>
+        <input id="librarySearch" type="search" placeholder="Ej.: armadura, discernimiento, puertas..." autocomplete="off" />
+      </label>
+      <div class="library-filter-row">
+        <select id="categoryFilter" aria-label="Filtrar por categoría"><option value="all">Todas las categorías</option></select>
+        <select id="levelFilter" aria-label="Filtrar por nivel"><option value="all">Todos los niveles</option><option value="1">Nivel 1</option><option value="2">Nivel 2</option><option value="3">Nivel 3</option></select>
+        <button id="clearFilters" type="button">Limpiar filtros</button>
+      </div>
+    </section>
+
+    <section class="library-featured" id="featuredSection">
+      <div class="library-section-heading"><span>DESTACADOS</span><h2>Empieza por aquí.</h2></div>
+      <div class="featured-grid" id="featuredGrid"></div>
+    </section>
+
+    <section class="library-results">
+      <div class="library-results-head"><div><span>RECURSOS</span><h2>Biblioteca completa</h2></div><b id="resultsCount"></b></div>
+      <div class="library-grid" id="libraryGrid"></div>
+      <div class="library-empty" id="libraryEmpty" hidden><h3>No encontramos recursos con esos filtros.</h3><p>Prueba otra palabra o limpia los filtros.</p></div>
+    </section>
+  </main>
+
+  <footer class="lesson-footer"><div><span>MIRMC GUERRA ESPIRITUAL</span><span>CRISTO AL CENTRO · BIBLIA ABIERTA · DISCERNIMIENTO</span></div></footer>
+
+  <script src="resource-data.js"></script>
+  <script src="library.js"></script>
+</body>
+</html>
