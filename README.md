@@ -6,59 +6,84 @@ Centro web de formación bíblica, enseñanza y entrenamiento para comprender la
 
 https://omendezsubarnaba89-alt.github.io/mirmc-guerra-espiritual/
 
-## Estado actual — V2
+## Estado actual — V3
 
-La segunda versión convierte la landing inicial en una experiencia de entrenamiento más completa:
+La V3 convierte la Ruta MIRMC en un curso navegable real sin abandonar la arquitectura estática y económica de GitHub Pages.
+
+### Experiencia principal
 
 - Portada cinematográfica responsive y navegación sticky.
-- Identidad MIRMC propia con escudo SVG, sin depender de imágenes externas.
-- Fundamento doctrinal: identidad, discernimiento y autoridad bajo Cristo.
-- Sala de discernimiento interactiva para distinguir tentación, heridas o agotamiento, conflictos humanos y oposición espiritual sin diagnosticar “espíritus”.
-- Armadura de Dios interactiva basada en Efesios 6:10–18, con explicación y aplicación práctica.
-- **Guardia de hoy**: entrenamiento diario rotativo de siete días.
-- Progreso local guardado en el navegador mediante `localStorage`; no requiere cuenta ni backend.
-- Ruta MIRMC de tres niveles y quince lecciones.
-- Código de campo con principios de responsabilidad bíblica.
-- Biblioteca de recursos preparada para crecer.
-- Preguntas frecuentes sobre guerra espiritual, ayuda profesional, objetos y discernimiento.
-- SEO básico, Open Graph, JSON-LD, `robots.txt`, `sitemap.xml` y manifiesto web.
-- Soporte para `prefers-reduced-motion`, foco visible, navegación por teclado y enlace “Saltar al contenido”.
-- Partículas optimizadas para reducir consumo en dispositivos móviles.
+- Identidad MIRMC propia con escudo SVG.
+- Fundamento doctrinal, Sala de discernimiento y Armadura de Dios interactiva.
+- **Guardia de hoy** con siete entrenamientos rotativos y progreso local.
+- Ruta MIRMC con **3 niveles y 15 lecciones navegables**.
+- Progreso total y por nivel guardado en el navegador.
+- Desbloqueo secuencial de lecciones.
+- Evaluación de tres preguntas por lección; se requieren al menos dos respuestas correctas para completarla.
+- Navegación anterior/siguiente y navegador lateral por nivel.
+- Estado visual `ABRIR`, `BLOQUEADA` o `COMPLETADA` desde la portada.
+- Botón inteligente `Comenzar/Continuar ruta` que abre la próxima lección disponible.
+- Código de campo, biblioteca conceptual y preguntas frecuentes.
+
+### Curso
+
+Cada una de las 15 lecciones contiene:
+
+- objetivo;
+- base bíblica;
+- idea central;
+- tres bloques de desarrollo;
+- tres puntos clave;
+- ejercicio práctico;
+- pregunta de reflexión;
+- mini evaluación;
+- finalización y desbloqueo de la siguiente lección.
 
 ## Estructura
 
-- `index.html` — contenido, semántica y experiencia principal.
-- `styles.css` — sistema visual completo y responsive.
-- `script.js` — menú, armadura, discernimiento, niveles, guardia diaria, progreso y partículas.
-- `assets/mirmc-shield.svg` — identidad visual principal.
-- `manifest.webmanifest` — metadatos de instalación web.
-- `robots.txt` / `sitemap.xml` — indexación básica.
-- `.nojekyll` — publicación estática directa en GitHub Pages.
+### Sitio principal
+
+- `index.html` — experiencia principal.
+- `styles.css` — sistema visual responsive.
+- `script.js` — portada, menú, armadura, discernimiento, Guardia y efectos.
+- `mobile-fixes.css` — hardening móvil basado en pruebas reales Android.
+- `assets/mirmc-shield.svg` — identidad visual.
+
+### Motor del curso
+
+- `course-data.js` — contenido estructurado de los 3 niveles y 15 lecciones.
+- `course-progress.js` — progreso, desbloqueos, navegación y estadísticas.
+- `course-enhancements.js` — integración de progreso en la Ruta MIRMC del home.
+- `course-index.css` — componentes de progreso del home.
+- `lesson.html` — plantilla dinámica de lección.
+- `lesson.css` — experiencia visual de estudio.
+- `lesson.js` — render, quiz, finalización y navegación.
+
+### Calidad y publicación
+
+- `scripts/validate.mjs` — referencias estáticas y estructura principal.
+- `scripts/validate-course.mjs` — coherencia de niveles, 15 lecciones, evaluaciones y archivos del curso.
+- `.github/workflows/validate.yml` — validación automática.
+- `.github/workflows/integrate-course.yml` — integra assets del curso en `index.html`.
+- `.github/workflows/apply-mobile-fixes.yml` — aplica hardening móvil a la hoja principal.
+- `manifest.webmanifest`, `robots.txt`, `sitemap.xml`, `.nojekyll` — publicación e indexación.
 
 ## Arquitectura actual
 
-La aplicación sigue siendo **100% estática** y no depende de Supabase, bases de datos, servidores propios ni créditos de IA. Esto permite mantenerla rápida, económica y fácil de publicar desde GitHub Pages.
+La aplicación sigue siendo **100% estática** y no depende de Supabase, bases de datos, servidores propios ni créditos de IA. El progreso de Guardia y Curso usa `localStorage`, por lo que permanece en el navegador del dispositivo actual.
 
-El progreso de Guardia de hoy se almacena exclusivamente en el navegador del visitante. Borrar los datos del navegador también elimina ese progreso.
+Esto permite validar primero la experiencia completa antes de añadir autenticación y backend. Cuando incorporemos cuentas, el motor de progreso ya está separado del contenido, por lo que podremos sustituir el almacenamiento local por persistencia remota sin reconstruir las lecciones.
 
 ## Próximas etapas previstas
 
-La base ya está preparada para evolucionar hacia:
-
-1. Páginas completas para cada una de las 15 lecciones.
-2. Biblioteca real de PDFs, audios, videos y enseñanzas.
-3. Evaluaciones y ejercicios por nivel.
-4. Perfil de alumno y sincronización de progreso cuando se incorpore backend.
-5. Panel administrativo para publicar contenido.
-6. Buscador de recursos y filtros por tema/nivel.
-7. Certificados y seguimiento del curso, si se decide incorporarlos.
+1. Biblioteca real de PDFs, audios, videos y enseñanzas.
+2. Evaluaciones finales por nivel y calificación acumulada.
+3. Perfil de alumno y sincronización de progreso con backend.
+4. Panel administrativo para publicar y editar contenido.
+5. Buscador y filtros por tema/nivel.
+6. Certificados y seguimiento del curso.
+7. Modo instalable/PWA mejorado y funcionamiento offline selectivo.
 
 ## Publicación
 
-GitHub Pages está configurado desde:
-
-- **Source:** Deploy from a branch
-- **Branch:** `main`
-- **Folder:** `/ (root)`
-
-Cada cambio aprobado que llegue a `main` se publica automáticamente en el sitio.
+GitHub Pages está configurado desde `main` y `/ (root)`. Cada cambio aprobado que llega a `main` se publica automáticamente.
