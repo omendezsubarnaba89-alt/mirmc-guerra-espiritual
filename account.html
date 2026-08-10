@@ -41,14 +41,15 @@
       <div class="auth-card" id="signedOutPanel">
         <p class="account-eyebrow">ACCESO SEGURO</p><h2>Entra o crea tu cuenta.</h2>
         <form id="authForm">
-          <label><span>CORREO</span><input id="authEmail" type="email" autocomplete="email" required /></label>
+          <label><span>CORREO</span><input id="authEmail" type="email" inputmode="email" autocomplete="email" autocapitalize="none" spellcheck="false" required /></label>
           <label><span>CONTRASEÑA</span><input id="authPassword" type="password" autocomplete="current-password" minlength="8" required /></label>
           <div class="auth-actions"><button class="button button-primary" id="signIn" type="submit">Entrar</button><button class="button button-ghost" id="signUp" type="button">Crear cuenta</button></div>
         </form>
-        <p class="account-auth-note">En cuentas nuevas, Supabase puede pedir confirmación por correo antes del primer inicio de sesión.</p>
+        <p class="account-auth-note">Si acabas de crear tu cuenta, revisa tu correo y confirma el acceso antes de entrar por primera vez.</p>
+        <button class="button button-ghost" id="resendConfirmation" type="button" hidden>Reenviar correo de confirmación</button>
         <div class="auth-separator" hidden><span>o</span></div>
         <button class="google-button" id="googleSignIn" type="button" hidden>Continuar con Google</button>
-        <div class="account-message" id="authMessage" aria-live="polite"></div>
+        <div class="account-message" id="authMessage" aria-live="polite" role="status"></div>
       </div>
 
       <div class="account-dashboard" id="signedInPanel" hidden>
