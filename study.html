@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#050813" />
+  <meta name="robots" content="noindex,nofollow" />
+  <meta name="description" content="Cuaderno personal, favoritos y búsqueda global de MIRMC Guerra Espiritual." />
+  <title>Cuaderno de estudio | MIRMC Guerra Espiritual</title>
+  <link rel="icon" href="assets/mirmc-shield.svg" type="image/svg+xml" />
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="study.css" />
+</head>
+<body class="study-page">
+  <a class="skip-link" href="#studyContent">Saltar al cuaderno</a>
+  <div class="ambient-grid" aria-hidden="true"></div>
+  <header class="study-header"><div>
+    <a class="brand" href="index.html"><img src="assets/mirmc-shield.svg" alt="" class="brand-mark" width="44" height="52" /><span class="brand-copy"><strong>MIRMC</strong><small>GUERRA ESPIRITUAL</small></span></a>
+    <a href="index.html#entrenamiento">← Centro de entrenamiento</a>
+  </div></header>
+
+  <main id="studyContent" class="study-shell">
+    <section class="study-hero">
+      <p class="study-eyebrow">CUADERNO MIRMC</p>
+      <h1>Encuentra. Guarda. <em>Vuelve a pensar.</em></h1>
+      <p>Busca en toda la formación, guarda recursos importantes y conserva tus propias notas sin convertir el estudio en una carrera por terminar pantallas.</p>
+      <div class="study-stats" id="studyStats"></div>
+    </section>
+
+    <section class="study-search-panel">
+      <label><span>BUSCAR EN TODA LA PLATAFORMA</span><input id="studySearch" type="search" placeholder="Ej.: fortalezas, autoridad, discernimiento, Efesios…" autocomplete="off" /></label>
+      <div class="study-filter-row"><select id="studyType"><option value="all">Lecciones + recursos</option><option value="lesson">Solo lecciones</option><option value="resource">Solo recursos</option></select><select id="studyLevel"><option value="all">Todos los niveles</option><option value="1">Nivel 1</option><option value="2">Nivel 2</option><option value="3">Nivel 3</option></select></div>
+    </section>
+
+    <nav class="study-tabs" aria-label="Vistas del cuaderno">
+      <button class="active" data-view="search" type="button">Buscar</button>
+      <button data-view="bookmarks" type="button">Favoritos <span id="bookmarkBadge">0</span></button>
+      <button data-view="notes" type="button">Mis notas <span id="noteBadge">0</span></button>
+      <button data-view="history" type="button">Recientes</button>
+    </nav>
+
+    <section class="study-results-head"><div><span id="studyResultLabel">RESULTADOS</span><h2 id="studyResultTitle">Toda la formación</h2></div><b id="studyResultCount"></b></section>
+    <section class="study-results" id="studyResults"></section>
+    <section class="study-empty" id="studyEmpty" hidden><h3>No hay nada que mostrar aquí todavía.</h3><p>Abre una lección o recurso, guarda un favorito o escribe una nota.</p></section>
+  </main>
+
+  <footer class="lesson-footer"><div><span>MIRMC GUERRA ESPIRITUAL</span><span>ESTUDIO · MEMORIA · APLICACIÓN</span></div></footer>
+  <script src="course-data.js"></script>
+  <script src="resource-data.js"></script>
+  <script src="study-data.js"></script>
+  <script src="study.js"></script>
+</body>
+</html>
