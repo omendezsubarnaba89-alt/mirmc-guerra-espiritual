@@ -13,6 +13,7 @@
   <link rel="stylesheet" href="styles.css" />
   <link rel="stylesheet" href="lesson.css" />
   <link rel="stylesheet" href="study-tools.css" />
+  <link rel="stylesheet" href="academic-official-ui.css" />
 </head>
 <body class="lesson-page">
   <a class="skip-link" href="#lessonContent">Saltar a la lección</a>
@@ -90,12 +91,17 @@
 
   <script src="course-data.js"></script>
   <script src="cloud-config.js"></script>
+  <script src="cloud-client.js"></script>
+  <script src="academic-official.js"></script>
   <script src="content-runtime.js"></script>
   <script src="course-progress.js"></script>
   <script>
     window.MIRMCContent.ready.finally(() => {
       const l=document.createElement('script'); l.src='lesson.js';
-      l.onload=()=>{const d=document.createElement('script');d.src='study-data.js';d.onload=()=>{const t=document.createElement('script');t.src='study-tools.js';document.body.appendChild(t);};document.body.appendChild(d);};
+      l.onload=()=>{
+        const o=document.createElement('script');o.src='lesson-official-hook.js';document.body.appendChild(o);
+        const d=document.createElement('script');d.src='study-data.js';d.onload=()=>{const t=document.createElement('script');t.src='study-tools.js';document.body.appendChild(t);};document.body.appendChild(d);
+      };
       document.body.appendChild(l);
     });
   </script>
