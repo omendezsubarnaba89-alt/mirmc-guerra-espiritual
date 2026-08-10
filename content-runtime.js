@@ -33,7 +33,6 @@
       const response = await fetch(url, {
         headers: {
           apikey: config.supabasePublishableKey,
-          Authorization: `Bearer ${config.supabasePublishableKey}`,
           Accept: 'application/json'
         },
         cache: 'no-store'
