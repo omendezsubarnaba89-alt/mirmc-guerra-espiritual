@@ -76,6 +76,7 @@
           <div class="editor-actions">
             <button class="primary" id="saveDraft" type="submit">Guardar borrador</button>
             <a class="button button-ghost" id="previewContent" target="_blank" rel="noopener" href="admin-preview.html" onclick="this.href='admin-preview.html?type='+encodeURIComponent(document.getElementById('contentType').value)+'&key='+encodeURIComponent(document.getElementById('contentKey').value)">Vista previa del borrador</a>
+            <a class="button button-ghost" id="versionHistory" href="admin-versions.html" onclick="this.href='admin-versions.html?type='+encodeURIComponent(document.getElementById('contentType').value)+'&key='+encodeURIComponent(document.getElementById('contentKey').value)">Versiones / rollback</a>
             <button id="publishContent" type="button">Publicar</button>
             <button id="unpublishContent" type="button">Retirar publicación</button>
             <button class="danger" id="archiveContent" type="button">Archivar override</button>
