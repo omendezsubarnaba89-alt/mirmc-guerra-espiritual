@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover" />
+  <meta name="theme-color" content="#050813" />
+  <meta name="robots" content="noindex,nofollow" />
+  <title>Contenido | Administración MIRMC</title>
+  <link rel="icon" href="assets/mirmc-shield.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="admin.css" />
+  <link rel="stylesheet" href="admin-content.css" />
+</head>
+<body class="content-page">
+  <div class="ambient-grid" aria-hidden="true"></div>
+  <header class="admin-header"><div>
+    <a class="brand" href="index.html"><img src="assets/mirmc-shield.svg" alt="" class="brand-mark" width="44" height="52" /><span class="brand-copy"><strong>MIRMC</strong><small>GUERRA ESPIRITUAL</small></span></a>
+    <a href="admin.html">← Administración</a>
+  </div></header>
+
+  <main class="content-shell">
+    <section class="content-hero">
+      <div><p class="admin-eyebrow">GESTIÓN DE CONTENIDO · V11</p><h1>Edita. Revisa. <em>Publica.</em></h1><p>Los archivos de GitHub siguen siendo respaldo. Una publicación desde aquí crea una versión en Supabase que reemplaza el contenido estático sin necesidad de redeploy.</p></div>
+      <div class="content-badge" id="contentRole">VERIFICANDO PERMISOS</div>
+    </section>
+
+    <section id="contentDenied" class="admin-denied" hidden><span>ACCESO RESTRINGIDO</span><h2>Necesitas permisos administrativos.</h2><p>Esta zona permite modificar el contenido público de la plataforma.</p></section>
+
+    <section id="contentApp" class="content-layout" hidden>
+      <aside class="content-list">
+        <div class="content-tabs"><button type="button" class="active" data-type="lesson">Lecciones</button><button type="button" data-type="resource">Biblioteca</button></div>
+        <button id="newResource" class="content-new" type="button">+ Nuevo recurso</button>
+        <div class="content-items" id="contentItems"></div>
+      </aside>
+
+      <section class="content-editor">
+        <div class="content-editor-empty" id="editorEmpty">Selecciona una lección o recurso para editarlo.</div>
+        <form class="content-form" id="contentForm" hidden>
+          <div class="editor-head"><div><span class="admin-eyebrow" id="editorType"></span><h2 id="editorHeading"></h2></div><div class="editor-state" id="editorState"></div></div>
+          <input type="hidden" id="contentType" />
+          <label><span>IDENTIFICADOR</span><input id="contentKey" type="text" readonly /></label>
+          <div class="form-grid">
+            <label><span>TÍTULO</span><input id="fieldTitle" type="text" maxlength="180" required /></label>
+            <label><span>SUBTÍTULO</span><input id="fieldSubtitle" type="text" maxlength="240" /></label>
+          </div>
+          <div class="form-grid">
+            <label><span>NIVEL</span><select id="fieldLevel"><option value="1">Nivel 1</option><option value="2">Nivel 2</option><option value="3">Nivel 3</option></select></label>
+            <label><span>DURACIÓN</span><input id="fieldDuration" type="text" maxlength="60" placeholder="Ej.: 15–20 min" /></label>
+          </div>
+          <div class="form-grid" id="resourceFields" hidden>
+            <label><span>CATEGORÍA</span><select id="fieldCategory"><option value="formacion">Formación</option><option value="estudio">Guías prácticas</option><option value="discernimiento">Casos y escenarios</option><option value="liderazgo">Liderazgo</option><option value="repaso">Preguntas y respuestas</option><option value="devocional">Devocional</option></select></label>
+            <label><span>FORMATO</span><input id="fieldFormat" type="text" maxlength="60" placeholder="Lectura, Guía, Caso..." /></label>
+          </div>
+          <label id="featuredLabel" hidden><span>DESTACADO</span><select id="fieldFeatured"><option value="false">No</option><option value="true">Sí</option></select></label>
+          <label><span>BASE BÍBLICA · UNA REFERENCIA POR LÍNEA</span><textarea id="fieldScriptures"></textarea></label>
+
+          <div id="lessonOnly">
+            <label><span>OBJETIVO</span><textarea id="fieldObjective"></textarea></label>
+            <label><span>IDEA CENTRAL</span><textarea id="fieldCore"></textarea></label>
+          </div>
+          <div id="resourceOnly" hidden><label><span>RESUMEN</span><textarea id="fieldSummary"></textarea></label></div>
+
+          <div class="section-editor"><span class="field-label">SECCIONES</span><div id="sectionRows"></div><button id="addSection" class="add-section" type="button">+ Añadir sección</button></div>
+
+          <div id="lessonTail">
+            <label><span>PUNTOS CLAVE · UNO POR LÍNEA</span><textarea id="fieldKeyPoints"></textarea></label>
+            <label><span>EJERCICIO DE APLICACIÓN</span><textarea id="fieldPractice"></textarea></label>
+            <label><span>PREGUNTA DE REFLEXIÓN</span><textarea id="fieldReflection"></textarea></label>
+            <label><span>QUIZ · JSON AVANZADO</span><textarea id="fieldQuiz" spellcheck="false"></textarea></label>
+          </div>
+          <div id="resourceTail" hidden><label><span>PARA RETENER</span><textarea id="fieldTakeaway"></textarea></label></div>
+
+          <div class="editor-actions">
+            <button class="primary" id="saveDraft" type="submit">Guardar borrador</button>
+            <button id="publishContent" type="button">Publicar</button>
+            <button id="unpublishContent" type="button">Retirar publicación</button>
+            <button class="danger" id="archiveContent" type="button">Archivar override</button>
+          </div>
+          <div class="content-message" id="contentMessage" aria-live="polite"></div>
+        </form>
+      </section>
+    </section>
+  </main>
+
+  <footer class="lesson-footer"><div><span>MIRMC GUERRA ESPIRITUAL</span><span>CONTENIDO · BORRADORES · PUBLICACIÓN</span></div></footer>
+  <script src="course-data.js"></script>
+  <script src="resource-data.js"></script>
+  <script src="cloud-config.js"></script>
+  <script src="cloud-client.js"></script>
+  <script src="admin-content.js"></script>
+</body>
+</html>
