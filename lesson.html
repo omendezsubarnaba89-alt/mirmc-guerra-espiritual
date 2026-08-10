@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#050813" />
+  <meta name="description" content="Lección del curso MIRMC Guerra Espiritual." />
+  <title>Lección | MIRMC Guerra Espiritual</title>
+  <link rel="icon" href="assets/mirmc-shield.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="lesson.css" />
+</head>
+<body class="lesson-page">
+  <a class="skip-link" href="#lessonContent">Saltar a la lección</a>
+  <div class="ambient-grid" aria-hidden="true"></div>
+
+  <header class="lesson-header">
+    <div class="lesson-header-inner">
+      <a class="brand" href="index.html#entrenamiento" aria-label="Volver a MIRMC Guerra Espiritual">
+        <img src="assets/mirmc-shield.svg" alt="" class="brand-mark" width="43" height="50" />
+        <span class="brand-copy"><strong>MIRMC</strong><small>GUERRA ESPIRITUAL</small></span>
+      </a>
+      <a class="lesson-back" href="index.html#entrenamiento">← Ruta MIRMC</a>
+    </div>
+  </header>
+
+  <main id="lessonContent" class="lesson-shell">
+    <section class="lesson-loading" id="lessonLoading" aria-live="polite">Cargando lección…</section>
+
+    <section class="lesson-locked" id="lessonLocked" hidden>
+      <img src="assets/mirmc-shield.svg" alt="" width="70" height="82" />
+      <p class="lesson-eyebrow">RUTA SECUENCIAL</p>
+      <h1>Esta lección todavía está bloqueada.</h1>
+      <p>Completa la lección anterior para continuar. El objetivo no es correr, sino construir fundamento antes de avanzar.</p>
+      <a class="button button-primary" id="lockedPrevious" href="index.html#entrenamiento">Ir a la lección anterior</a>
+    </section>
+
+    <div id="lessonExperience" hidden>
+      <section class="lesson-hero">
+        <div class="lesson-hero-main">
+          <div class="lesson-breadcrumb" id="lessonBreadcrumb"></div>
+          <p class="lesson-eyebrow" id="lessonLevel"></p>
+          <h1 id="lessonTitle"></h1>
+          <p class="lesson-subtitle" id="lessonSubtitle"></p>
+          <div class="lesson-meta">
+            <span id="lessonDuration"></span>
+            <span id="lessonPosition"></span>
+            <span id="lessonState"></span>
+          </div>
+        </div>
+        <aside class="lesson-progress-card">
+          <div class="lesson-progress-head"><span>PROGRESO TOTAL</span><b id="courseProgressText">0/15</b></div>
+          <div class="lesson-progress-track"><i id="courseProgressBar"></i></div>
+          <strong id="courseProgressPct">0%</strong>
+          <p>Tu progreso se guarda en este navegador.</p>
+        </aside>
+      </section>
+
+      <div class="lesson-layout">
+        <article class="lesson-article">
+          <section class="lesson-objective lesson-block">
+            <span class="block-label">OBJETIVO</span>
+            <p id="lessonObjective"></p>
+          </section>
+
+          <section class="lesson-scriptures lesson-block">
+            <div>
+              <span class="block-label">BASE BÍBLICA</span>
+              <h2>Lee antes de concluir.</h2>
+            </div>
+            <div class="scripture-chips" id="lessonScriptures"></div>
+          </section>
+
+          <section class="lesson-core lesson-block">
+            <span class="block-label">IDEA CENTRAL</span>
+            <blockquote id="lessonCore"></blockquote>
+          </section>
+
+          <div id="lessonSections"></div>
+
+          <section class="lesson-points lesson-block">
+            <span class="block-label">LO QUE DEBES RETENER</span>
+            <h2>Tres anclas para no perder el centro.</h2>
+            <ol id="lessonKeyPoints"></ol>
+          </section>
+
+          <section class="lesson-practice lesson-block">
+            <span class="block-label">EJERCICIO DE APLICACIÓN</span>
+            <h2>La enseñanza tiene que aterrizar.</h2>
+            <p id="lessonPractice"></p>
+          </section>
+
+          <section class="lesson-reflection lesson-block">
+            <span class="block-label">PREGUNTA DE REFLEXIÓN</span>
+            <h2 id="lessonReflection"></h2>
+            <p>No tienes que responderla en la página. Detente, escríbela y sé específico contigo mismo.</p>
+          </section>
+
+          <section class="lesson-quiz lesson-block" id="quizSection">
+            <div class="quiz-heading">
+              <div><span class="block-label">VERIFICACIÓN</span><h2>Comprueba que entendiste.</h2></div>
+              <span class="quiz-threshold">Aprueba con 2 de 3</span>
+            </div>
+            <form id="quizForm"></form>
+            <button class="button button-ghost quiz-check" id="quizCheck" type="button">Revisar respuestas</button>
+            <div class="quiz-result" id="quizResult" aria-live="polite"></div>
+          </section>
+
+          <section class="lesson-complete-panel lesson-block" id="completePanel">
+            <div>
+              <span class="block-label">CIERRE DE LECCIÓN</span>
+              <h2>Marca la lección cuando hayas comprendido y aplicado.</h2>
+              <p>Para habilitar el avance debes aprobar la verificación con al menos dos respuestas correctas.</p>
+            </div>
+            <button class="button button-primary" id="completeLesson" type="button" disabled>Completar lección <span>✓</span></button>
+          </section>
+        </article>
+
+        <aside class="lesson-sidebar">
+          <div class="sidebar-sticky">
+            <div class="sidebar-title"><span>RUTA MIRMC</span><strong id="sidebarLevel"></strong></div>
+            <nav id="lessonNavigator" aria-label="Lecciones del nivel"></nav>
+          </div>
+        </aside>
+      </div>
+
+      <nav class="lesson-footer-nav" aria-label="Navegación entre lecciones">
+        <a class="lesson-nav-card prev" id="prevLesson" href="#"><small>ANTERIOR</small><strong></strong></a>
+        <a class="lesson-nav-card next" id="nextLesson" href="#"><small>SIGUIENTE</small><strong></strong></a>
+      </nav>
+    </div>
+  </main>
+
+  <footer class="lesson-footer">
+    <div><span>MIRMC GUERRA ESPIRITUAL</span><span>CRISTO AL CENTRO · BIBLIA ABIERTA · DISCERNIMIENTO</span></div>
+  </footer>
+
+  <script src="course-data.js"></script>
+  <script src="course-progress.js"></script>
+  <script src="lesson.js"></script>
+</body>
+</html>
