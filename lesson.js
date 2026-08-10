@@ -10,6 +10,10 @@
   const locked = $('#lessonLocked');
   const experience = $('#lessonExperience');
 
+  // Estado inicial inequívoco: solo se revela una experiencia después de resolver acceso.
+  if (locked) locked.hidden = true;
+  if (experience) experience.hidden = true;
+
   if (!lesson) {
     loading.innerHTML = '<strong>Lección no encontrada.</strong><br><a href="index.html#entrenamiento">Volver a la Ruta MIRMC</a>';
     return;
@@ -28,11 +32,15 @@
     if (prevId) {
       btn.href = `lesson.html?lesson=${prevId}`;
       btn.textContent = `Completar lección ${prevId}`;
+    } else {
+      btn.href = 'index.html#entrenamiento';
+      btn.textContent = 'Volver a la Ruta MIRMC';
     }
     return;
   }
 
   loading.hidden = true;
+  locked.hidden = true;
   experience.hidden = false;
 
   function renderProgress() {
@@ -155,13 +163,18 @@
   function configureFooterNav() {
     const prev = $('#prevLesson');
     const next = $('#nextLesson');
+    prev.classList.remove('disabled','route-home');
+    next.classList.remove('route-home');
+
     if (prevId) {
       prev.href = `lesson.html?lesson=${prevId}`;
+      prev.querySelector('small').textContent = 'ANTERIOR';
       prev.querySelector('strong').textContent = `${prevId} · ${data.lessons[prevId].title}`;
     } else {
-      prev.classList.add('disabled');
-      prev.removeAttribute('href');
-      prev.querySelector('strong').textContent = 'Inicio de la ruta';
+      prev.href = 'index.html#entrenamiento';
+      prev.classList.add('route-home');
+      prev.querySelector('small').textContent = 'RUTA MIRMC';
+      prev.querySelector('strong').textContent = 'Volver al inicio de la ruta';
     }
 
     if (nextId) {
@@ -169,9 +182,12 @@
       next.href = nextUnlocked ? `lesson.html?lesson=${nextId}` : '#';
       next.classList.toggle('disabled', !nextUnlocked);
       next.setAttribute('aria-disabled', String(!nextUnlocked));
+      next.querySelector('small').textContent = 'SIGUIENTE';
       next.querySelector('strong').textContent = nextUnlocked ? `${nextId} · ${data.lessons[nextId].title}` : `Completa esta lección para desbloquear ${nextId}`;
     } else {
       next.href = 'index.html#entrenamiento';
+      next.classList.remove('disabled');
+      next.removeAttribute('aria-disabled');
       next.querySelector('small').textContent = 'RUTA COMPLETADA';
       next.querySelector('strong').textContent = 'Volver al centro de entrenamiento';
     }
