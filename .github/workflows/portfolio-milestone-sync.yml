@@ -1,0 +1,40 @@
+name: Portfolio Milestone Sync
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/portfolio-milestone-sync.yml"
+  issues:
+    types: [opened, closed, reopened, edited]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+concurrency:
+  group: portfolio-milestone-sync
+  cancel-in-progress: true
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Create or reuse milestone and attach portfolio progress issues
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          MILESTONE_TITLE: MIRMC Guerra Espiritual — Production v1
+        run: |
+          set -euo pipefail
+          number="$(gh api "repos/${GH_REPO}/milestones?state=all&per_page=100" --jq '.[] | select(.title == env.MILESTONE_TITLE) | .number' | head -n 1)"
+          if [ -z "$number" ]; then
+            number="$(gh api --method POST "repos/${GH_REPO}/milestones" -f title="$MILESTONE_TITLE" -f description='Milestone de producción medido únicamente con issues [portfolio-progress] verificables de GitHub.' --jq '.number')"
+          fi
+          gh api --paginate "repos/${GH_REPO}/issues?state=all&per_page=100" --jq '.[] | select((has("pull_request") | not) and (.title | startswith("[portfolio-progress]"))) | .number' |
+          while read -r issue; do
+            [ -n "$issue" ] || continue
+            gh api --method PATCH "repos/${GH_REPO}/issues/${issue}" -F milestone="$number" >/dev/null
+          done
+          gh api "repos/${GH_REPO}/milestones/${number}" --jq '{number,title,state,open_issues,closed_issues,html_url}'
