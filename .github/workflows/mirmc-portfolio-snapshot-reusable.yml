@@ -1,0 +1,44 @@
+name: MIRMC Portfolio Snapshot Reusable
+
+on:
+  workflow_call:
+
+permissions:
+  contents: write
+  issues: read
+  actions: read
+
+jobs:
+  snapshot:
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    steps:
+      - name: Publish verified repository snapshot
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ github.token }}
+          script: |
+            const { owner, repo } = context.repo;
+            const meta = (await github.rest.repos.get({ owner, repo })).data;
+            const defaultBranch = meta.default_branch || "main";
+            const sourceSha = (await github.rest.repos.getCommit({ owner, repo, ref: defaultBranch })).data.sha;
+            let issues = [], issuesAccessible = true;
+            try { issues = (await github.paginate(github.rest.issues.listForRepo, { owner, repo, state:"all", per_page:100 })).filter(i => !i.pull_request); } catch { issuesAccessible = false; }
+            let runs = [], actionsAccessible = true;
+            try { runs = (await github.rest.actions.listWorkflowRunsForRepo({ owner, repo, branch:defaultBranch, per_page:30 })).data.workflow_runs; } catch { actionsAccessible = false; }
+            const run = runs.find(r => !["MIRMC Portfolio Snapshot", "MIRMC Portfolio Snapshot Reusable", "Portfolio Milestone Sync"].includes(r.name));
+            const ciState = !run ? "not-configured" : run.status !== "completed" ? "pending" : ["failure","timed_out","action_required","stale","startup_failure"].includes(run.conclusion) ? "failure" : (run.conclusion || "unknown");
+            const progressIssues = issues.filter(i => String(i.title || "").trim().toLowerCase().startsWith("[portfolio-progress]"));
+            let roadmap = null;
+            if (progressIssues.length) { const closed=progressIssues.filter(i=>i.state==="closed").length,total=progressIssues.length; roadmap={title:"Verified roadmap issues",prefix:"[portfolio-progress]",openIssues:total-closed,closedIssues:closed,totalIssues:total,percent:Math.round(closed/total*100),updatedAt:progressIssues.map(i=>i.updated_at).filter(Boolean).sort().at(-1)||null,url:`https://github.com/${owner}/${repo}/issues?q=is%3Aissue+%22%5Bportfolio-progress%5D%22`}; }
+            let milestones=[]; try { milestones=await github.paginate(github.rest.issues.listMilestones,{owner,repo,state:"all",per_page:100}); } catch {}
+            const candidates=milestones.map(m=>({m,total:(m.open_issues||0)+(m.closed_issues||0)})).filter(x=>x.total).sort((a,b)=>(b.m.state==="open")-(a.m.state==="open")||String(b.m.updated_at||"").localeCompare(String(a.m.updated_at||"")));
+            let milestone=null;
+            if(candidates.length){const {m,total}=candidates[0];milestone={title:m.title||`Milestone #${m.number}`,number:m.number,state:m.state,openIssues:m.open_issues||0,closedIssues:m.closed_issues||0,totalIssues:total,percent:Math.round((m.closed_issues||0)/total*100),dueOn:m.due_on||null,updatedAt:m.updated_at||null,url:m.html_url||null};}
+            const progress=milestone?{percent:milestone.percent,source:"github-milestone",label:milestone.title}:roadmap?{percent:roadmap.percent,source:"github-roadmap-issues",label:roadmap.title}:{percent:null,source:"not-configured",label:null};
+            const snapshot={schemaVersion:1,repository:repo,fullName:`${owner}/${repo}`,generatedAt:new Date().toISOString(),sourceEvent:context.eventName,sourceSha,defaultBranch,pushedAt:meta.pushed_at||null,openIssues:issuesAccessible?issues.filter(i=>i.state==="open").length:null,access:{issues:issuesAccessible,actions:actionsAccessible},ci:{state:ciState,workflow:run?.name||null,event:run?.event||null,branch:run?.head_branch||defaultBranch,runUrl:run?.html_url||null,updatedAt:run?.updated_at||null,accessible:actionsAccessible},milestone,roadmap,progress};
+            const branch="mirmc-portfolio-snapshot",path=".mirmc/portfolio-snapshot.json";
+            try{await github.rest.git.getRef({owner,repo,ref:`heads/${branch}`});}catch{await github.rest.git.createRef({owner,repo,ref:`refs/heads/${branch}`,sha:sourceSha});}
+            let sha;try{const current=await github.rest.repos.getContent({owner,repo,path,ref:branch});if(!Array.isArray(current.data))sha=current.data.sha;}catch{}
+            await github.rest.repos.createOrUpdateFileContents({owner,repo,path,branch,sha,message:"chore(portfolio): refresh repository snapshot [skip ci]",content:Buffer.from(JSON.stringify(snapshot,null,2)+"\n").toString("base64")});
+            core.info(`MIRMC snapshot: issues=${issuesAccessible} actions=${actionsAccessible} progress=${progress.percent}`);
